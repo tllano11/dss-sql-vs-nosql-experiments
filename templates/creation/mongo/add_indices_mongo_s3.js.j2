@@ -1,0 +1,19 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+db.{{ variables['mongo_C'] }}.createIndex( 
+    {"c_acctbal": 1},
+    {name: "idx_c_acctbal"}
+);
+db.{{ variables['mongo_C'] }}.createIndex( 
+    {"c_mktsegment": 1},
+    {name: "idx_c_mktsegment"}
+);
+db.{{ variables['mongo_OjL'] }}.createIndex( 
+    {"o_custkey": 1},
+    {name: "idx_o_custkey"}
+);
+db.{{ variables['mongo_OjL'] }}.createIndex( 
+    {"o_orderdate": 1},
+    {name: "idx_o_orderdate"}
+);
+

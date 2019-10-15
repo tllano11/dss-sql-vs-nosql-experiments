@@ -1,0 +1,175 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                QUERY PLAN                                                                                                                                                 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=318742779.49..318742779.99 rows=200 width=16) (actual time=6777123.539..6777123.542 rows=45 loops=1)
+   Sort Key: (count(*)) DESC, c_orders.c_count DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  GroupAggregate  (cost=318742768.35..318742771.85 rows=200 width=16) (actual time=6772724.469..6777123.379 rows=45 loops=1)
+         Group Key: c_orders.c_count
+         ->  Sort  (cost=318742768.35..318742768.85 rows=200 width=8) (actual time=6772724.449..6775646.508 rows=14999987 loops=1)
+               Sort Key: c_orders.c_count DESC
+               Sort Method: external merge  Disk: 264320kB
+               ->  Subquery Scan on c_orders  (cost=50188714.17..318742760.71 rows=200 width=8) (actual time=3906705.561..6764274.776 rows=14999987 loops=1)
+                     ->  GroupAggregate  (cost=50188714.17..318742758.71 rows=200 width=12) (actual time=3906705.560..6761933.340 rows=14999987 loops=1)
+                           Group Key: j.custkey
+                           ->  Subquery Scan on j  (cost=50188714.17..307493876.08 rows=1499850750 width=36) (actual time=3906694.562..6689405.523 rows=153389913 loops=1)
+                                 Filter: (((j.c_orders -> 'o_orderkey'::text) IS NULL) OR ((j.c_orders ->> 'o_comment'::text) !~~ '%express%packages%'::text))
+                                 Rows Removed by Filter: 1610254
+                                 ->  Group  (cost=50188714.17..281243876.08 rows=1500000000 width=36) (actual time=3906694.248..6562712.017 rows=155000167 loops=1)
+                                       Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                       ->  Gather Merge  (cost=50188714.17..239993876.08 rows=1500000000 width=36) (actual time=3906694.241..6360879.920 rows=155000167 loops=1)
+                                             Workers Planned: 6
+                                             Workers Launched: 6
+                                             ->  Group  (cost=50187714.07..57687714.07 rows=250000000 width=36) (actual time=3906610.854..4300764.003 rows=22142881 loops=7)
+                                                   Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                   ->  Sort  (cost=50187714.07..50812714.07 rows=250000000 width=36) (actual time=3906610.849..4271234.533 rows=22142881 loops=7)
+                                                         Sort Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                         Sort Method: external sort  Disk: 49202728kB
+                                                         ->  ProjectSet  (cost=0.00..1644148.00 rows=250000000 width=36) (actual time=10.539..3699214.580 rows=22142881 loops=7)
+                                                               ->  Parallel Seq Scan on json_data j_1  (cost=0.00..325398.00 rows=2500000 width=128) (actual time=4.957..10121.442 rows=2142857 loops=7)
+ Planning time: 75.782 ms
+ Execution time: 6778456.322 ms
+(28 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                QUERY PLAN                                                                                                                                                 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=318742779.49..318742779.99 rows=200 width=16) (actual time=6811375.588..6811375.591 rows=45 loops=1)
+   Sort Key: (count(*)) DESC, c_orders.c_count DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  GroupAggregate  (cost=318742768.35..318742771.85 rows=200 width=16) (actual time=6806370.061..6811375.498 rows=45 loops=1)
+         Group Key: c_orders.c_count
+         ->  Sort  (cost=318742768.35..318742768.85 rows=200 width=8) (actual time=6806370.037..6809993.175 rows=14999987 loops=1)
+               Sort Key: c_orders.c_count DESC
+               Sort Method: external merge  Disk: 264320kB
+               ->  Subquery Scan on c_orders  (cost=50188714.17..318742760.71 rows=200 width=8) (actual time=3946693.542..6797867.910 rows=14999987 loops=1)
+                     ->  GroupAggregate  (cost=50188714.17..318742758.71 rows=200 width=12) (actual time=3946693.541..6795467.237 rows=14999987 loops=1)
+                           Group Key: j.custkey
+                           ->  Subquery Scan on j  (cost=50188714.17..307493876.08 rows=1499850750 width=36) (actual time=3946223.214..6722262.476 rows=153389913 loops=1)
+                                 Filter: (((j.c_orders -> 'o_orderkey'::text) IS NULL) OR ((j.c_orders ->> 'o_comment'::text) !~~ '%express%packages%'::text))
+                                 Rows Removed by Filter: 1610254
+                                 ->  Group  (cost=50188714.17..281243876.08 rows=1500000000 width=36) (actual time=3946222.323..6597534.979 rows=155000167 loops=1)
+                                       Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                       ->  Gather Merge  (cost=50188714.17..239993876.08 rows=1500000000 width=36) (actual time=3946222.306..6393709.382 rows=155000167 loops=1)
+                                             Workers Planned: 6
+                                             Workers Launched: 6
+                                             ->  Group  (cost=50187714.07..57687714.07 rows=250000000 width=36) (actual time=3946079.045..4339807.804 rows=22142881 loops=7)
+                                                   Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                   ->  Sort  (cost=50187714.07..50812714.07 rows=250000000 width=36) (actual time=3946079.038..4310356.193 rows=22142881 loops=7)
+                                                         Sort Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                         Sort Method: external sort  Disk: 50245856kB
+                                                         ->  ProjectSet  (cost=0.00..1644148.00 rows=250000000 width=36) (actual time=12.745..3737556.663 rows=22142881 loops=7)
+                                                               ->  Parallel Seq Scan on json_data j_1  (cost=0.00..325398.00 rows=2500000 width=128) (actual time=7.145..5004.921 rows=2142857 loops=7)
+ Planning time: 44.618 ms
+ Execution time: 6812718.127 ms
+(28 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                QUERY PLAN                                                                                                                                                 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=318742779.49..318742779.99 rows=200 width=16) (actual time=6860533.608..6860533.610 rows=45 loops=1)
+   Sort Key: (count(*)) DESC, c_orders.c_count DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  GroupAggregate  (cost=318742768.35..318742771.85 rows=200 width=16) (actual time=6855686.415..6860533.492 rows=45 loops=1)
+         Group Key: c_orders.c_count
+         ->  Sort  (cost=318742768.35..318742768.85 rows=200 width=8) (actual time=6855686.399..6859065.582 rows=14999987 loops=1)
+               Sort Key: c_orders.c_count DESC
+               Sort Method: external merge  Disk: 264320kB
+               ->  Subquery Scan on c_orders  (cost=50188714.17..318742760.71 rows=200 width=8) (actual time=4006423.442..6847187.545 rows=14999987 loops=1)
+                     ->  GroupAggregate  (cost=50188714.17..318742758.71 rows=200 width=12) (actual time=4006423.441..6844771.227 rows=14999987 loops=1)
+                           Group Key: j.custkey
+                           ->  Subquery Scan on j  (cost=50188714.17..307493876.08 rows=1499850750 width=36) (actual time=4006406.061..6768844.108 rows=153389913 loops=1)
+                                 Filter: (((j.c_orders -> 'o_orderkey'::text) IS NULL) OR ((j.c_orders ->> 'o_comment'::text) !~~ '%express%packages%'::text))
+                                 Rows Removed by Filter: 1610254
+                                 ->  Group  (cost=50188714.17..281243876.08 rows=1500000000 width=36) (actual time=4006405.252..6642989.852 rows=155000167 loops=1)
+                                       Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                       ->  Gather Merge  (cost=50188714.17..239993876.08 rows=1500000000 width=36) (actual time=4006405.247..6439805.400 rows=155000167 loops=1)
+                                             Workers Planned: 6
+                                             Workers Launched: 6
+                                             ->  Group  (cost=50187714.07..57687714.07 rows=250000000 width=36) (actual time=4005903.902..4397595.660 rows=22142881 loops=7)
+                                                   Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                   ->  Sort  (cost=50187714.07..50812714.07 rows=250000000 width=36) (actual time=4005903.896..4368166.287 rows=22142881 loops=7)
+                                                         Sort Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                         Sort Method: external sort  Disk: 50046184kB
+                                                         ->  ProjectSet  (cost=0.00..1644148.00 rows=250000000 width=36) (actual time=15.171..3796324.163 rows=22142881 loops=7)
+                                                               ->  Parallel Seq Scan on json_data j_1  (cost=0.00..325398.00 rows=2500000 width=128) (actual time=9.539..13085.341 rows=2142857 loops=7)
+ Planning time: 77.305 ms
+ Execution time: 6861889.310 ms
+(28 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                QUERY PLAN                                                                                                                                                 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=318742779.49..318742779.99 rows=200 width=16) (actual time=7438216.803..7438216.806 rows=45 loops=1)
+   Sort Key: (count(*)) DESC, c_orders.c_count DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  GroupAggregate  (cost=318742768.35..318742771.85 rows=200 width=16) (actual time=7432731.304..7438216.680 rows=45 loops=1)
+         Group Key: c_orders.c_count
+         ->  Sort  (cost=318742768.35..318742768.85 rows=200 width=8) (actual time=7432731.284..7436724.331 rows=14999987 loops=1)
+               Sort Key: c_orders.c_count DESC
+               Sort Method: external merge  Disk: 264320kB
+               ->  Subquery Scan on c_orders  (cost=50188714.17..318742760.71 rows=200 width=8) (actual time=3999274.676..7424430.030 rows=14999987 loops=1)
+                     ->  GroupAggregate  (cost=50188714.17..318742758.71 rows=200 width=12) (actual time=3999274.675..7422036.486 rows=14999987 loops=1)
+                           Group Key: j.custkey
+                           ->  Subquery Scan on j  (cost=50188714.17..307493876.08 rows=1499850750 width=36) (actual time=3999265.705..7350459.878 rows=153389913 loops=1)
+                                 Filter: (((j.c_orders -> 'o_orderkey'::text) IS NULL) OR ((j.c_orders ->> 'o_comment'::text) !~~ '%express%packages%'::text))
+                                 Rows Removed by Filter: 1610254
+                                 ->  Group  (cost=50188714.17..281243876.08 rows=1500000000 width=36) (actual time=3999265.398..7225047.686 rows=155000167 loops=1)
+                                       Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                       ->  Gather Merge  (cost=50188714.17..239993876.08 rows=1500000000 width=36) (actual time=3999265.393..7022378.196 rows=155000167 loops=1)
+                                             Workers Planned: 6
+                                             Workers Launched: 6
+                                             ->  Group  (cost=50187714.07..57687714.07 rows=250000000 width=36) (actual time=3999221.198..4477300.439 rows=22142881 loops=7)
+                                                   Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                   ->  Sort  (cost=50187714.07..50812714.07 rows=250000000 width=36) (actual time=3999221.194..4447630.778 rows=22142881 loops=7)
+                                                         Sort Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                         Sort Method: external sort  Disk: 49765672kB
+                                                         ->  ProjectSet  (cost=0.00..1644148.00 rows=250000000 width=36) (actual time=6.640..3793036.468 rows=22142881 loops=7)
+                                                               ->  Parallel Seq Scan on json_data j_1  (cost=0.00..325398.00 rows=2500000 width=128) (actual time=3.469..16962.046 rows=2142857 loops=7)
+ Planning time: 70.843 ms
+ Execution time: 7439493.127 ms
+(28 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                QUERY PLAN                                                                                                                                                 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=318742779.49..318742779.99 rows=200 width=16) (actual time=7647040.987..7647040.990 rows=45 loops=1)
+   Sort Key: (count(*)) DESC, c_orders.c_count DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  GroupAggregate  (cost=318742768.35..318742771.85 rows=200 width=16) (actual time=7641535.667..7647040.880 rows=45 loops=1)
+         Group Key: c_orders.c_count
+         ->  Sort  (cost=318742768.35..318742768.85 rows=200 width=8) (actual time=7641535.654..7645474.253 rows=14999987 loops=1)
+               Sort Key: c_orders.c_count DESC
+               Sort Method: external merge  Disk: 264320kB
+               ->  Subquery Scan on c_orders  (cost=50188714.17..318742760.71 rows=200 width=8) (actual time=4175884.173..7633203.185 rows=14999987 loops=1)
+                     ->  GroupAggregate  (cost=50188714.17..318742758.71 rows=200 width=12) (actual time=4175884.172..7630929.002 rows=14999987 loops=1)
+                           Group Key: j.custkey
+                           ->  Subquery Scan on j  (cost=50188714.17..307493876.08 rows=1499850750 width=36) (actual time=4175881.613..7556539.292 rows=153389913 loops=1)
+                                 Filter: (((j.c_orders -> 'o_orderkey'::text) IS NULL) OR ((j.c_orders ->> 'o_comment'::text) !~~ '%express%packages%'::text))
+                                 Rows Removed by Filter: 1610254
+                                 ->  Group  (cost=50188714.17..281243876.08 rows=1500000000 width=36) (actual time=4175881.251..7428765.738 rows=155000167 loops=1)
+                                       Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                       ->  Gather Merge  (cost=50188714.17..239993876.08 rows=1500000000 width=36) (actual time=4175881.237..7225309.483 rows=155000167 loops=1)
+                                             Workers Planned: 6
+                                             Workers Launched: 6
+                                             ->  Group  (cost=50187714.07..57687714.07 rows=250000000 width=36) (actual time=4175825.348..4658767.847 rows=22142881 loops=7)
+                                                   Group Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                   ->  Sort  (cost=50187714.07..50812714.07 rows=250000000 width=36) (actual time=4175825.342..4628873.234 rows=22142881 loops=7)
+                                                         Sort Key: (((j_1.customers ->> 'c_custkey'::text))::integer), (jsonb_array_elements(CASE WHEN (jsonb_array_length((j_1.customers -> 'c_orders'::text)) >= 1) THEN (j_1.customers -> 'c_orders'::text) ELSE jsonb_build_array(NULL::unknown) END))
+                                                         Sort Method: external sort  Disk: 49880976kB
+                                                         ->  ProjectSet  (cost=0.00..1644148.00 rows=250000000 width=36) (actual time=10.646..3963355.101 rows=22142881 loops=7)
+                                                               ->  Parallel Seq Scan on json_data j_1  (cost=0.00..325398.00 rows=2500000 width=128) (actual time=7.767..5628.824 rows=2142857 loops=7)
+ Planning time: 87.907 ms
+ Execution time: 7648365.336 ms
+(28 rows)
+
+
+

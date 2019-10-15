@@ -1,0 +1,34 @@
+\c {{ variables['psql_db_name'] }}
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+	j.lineitems->>'l_shipmode' as l_shipmode,
+        sum(case
+                when o_orderpriority = '1-URGENT'
+                        or o_orderpriority = '2-HIGH'
+                        then 1
+                else 0
+        end) as high_line_count,
+        sum(case
+                when o_orderpriority <> '1-URGENT'
+                        and o_orderpriority <> '2-HIGH'
+                        then 1
+                else 0
+        end) as low_line_count
+from
+	(select
+		j.orders->>'o_orderpriority' o_orderpriority,
+		jsonb_array_elements(j.orders->'o_lineitems') lineitems
+	from (select jsonb_array_elements(j.customers->'c_orders') as orders from {{ variables['psql_db_schema'] }}.json_data j) j) j
+where 
+      j.lineitems->>'l_shipmode' in ('{{ variables['tpch']['q12']['shipmode_1'] }}', '{{ variables['tpch']['q12']['shipmode_2'] }}')
+      and cast(j.lineitems->>'l_commitdate' as date) < cast(j.lineitems->>'l_receiptdate' as date)
+      and cast(j.lineitems->>'l_shipdate' as date) < cast(j.lineitems->>'l_commitdate' as date)
+      and cast(j.lineitems->>'l_receiptdate' as date) >= date '{{ variables['tpch']['q12']['date'] }}'
+      and cast(j.lineitems->>'l_receiptdate' as date) < date '{{ variables['tpch']['q12']['date'] }}' + interval '1' year
+group by
+      l_shipmode
+order by
+      l_shipmode;

@@ -1,0 +1,155 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                          QUERY PLAN                                                                           
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=838501.87..838685.71 rows=6685 width=72) (actual time=11570.717..11583.845 rows=7 loops=1)
+   Group Key: ("substring"((customer.c_phone)::text, 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=46701.02..46701.03 rows=1 width=32) (actual time=1054.192..1054.192 rows=1 loops=1)
+           ->  Gather  (cost=46700.58..46700.99 rows=4 width=32) (actual time=1054.124..1054.282 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=45700.58..45700.59 rows=1 width=32) (actual time=1039.799..1039.799 rows=1 loops=5)
+                       ->  Parallel Seq Scan on customer customer_1  (cost=0.00..45670.75 rows=11932 width=6) (actual time=3.489..1021.978 rows=76404 loops=5)
+                             Filter: ((c_acctbal > 0.00) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=791800.84..791817.56 rows=6685 width=38) (actual time=11568.514..11571.454 rows=63677 loops=1)
+         Sort Key: ("substring"((customer.c_phone)::text, 1, 2))
+         Sort Method: quicksort  Memory: 4521kB
+         ->  Hash Anti Join  (cost=657006.00..791376.12 rows=6685 width=38) (actual time=9144.229..11543.694 rows=63677 loops=1)
+               Hash Cond: (customer.c_custkey = orders.o_custkey)
+               ->  Seq Scan on customer  (cost=0.00..75202.00 rows=17500 width=26) (actual time=1054.215..1795.025 rows=190939 loops=1)
+                     Filter: ((c_acctbal > $1) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                     Rows Removed by Filter: 1309061
+               ->  Hash  (cost=410912.00..410912.00 rows=15000000 width=4) (actual time=8080.064..8080.064 rows=15000000 loops=1)
+                     Buckets: 2097152  Batches: 32  Memory Usage: 32957kB
+                     ->  Seq Scan on orders  (cost=0.00..410912.00 rows=15000000 width=4) (actual time=4.303..5760.974 rows=15000000 loops=1)
+ Planning time: 128.085 ms
+ Execution time: 11584.157 ms
+(24 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                           QUERY PLAN                                                                           
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=838501.87..838685.71 rows=6685 width=72) (actual time=12403.185..12414.940 rows=7 loops=1)
+   Group Key: ("substring"((customer.c_phone)::text, 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=46701.02..46701.03 rows=1 width=32) (actual time=1079.169..1079.169 rows=1 loops=1)
+           ->  Gather  (cost=46700.58..46700.99 rows=4 width=32) (actual time=1079.071..1079.303 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=45700.58..45700.59 rows=1 width=32) (actual time=1054.691..1054.691 rows=1 loops=5)
+                       ->  Parallel Seq Scan on customer customer_1  (cost=0.00..45670.75 rows=11932 width=6) (actual time=13.516..1037.779 rows=76404 loops=5)
+                             Filter: ((c_acctbal > 0.00) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=791800.84..791817.56 rows=6685 width=38) (actual time=12401.186..12403.868 rows=63677 loops=1)
+         Sort Key: ("substring"((customer.c_phone)::text, 1, 2))
+         Sort Method: quicksort  Memory: 4521kB
+         ->  Hash Anti Join  (cost=657006.00..791376.12 rows=6685 width=38) (actual time=9910.598..12377.970 rows=63677 loops=1)
+               Hash Cond: (customer.c_custkey = orders.o_custkey)
+               ->  Seq Scan on customer  (cost=0.00..75202.00 rows=17500 width=26) (actual time=1079.192..1845.950 rows=190939 loops=1)
+                     Filter: ((c_acctbal > $1) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                     Rows Removed by Filter: 1309061
+               ->  Hash  (cost=410912.00..410912.00 rows=15000000 width=4) (actual time=8821.252..8821.252 rows=15000000 loops=1)
+                     Buckets: 2097152  Batches: 32  Memory Usage: 32957kB
+                     ->  Seq Scan on orders  (cost=0.00..410912.00 rows=15000000 width=4) (actual time=12.732..6414.756 rows=15000000 loops=1)
+ Planning time: 123.701 ms
+ Execution time: 12415.360 ms
+(24 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                          QUERY PLAN                                                                           
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=838501.87..838685.71 rows=6685 width=72) (actual time=11549.245..11562.458 rows=7 loops=1)
+   Group Key: ("substring"((customer.c_phone)::text, 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=46701.02..46701.03 rows=1 width=32) (actual time=1054.240..1054.240 rows=1 loops=1)
+           ->  Gather  (cost=46700.58..46700.99 rows=4 width=32) (actual time=1054.100..1054.325 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=45700.58..45700.59 rows=1 width=32) (actual time=1039.892..1039.893 rows=1 loops=5)
+                       ->  Parallel Seq Scan on customer customer_1  (cost=0.00..45670.75 rows=11932 width=6) (actual time=3.848..1022.204 rows=76404 loops=5)
+                             Filter: ((c_acctbal > 0.00) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=791800.84..791817.56 rows=6685 width=38) (actual time=11547.024..11549.765 rows=63677 loops=1)
+         Sort Key: ("substring"((customer.c_phone)::text, 1, 2))
+         Sort Method: quicksort  Memory: 4521kB
+         ->  Hash Anti Join  (cost=657006.00..791376.12 rows=6685 width=38) (actual time=9110.922..11523.631 rows=63677 loops=1)
+               Hash Cond: (customer.c_custkey = orders.o_custkey)
+               ->  Seq Scan on customer  (cost=0.00..75202.00 rows=17500 width=26) (actual time=1054.264..1813.121 rows=190939 loops=1)
+                     Filter: ((c_acctbal > $1) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                     Rows Removed by Filter: 1309061
+               ->  Hash  (cost=410912.00..410912.00 rows=15000000 width=4) (actual time=8046.659..8046.659 rows=15000000 loops=1)
+                     Buckets: 2097152  Batches: 32  Memory Usage: 32957kB
+                     ->  Seq Scan on orders  (cost=0.00..410912.00 rows=15000000 width=4) (actual time=12.898..5667.998 rows=15000000 loops=1)
+ Planning time: 139.957 ms
+ Execution time: 11562.754 ms
+(24 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                           QUERY PLAN                                                                           
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=838501.87..838685.71 rows=6685 width=72) (actual time=11527.848..11541.052 rows=7 loops=1)
+   Group Key: ("substring"((customer.c_phone)::text, 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=46701.02..46701.03 rows=1 width=32) (actual time=1079.272..1079.272 rows=1 loops=1)
+           ->  Gather  (cost=46700.58..46700.99 rows=4 width=32) (actual time=1079.151..1079.373 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=45700.58..45700.59 rows=1 width=32) (actual time=1054.649..1054.649 rows=1 loops=5)
+                       ->  Parallel Seq Scan on customer customer_1  (cost=0.00..45670.75 rows=11932 width=6) (actual time=13.623..1036.518 rows=76404 loops=5)
+                             Filter: ((c_acctbal > 0.00) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=791800.84..791817.56 rows=6685 width=38) (actual time=11525.631..11528.618 rows=63677 loops=1)
+         Sort Key: ("substring"((customer.c_phone)::text, 1, 2))
+         Sort Method: quicksort  Memory: 4521kB
+         ->  Hash Anti Join  (cost=657006.00..791376.12 rows=6685 width=38) (actual time=9094.357..11500.481 rows=63677 loops=1)
+               Hash Cond: (customer.c_custkey = orders.o_custkey)
+               ->  Seq Scan on customer  (cost=0.00..75202.00 rows=17500 width=26) (actual time=1079.296..1820.106 rows=190939 loops=1)
+                     Filter: ((c_acctbal > $1) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                     Rows Removed by Filter: 1309061
+               ->  Hash  (cost=410912.00..410912.00 rows=15000000 width=4) (actual time=8006.792..8006.792 rows=15000000 loops=1)
+                     Buckets: 2097152  Batches: 32  Memory Usage: 32957kB
+                     ->  Seq Scan on orders  (cost=0.00..410912.00 rows=15000000 width=4) (actual time=6.493..5622.213 rows=15000000 loops=1)
+ Planning time: 139.822 ms
+ Execution time: 11541.381 ms
+(24 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                          QUERY PLAN                                                                           
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=838501.87..838685.71 rows=6685 width=72) (actual time=11576.382..11588.203 rows=7 loops=1)
+   Group Key: ("substring"((customer.c_phone)::text, 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=46701.02..46701.03 rows=1 width=32) (actual time=1062.613..1062.613 rows=1 loops=1)
+           ->  Gather  (cost=46700.58..46700.99 rows=4 width=32) (actual time=1062.540..1062.761 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=45700.58..45700.59 rows=1 width=32) (actual time=1048.225..1048.225 rows=1 loops=5)
+                       ->  Parallel Seq Scan on customer customer_1  (cost=0.00..45670.75 rows=11932 width=6) (actual time=4.058..1031.545 rows=76404 loops=5)
+                             Filter: ((c_acctbal > 0.00) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=791800.84..791817.56 rows=6685 width=38) (actual time=11574.380..11577.051 rows=63677 loops=1)
+         Sort Key: ("substring"((customer.c_phone)::text, 1, 2))
+         Sort Method: quicksort  Memory: 4521kB
+         ->  Hash Anti Join  (cost=657006.00..791376.12 rows=6685 width=38) (actual time=9186.090..11551.150 rows=63677 loops=1)
+               Hash Cond: (customer.c_custkey = orders.o_custkey)
+               ->  Seq Scan on customer  (cost=0.00..75202.00 rows=17500 width=26) (actual time=1062.633..1823.207 rows=190939 loops=1)
+                     Filter: ((c_acctbal > $1) AND ("substring"((c_phone)::text, 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                     Rows Removed by Filter: 1309061
+               ->  Hash  (cost=410912.00..410912.00 rows=15000000 width=4) (actual time=8115.096..8115.096 rows=15000000 loops=1)
+                     Buckets: 2097152  Batches: 32  Memory Usage: 32957kB
+                     ->  Seq Scan on orders  (cost=0.00..410912.00 rows=15000000 width=4) (actual time=6.620..5762.729 rows=15000000 loops=1)
+ Planning time: 115.236 ms
+ Execution time: 11588.610 ms
+(24 rows)
+
+
+

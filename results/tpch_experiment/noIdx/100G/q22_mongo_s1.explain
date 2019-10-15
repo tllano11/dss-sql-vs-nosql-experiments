@@ -1,0 +1,995 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_acctbal" : {
+						"$gt" : 0
+					}
+				},
+				"fields" : {
+					"c_acctbal" : 1,
+					"c_phone" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_acctbal" : {
+							"$gt" : 0
+						}
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 11268649,
+					"executionTimeMillis" : 1490547,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 12395000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"nReturned" : 11268649,
+						"executionTimeMillisEstimate" : 730818,
+						"works" : 12395002,
+						"advanced" : 11268649,
+						"needTime" : 1126352,
+						"needYield" : 0,
+						"saveState" : 104368,
+						"restoreState" : 104368,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 12395000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_acctbal" : true,
+				"cntrycode" : {
+					"$substrBytes" : [
+						"$c_phone",
+						{
+							"$const" : 0
+						},
+						{
+							"$const" : 2
+						}
+					]
+				}
+			}
+		},
+		{
+			"$match" : {
+				"cntrycode" : {
+					"$in" : [
+						"10",
+						"15",
+						"17",
+						"21",
+						"22",
+						"25",
+						"30"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"$const" : null
+				},
+				"c_acctbal_avg" : {
+					"$avg" : "$c_acctbal"
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"c_acctbal_avg" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "scale1",
+				"as" : "c_acctbals",
+				"let" : {
+					
+				},
+				"pipeline" : [
+					{
+						"$match" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							},
+							"c_orders" : {
+								"$eq" : [ ]
+							}
+						}
+					},
+					{
+						"$project" : {
+							"_id" : 0,
+							"c_acctbal" : 1,
+							"cntrycode" : {
+								"$substr" : [
+									"$c_phone",
+									0,
+									2
+								]
+							}
+						}
+					},
+					{
+						"$match" : {
+							"cntrycode" : {
+								"$in" : [
+									"30",
+									"17",
+									"25",
+									"10",
+									"22",
+									"15",
+									"21"
+								]
+							}
+						}
+					}
+				],
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$expr" : {
+					"$gt" : [
+						"$c_acctbals.c_acctbal",
+						"$c_acctbal_avg"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_acctbals.cntrycode",
+				"numcust" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				},
+				"totacctbal" : {
+					"$sum" : "$c_acctbals.c_acctbal"
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_acctbal" : {
+						"$gt" : 0
+					}
+				},
+				"fields" : {
+					"c_acctbal" : 1,
+					"c_phone" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_acctbal" : {
+							"$gt" : 0
+						}
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 11268649,
+					"executionTimeMillis" : 1493578,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 12395000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"nReturned" : 11268649,
+						"executionTimeMillisEstimate" : 731595,
+						"works" : 12395002,
+						"advanced" : 11268649,
+						"needTime" : 1126352,
+						"needYield" : 0,
+						"saveState" : 104388,
+						"restoreState" : 104388,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 12395000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_acctbal" : true,
+				"cntrycode" : {
+					"$substrBytes" : [
+						"$c_phone",
+						{
+							"$const" : 0
+						},
+						{
+							"$const" : 2
+						}
+					]
+				}
+			}
+		},
+		{
+			"$match" : {
+				"cntrycode" : {
+					"$in" : [
+						"10",
+						"15",
+						"17",
+						"21",
+						"22",
+						"25",
+						"30"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"$const" : null
+				},
+				"c_acctbal_avg" : {
+					"$avg" : "$c_acctbal"
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"c_acctbal_avg" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "scale1",
+				"as" : "c_acctbals",
+				"let" : {
+					
+				},
+				"pipeline" : [
+					{
+						"$match" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							},
+							"c_orders" : {
+								"$eq" : [ ]
+							}
+						}
+					},
+					{
+						"$project" : {
+							"_id" : 0,
+							"c_acctbal" : 1,
+							"cntrycode" : {
+								"$substr" : [
+									"$c_phone",
+									0,
+									2
+								]
+							}
+						}
+					},
+					{
+						"$match" : {
+							"cntrycode" : {
+								"$in" : [
+									"30",
+									"17",
+									"25",
+									"10",
+									"22",
+									"15",
+									"21"
+								]
+							}
+						}
+					}
+				],
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$expr" : {
+					"$gt" : [
+						"$c_acctbals.c_acctbal",
+						"$c_acctbal_avg"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_acctbals.cntrycode",
+				"numcust" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				},
+				"totacctbal" : {
+					"$sum" : "$c_acctbals.c_acctbal"
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_acctbal" : {
+						"$gt" : 0
+					}
+				},
+				"fields" : {
+					"c_acctbal" : 1,
+					"c_phone" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_acctbal" : {
+							"$gt" : 0
+						}
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 11268649,
+					"executionTimeMillis" : 1487708,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 12395000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"nReturned" : 11268649,
+						"executionTimeMillisEstimate" : 728802,
+						"works" : 12395002,
+						"advanced" : 11268649,
+						"needTime" : 1126352,
+						"needYield" : 0,
+						"saveState" : 104375,
+						"restoreState" : 104375,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 12395000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_acctbal" : true,
+				"cntrycode" : {
+					"$substrBytes" : [
+						"$c_phone",
+						{
+							"$const" : 0
+						},
+						{
+							"$const" : 2
+						}
+					]
+				}
+			}
+		},
+		{
+			"$match" : {
+				"cntrycode" : {
+					"$in" : [
+						"10",
+						"15",
+						"17",
+						"21",
+						"22",
+						"25",
+						"30"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"$const" : null
+				},
+				"c_acctbal_avg" : {
+					"$avg" : "$c_acctbal"
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"c_acctbal_avg" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "scale1",
+				"as" : "c_acctbals",
+				"let" : {
+					
+				},
+				"pipeline" : [
+					{
+						"$match" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							},
+							"c_orders" : {
+								"$eq" : [ ]
+							}
+						}
+					},
+					{
+						"$project" : {
+							"_id" : 0,
+							"c_acctbal" : 1,
+							"cntrycode" : {
+								"$substr" : [
+									"$c_phone",
+									0,
+									2
+								]
+							}
+						}
+					},
+					{
+						"$match" : {
+							"cntrycode" : {
+								"$in" : [
+									"30",
+									"17",
+									"25",
+									"10",
+									"22",
+									"15",
+									"21"
+								]
+							}
+						}
+					}
+				],
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$expr" : {
+					"$gt" : [
+						"$c_acctbals.c_acctbal",
+						"$c_acctbal_avg"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_acctbals.cntrycode",
+				"numcust" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				},
+				"totacctbal" : {
+					"$sum" : "$c_acctbals.c_acctbal"
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_acctbal" : {
+						"$gt" : 0
+					}
+				},
+				"fields" : {
+					"c_acctbal" : 1,
+					"c_phone" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_acctbal" : {
+							"$gt" : 0
+						}
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 11268649,
+					"executionTimeMillis" : 1486598,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 12395000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"nReturned" : 11268649,
+						"executionTimeMillisEstimate" : 728420,
+						"works" : 12395002,
+						"advanced" : 11268649,
+						"needTime" : 1126352,
+						"needYield" : 0,
+						"saveState" : 104411,
+						"restoreState" : 104411,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 12395000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_acctbal" : true,
+				"cntrycode" : {
+					"$substrBytes" : [
+						"$c_phone",
+						{
+							"$const" : 0
+						},
+						{
+							"$const" : 2
+						}
+					]
+				}
+			}
+		},
+		{
+			"$match" : {
+				"cntrycode" : {
+					"$in" : [
+						"10",
+						"15",
+						"17",
+						"21",
+						"22",
+						"25",
+						"30"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"$const" : null
+				},
+				"c_acctbal_avg" : {
+					"$avg" : "$c_acctbal"
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"c_acctbal_avg" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "scale1",
+				"as" : "c_acctbals",
+				"let" : {
+					
+				},
+				"pipeline" : [
+					{
+						"$match" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							},
+							"c_orders" : {
+								"$eq" : [ ]
+							}
+						}
+					},
+					{
+						"$project" : {
+							"_id" : 0,
+							"c_acctbal" : 1,
+							"cntrycode" : {
+								"$substr" : [
+									"$c_phone",
+									0,
+									2
+								]
+							}
+						}
+					},
+					{
+						"$match" : {
+							"cntrycode" : {
+								"$in" : [
+									"30",
+									"17",
+									"25",
+									"10",
+									"22",
+									"15",
+									"21"
+								]
+							}
+						}
+					}
+				],
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$expr" : {
+					"$gt" : [
+						"$c_acctbals.c_acctbal",
+						"$c_acctbal_avg"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_acctbals.cntrycode",
+				"numcust" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				},
+				"totacctbal" : {
+					"$sum" : "$c_acctbals.c_acctbal"
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_acctbal" : {
+						"$gt" : 0
+					}
+				},
+				"fields" : {
+					"c_acctbal" : 1,
+					"c_phone" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_acctbal" : {
+							"$gt" : 0
+						}
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 11268649,
+					"executionTimeMillis" : 1503655,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 12395000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							}
+						},
+						"nReturned" : 11268649,
+						"executionTimeMillisEstimate" : 733547,
+						"works" : 12395002,
+						"advanced" : 11268649,
+						"needTime" : 1126352,
+						"needYield" : 0,
+						"saveState" : 104465,
+						"restoreState" : 104465,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 12395000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_acctbal" : true,
+				"cntrycode" : {
+					"$substrBytes" : [
+						"$c_phone",
+						{
+							"$const" : 0
+						},
+						{
+							"$const" : 2
+						}
+					]
+				}
+			}
+		},
+		{
+			"$match" : {
+				"cntrycode" : {
+					"$in" : [
+						"10",
+						"15",
+						"17",
+						"21",
+						"22",
+						"25",
+						"30"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"$const" : null
+				},
+				"c_acctbal_avg" : {
+					"$avg" : "$c_acctbal"
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"c_acctbal_avg" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "scale1",
+				"as" : "c_acctbals",
+				"let" : {
+					
+				},
+				"pipeline" : [
+					{
+						"$match" : {
+							"c_acctbal" : {
+								"$gt" : 0
+							},
+							"c_orders" : {
+								"$eq" : [ ]
+							}
+						}
+					},
+					{
+						"$project" : {
+							"_id" : 0,
+							"c_acctbal" : 1,
+							"cntrycode" : {
+								"$substr" : [
+									"$c_phone",
+									0,
+									2
+								]
+							}
+						}
+					},
+					{
+						"$match" : {
+							"cntrycode" : {
+								"$in" : [
+									"30",
+									"17",
+									"25",
+									"10",
+									"22",
+									"15",
+									"21"
+								]
+							}
+						}
+					}
+				],
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$expr" : {
+					"$gt" : [
+						"$c_acctbals.c_acctbal",
+						"$c_acctbal_avg"
+					]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_acctbals.cntrycode",
+				"numcust" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				},
+				"totacctbal" : {
+					"$sum" : "$c_acctbals.c_acctbal"
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

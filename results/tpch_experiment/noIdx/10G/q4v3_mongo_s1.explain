@@ -1,0 +1,645 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 238607,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 54336,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 33569,
+						"restoreState" : 33569,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$and" : [
+								{
+									"$anyElementTrue" : [
+										{
+											"$map" : {
+												"input" : "$$o.o_lineitems",
+												"as" : "l",
+												"in" : {
+													"$lt" : [
+														"$$l.l_commitdate",
+														"$$l.l_receiptdate"
+													]
+												}
+											}
+										}
+									]
+								},
+								{
+									"$gte" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-01-01T00:00:00Z")
+										}
+									]
+								},
+								{
+									"$lt" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-04-01T00:00:00Z")
+										}
+									]
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 239551,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 54578,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 33607,
+						"restoreState" : 33607,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$and" : [
+								{
+									"$anyElementTrue" : [
+										{
+											"$map" : {
+												"input" : "$$o.o_lineitems",
+												"as" : "l",
+												"in" : {
+													"$lt" : [
+														"$$l.l_commitdate",
+														"$$l.l_receiptdate"
+													]
+												}
+											}
+										}
+									]
+								},
+								{
+									"$gte" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-01-01T00:00:00Z")
+										}
+									]
+								},
+								{
+									"$lt" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-04-01T00:00:00Z")
+										}
+									]
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 237826,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 53836,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 33599,
+						"restoreState" : 33599,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$and" : [
+								{
+									"$anyElementTrue" : [
+										{
+											"$map" : {
+												"input" : "$$o.o_lineitems",
+												"as" : "l",
+												"in" : {
+													"$lt" : [
+														"$$l.l_commitdate",
+														"$$l.l_receiptdate"
+													]
+												}
+											}
+										}
+									]
+								},
+								{
+									"$gte" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-01-01T00:00:00Z")
+										}
+									]
+								},
+								{
+									"$lt" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-04-01T00:00:00Z")
+										}
+									]
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 238091,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 53485,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 33626,
+						"restoreState" : 33626,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$and" : [
+								{
+									"$anyElementTrue" : [
+										{
+											"$map" : {
+												"input" : "$$o.o_lineitems",
+												"as" : "l",
+												"in" : {
+													"$lt" : [
+														"$$l.l_commitdate",
+														"$$l.l_receiptdate"
+													]
+												}
+											}
+										}
+									]
+								},
+								{
+									"$gte" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-01-01T00:00:00Z")
+										}
+									]
+								},
+								{
+									"$lt" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-04-01T00:00:00Z")
+										}
+									]
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 239550,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 52410,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 33565,
+						"restoreState" : 33565,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$and" : [
+								{
+									"$anyElementTrue" : [
+										{
+											"$map" : {
+												"input" : "$$o.o_lineitems",
+												"as" : "l",
+												"in" : {
+													"$lt" : [
+														"$$l.l_commitdate",
+														"$$l.l_receiptdate"
+													]
+												}
+											}
+										}
+									]
+								},
+								{
+									"$gte" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-01-01T00:00:00Z")
+										}
+									]
+								},
+								{
+									"$lt" : [
+										"$$o.o_orderdate",
+										{
+											"$const" : ISODate("1992-04-01T00:00:00Z")
+										}
+									]
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

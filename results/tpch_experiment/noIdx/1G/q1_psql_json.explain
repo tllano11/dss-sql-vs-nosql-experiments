@@ -1,0 +1,105 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                       QUERY PLAN                                                                        
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=97806066.50..97806066.50 rows=1 width=296) (actual time=17454.220..17454.223 rows=1 loops=1)
+   ->  Sort  (cost=97806066.50..97806067.00 rows=200 width=296) (actual time=17454.216..17454.216 rows=1 loops=1)
+         Sort Key: ((li.l ->> 'l_returnflag'::text)), ((li.l ->> 'l_linestatus'::text))
+         Sort Method: quicksort  Memory: 25kB
+         ->  HashAggregate  (cost=97806059.00..97806065.50 rows=200 width=296) (actual time=17454.151..17454.156 rows=2 loops=1)
+               Group Key: (li.l ->> 'l_returnflag'::text), (li.l ->> 'l_linestatus'::text)
+               ->  Subquery Scan on li  (cost=0.00..40306059.00 rows=500000000 width=96) (actual time=398.368..17453.746 rows=17 loops=1)
+                     Filter: (((li.l ->> 'l_shipdate'::text))::date <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 6001198
+                     ->  ProjectSet  (cost=0.00..7806059.00 rows=1500000000 width=32) (actual time=28.678..13941.395 rows=6001215 loops=1)
+                           ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=28.661..10343.346 rows=1500000 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=8.786..86.109 rows=150000 loops=1)
+ Planning time: 116.904 ms
+ Execution time: 17454.402 ms
+(14 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                       QUERY PLAN                                                                        
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=97806066.50..97806066.50 rows=1 width=296) (actual time=17406.757..17406.761 rows=1 loops=1)
+   ->  Sort  (cost=97806066.50..97806067.00 rows=200 width=296) (actual time=17406.753..17406.753 rows=1 loops=1)
+         Sort Key: ((li.l ->> 'l_returnflag'::text)), ((li.l ->> 'l_linestatus'::text))
+         Sort Method: quicksort  Memory: 25kB
+         ->  HashAggregate  (cost=97806059.00..97806065.50 rows=200 width=296) (actual time=17406.606..17406.610 rows=2 loops=1)
+               Group Key: (li.l ->> 'l_returnflag'::text), (li.l ->> 'l_linestatus'::text)
+               ->  Subquery Scan on li  (cost=0.00..40306059.00 rows=500000000 width=96) (actual time=398.200..17406.172 rows=17 loops=1)
+                     Filter: (((li.l ->> 'l_shipdate'::text))::date <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 6001198
+                     ->  ProjectSet  (cost=0.00..7806059.00 rows=1500000000 width=32) (actual time=37.730..13720.654 rows=6001215 loops=1)
+                           ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=37.716..10120.187 rows=1500000 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=9.383..83.375 rows=150000 loops=1)
+ Planning time: 91.287 ms
+ Execution time: 17406.953 ms
+(14 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                        QUERY PLAN                                                                        
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=97806066.50..97806066.50 rows=1 width=296) (actual time=17309.900..17309.904 rows=1 loops=1)
+   ->  Sort  (cost=97806066.50..97806067.00 rows=200 width=296) (actual time=17309.896..17309.896 rows=1 loops=1)
+         Sort Key: ((li.l ->> 'l_returnflag'::text)), ((li.l ->> 'l_linestatus'::text))
+         Sort Method: quicksort  Memory: 25kB
+         ->  HashAggregate  (cost=97806059.00..97806065.50 rows=200 width=296) (actual time=17309.747..17309.752 rows=2 loops=1)
+               Group Key: (li.l ->> 'l_returnflag'::text), (li.l ->> 'l_linestatus'::text)
+               ->  Subquery Scan on li  (cost=0.00..40306059.00 rows=500000000 width=96) (actual time=415.680..17309.311 rows=17 loops=1)
+                     Filter: (((li.l ->> 'l_shipdate'::text))::date <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 6001198
+                     ->  ProjectSet  (cost=0.00..7806059.00 rows=1500000000 width=32) (actual time=64.426..13587.081 rows=6001215 loops=1)
+                           ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=64.404..9950.184 rows=1500000 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=11.024..86.334 rows=150000 loops=1)
+ Planning time: 106.300 ms
+ Execution time: 17310.091 ms
+(14 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                       QUERY PLAN                                                                        
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=97806066.50..97806066.50 rows=1 width=296) (actual time=17376.170..17376.174 rows=1 loops=1)
+   ->  Sort  (cost=97806066.50..97806067.00 rows=200 width=296) (actual time=17376.166..17376.166 rows=1 loops=1)
+         Sort Key: ((li.l ->> 'l_returnflag'::text)), ((li.l ->> 'l_linestatus'::text))
+         Sort Method: quicksort  Memory: 25kB
+         ->  HashAggregate  (cost=97806059.00..97806065.50 rows=200 width=296) (actual time=17376.012..17376.017 rows=2 loops=1)
+               Group Key: (li.l ->> 'l_returnflag'::text), (li.l ->> 'l_linestatus'::text)
+               ->  Subquery Scan on li  (cost=0.00..40306059.00 rows=500000000 width=96) (actual time=396.298..17375.574 rows=17 loops=1)
+                     Filter: (((li.l ->> 'l_shipdate'::text))::date <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 6001198
+                     ->  ProjectSet  (cost=0.00..7806059.00 rows=1500000000 width=32) (actual time=36.410..13709.013 rows=6001215 loops=1)
+                           ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=36.397..10169.875 rows=1500000 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=8.050..79.317 rows=150000 loops=1)
+ Planning time: 75.984 ms
+ Execution time: 17376.361 ms
+(14 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                        QUERY PLAN                                                                        
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=97806066.50..97806066.50 rows=1 width=296) (actual time=17530.215..17530.219 rows=1 loops=1)
+   ->  Sort  (cost=97806066.50..97806067.00 rows=200 width=296) (actual time=17530.211..17530.211 rows=1 loops=1)
+         Sort Key: ((li.l ->> 'l_returnflag'::text)), ((li.l ->> 'l_linestatus'::text))
+         Sort Method: quicksort  Memory: 25kB
+         ->  HashAggregate  (cost=97806059.00..97806065.50 rows=200 width=296) (actual time=17530.061..17530.065 rows=2 loops=1)
+               Group Key: (li.l ->> 'l_returnflag'::text), (li.l ->> 'l_linestatus'::text)
+               ->  Subquery Scan on li  (cost=0.00..40306059.00 rows=500000000 width=96) (actual time=391.192..17529.626 rows=17 loops=1)
+                     Filter: (((li.l ->> 'l_shipdate'::text))::date <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 6001198
+                     ->  ProjectSet  (cost=0.00..7806059.00 rows=1500000000 width=32) (actual time=30.403..13831.752 rows=6001215 loops=1)
+                           ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=30.386..10217.166 rows=1500000 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=10.409..86.078 rows=150000 loops=1)
+ Planning time: 90.275 ms
+ Execution time: 17530.406 ms
+(14 rows)
+
+
+

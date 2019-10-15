@@ -1,0 +1,14 @@
+\c {{ variables['psql_db_name'] }}
+set search_path to {{ variables['psql_db_schema'] }};
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+       jsonb_array_elements(orders->'o_lineitems')
+from 
+       (select jsonb_array_elements(customers->'c_orders') as orders 
+       from json_data 
+       where customers @> '{"c_orders":[{"o_orderkey":{{ variables['point']['q1']['orderkey'] }}}]}'::jsonb) o 
+where
+	orders @> '{"o_orderkey":{{ variables['point']['q1']['orderkey'] }}}';

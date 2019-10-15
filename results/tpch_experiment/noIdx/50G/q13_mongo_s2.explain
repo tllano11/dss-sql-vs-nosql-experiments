@@ -1,0 +1,645 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 7500000,
+					"executionTimeMillis" : 3497329,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 7500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 7500000,
+						"executionTimeMillisEstimate" : 16125,
+						"works" : 7500002,
+						"advanced" : 7500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 59256,
+						"restoreState" : 59256,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 7500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : true
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"ordercomment" : "$orders.o_comment"
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"ordercomment" : {
+							"$regex" : ".*express.*packages.*"
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id",
+				"c_count" : {
+					"$sum" : {
+						"$cond" : [
+							{
+								"$eq" : [
+									"$ordercomment",
+									{
+										"$const" : undefined
+									}
+								]
+							},
+							{
+								"$const" : 0
+							},
+							{
+								"$const" : 1
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_count",
+				"custdist" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"custdist" : -1,
+					"_id" : -1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 7500000,
+					"executionTimeMillis" : 3553612,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 7500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 7500000,
+						"executionTimeMillisEstimate" : 17423,
+						"works" : 7500002,
+						"advanced" : 7500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 59271,
+						"restoreState" : 59271,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 7500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : true
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"ordercomment" : "$orders.o_comment"
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"ordercomment" : {
+							"$regex" : ".*express.*packages.*"
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id",
+				"c_count" : {
+					"$sum" : {
+						"$cond" : [
+							{
+								"$eq" : [
+									"$ordercomment",
+									{
+										"$const" : undefined
+									}
+								]
+							},
+							{
+								"$const" : 0
+							},
+							{
+								"$const" : 1
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_count",
+				"custdist" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"custdist" : -1,
+					"_id" : -1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 7500000,
+					"executionTimeMillis" : 3603513,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 7500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 7500000,
+						"executionTimeMillisEstimate" : 17653,
+						"works" : 7500002,
+						"advanced" : 7500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 59277,
+						"restoreState" : 59277,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 7500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : true
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"ordercomment" : "$orders.o_comment"
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"ordercomment" : {
+							"$regex" : ".*express.*packages.*"
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id",
+				"c_count" : {
+					"$sum" : {
+						"$cond" : [
+							{
+								"$eq" : [
+									"$ordercomment",
+									{
+										"$const" : undefined
+									}
+								]
+							},
+							{
+								"$const" : 0
+							},
+							{
+								"$const" : 1
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_count",
+				"custdist" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"custdist" : -1,
+					"_id" : -1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 7500000,
+					"executionTimeMillis" : 3670114,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 7500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 7500000,
+						"executionTimeMillisEstimate" : 18649,
+						"works" : 7500002,
+						"advanced" : 7500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 59281,
+						"restoreState" : 59281,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 7500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : true
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"ordercomment" : "$orders.o_comment"
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"ordercomment" : {
+							"$regex" : ".*express.*packages.*"
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id",
+				"c_count" : {
+					"$sum" : {
+						"$cond" : [
+							{
+								"$eq" : [
+									"$ordercomment",
+									{
+										"$const" : undefined
+									}
+								]
+							},
+							{
+								"$const" : 0
+							},
+							{
+								"$const" : 1
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_count",
+				"custdist" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"custdist" : -1,
+					"_id" : -1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 7500000,
+					"executionTimeMillis" : 3748193,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 7500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 7500000,
+						"executionTimeMillisEstimate" : 19736,
+						"works" : 7500002,
+						"advanced" : 7500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 59294,
+						"restoreState" : 59294,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 7500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : true
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"ordercomment" : "$orders.o_comment"
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"ordercomment" : {
+							"$regex" : ".*express.*packages.*"
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id",
+				"c_count" : {
+					"$sum" : {
+						"$cond" : [
+							{
+								"$eq" : [
+									"$ordercomment",
+									{
+										"$const" : undefined
+									}
+								]
+							},
+							{
+								"$const" : 0
+							},
+							{
+								"$const" : 1
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$c_count",
+				"custdist" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"custdist" : -1,
+					"_id" : -1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

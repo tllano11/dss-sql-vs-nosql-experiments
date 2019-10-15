@@ -1,0 +1,110 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=6093884.65..6093895.07 rows=6 width=236) (actual time=227077.487..227077.547 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Gather Merge  (cost=6093884.65..6093892.86 rows=48 width=236) (actual time=227077.215..227079.456 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=6092884.51..6092886.80 rows=6 width=236) (actual time=227066.938..227067.095 rows=2 loops=9)
+               Group Key: l_returnflag, l_linestatus
+               ->  Sort  (cost=6092884.51..6092884.64 rows=50 width=25) (actual time=227066.710..227066.719 rows=109 loops=9)
+                     Sort Key: l_returnflag, l_linestatus
+                     Sort Method: quicksort  Memory: 33kB
+                     ->  Parallel Seq Scan on lineitem  (cost=0.00..6092883.10 rows=50 width=25) (actual time=1522.338..227065.750 rows=109 loops=9)
+                           Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                           Rows Removed by Filter: 33333870
+ Planning time: 62.421 ms
+ Execution time: 227079.839 ms
+(15 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=6093884.65..6093895.07 rows=6 width=236) (actual time=226619.604..226619.647 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Gather Merge  (cost=6093884.65..6093892.86 rows=48 width=236) (actual time=226619.441..226622.065 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=6092884.51..6092886.80 rows=6 width=236) (actual time=226608.563..226608.686 rows=2 loops=9)
+               Group Key: l_returnflag, l_linestatus
+               ->  Sort  (cost=6092884.51..6092884.64 rows=50 width=25) (actual time=226608.388..226608.395 rows=109 loops=9)
+                     Sort Key: l_returnflag, l_linestatus
+                     Sort Method: quicksort  Memory: 32kB
+                     ->  Parallel Seq Scan on lineitem  (cost=0.00..6092883.10 rows=50 width=25) (actual time=2371.184..226607.493 rows=109 loops=9)
+                           Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                           Rows Removed by Filter: 33333870
+ Planning time: 44.978 ms
+ Execution time: 226622.367 ms
+(15 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=6093884.65..6093895.07 rows=6 width=236) (actual time=226036.240..226036.281 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Gather Merge  (cost=6093884.65..6093892.86 rows=48 width=236) (actual time=226036.038..226039.624 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=6092884.51..6092886.80 rows=6 width=236) (actual time=226027.579..226027.714 rows=2 loops=9)
+               Group Key: l_returnflag, l_linestatus
+               ->  Sort  (cost=6092884.51..6092884.64 rows=50 width=25) (actual time=226027.372..226027.380 rows=109 loops=9)
+                     Sort Key: l_returnflag, l_linestatus
+                     Sort Method: quicksort  Memory: 32kB
+                     ->  Parallel Seq Scan on lineitem  (cost=0.00..6092883.10 rows=50 width=25) (actual time=1371.740..226026.458 rows=109 loops=9)
+                           Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                           Rows Removed by Filter: 33333870
+ Planning time: 62.806 ms
+ Execution time: 226039.924 ms
+(15 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=6093884.65..6093895.07 rows=6 width=236) (actual time=226927.938..226928.004 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Gather Merge  (cost=6093884.65..6093892.86 rows=48 width=236) (actual time=226927.567..226931.606 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=6092884.51..6092886.80 rows=6 width=236) (actual time=226918.688..226918.839 rows=2 loops=9)
+               Group Key: l_returnflag, l_linestatus
+               ->  Sort  (cost=6092884.51..6092884.64 rows=50 width=25) (actual time=226918.475..226918.487 rows=109 loops=9)
+                     Sort Key: l_returnflag, l_linestatus
+                     Sort Method: quicksort  Memory: 33kB
+                     ->  Parallel Seq Scan on lineitem  (cost=0.00..6092883.10 rows=50 width=25) (actual time=1963.326..226917.538 rows=109 loops=9)
+                           Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                           Rows Removed by Filter: 33333870
+ Planning time: 64.228 ms
+ Execution time: 226932.028 ms
+(15 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                     QUERY PLAN                                                                      
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=6093884.65..6093895.07 rows=6 width=236) (actual time=226665.711..226665.753 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Gather Merge  (cost=6093884.65..6093892.86 rows=48 width=236) (actual time=226665.471..226669.165 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=6092884.51..6092886.80 rows=6 width=236) (actual time=226652.438..226652.568 rows=2 loops=9)
+               Group Key: l_returnflag, l_linestatus
+               ->  Sort  (cost=6092884.51..6092884.64 rows=50 width=25) (actual time=226652.242..226652.250 rows=109 loops=9)
+                     Sort Key: l_returnflag, l_linestatus
+                     Sort Method: quicksort  Memory: 35kB
+                     ->  Parallel Seq Scan on lineitem  (cost=0.00..6092883.10 rows=50 width=25) (actual time=1839.383..226650.964 rows=109 loops=9)
+                           Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                           Rows Removed by Filter: 33333870
+ Planning time: 65.420 ms
+ Execution time: 226669.511 ms
+(15 rows)
+
+
+

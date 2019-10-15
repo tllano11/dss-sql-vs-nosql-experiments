@@ -1,0 +1,1040 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 389074,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 51754,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 38882,
+						"restoreState" : 38882,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority",
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"$and" : [
+					{
+						"lineitems.l_shipmode" : {
+							"$in" : [
+								"RAIL",
+								"REG AIR"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_commitdate",
+								"$lineitems.l_receiptdate"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_shipdate",
+								"$lineitems.l_commitdate"
+							]
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$gte" : ISODate("1992-01-01T00:00:00Z")
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$lt" : ISODate("1993-01-01T00:00:00Z")
+						}
+					}
+				]
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : true,
+				"l_shipmode" : "$lineitems.l_shipmode"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 389670,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 51992,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 38901,
+						"restoreState" : 38901,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority",
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"$and" : [
+					{
+						"lineitems.l_shipmode" : {
+							"$in" : [
+								"RAIL",
+								"REG AIR"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_commitdate",
+								"$lineitems.l_receiptdate"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_shipdate",
+								"$lineitems.l_commitdate"
+							]
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$gte" : ISODate("1992-01-01T00:00:00Z")
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$lt" : ISODate("1993-01-01T00:00:00Z")
+						}
+					}
+				]
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : true,
+				"l_shipmode" : "$lineitems.l_shipmode"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 396947,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 52913,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 39103,
+						"restoreState" : 39103,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority",
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"$and" : [
+					{
+						"lineitems.l_shipmode" : {
+							"$in" : [
+								"RAIL",
+								"REG AIR"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_commitdate",
+								"$lineitems.l_receiptdate"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_shipdate",
+								"$lineitems.l_commitdate"
+							]
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$gte" : ISODate("1992-01-01T00:00:00Z")
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$lt" : ISODate("1993-01-01T00:00:00Z")
+						}
+					}
+				]
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : true,
+				"l_shipmode" : "$lineitems.l_shipmode"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 384372,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 51464,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 38626,
+						"restoreState" : 38626,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority",
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"$and" : [
+					{
+						"lineitems.l_shipmode" : {
+							"$in" : [
+								"RAIL",
+								"REG AIR"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_commitdate",
+								"$lineitems.l_receiptdate"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_shipdate",
+								"$lineitems.l_commitdate"
+							]
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$gte" : ISODate("1992-01-01T00:00:00Z")
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$lt" : ISODate("1993-01-01T00:00:00Z")
+						}
+					}
+				]
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : true,
+				"l_shipmode" : "$lineitems.l_shipmode"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 388094,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 52709,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 38821,
+						"restoreState" : 38821,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$orders.o_orderpriority",
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"$and" : [
+					{
+						"lineitems.l_shipmode" : {
+							"$in" : [
+								"RAIL",
+								"REG AIR"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_commitdate",
+								"$lineitems.l_receiptdate"
+							]
+						}
+					},
+					{
+						"$expr" : {
+							"$lt" : [
+								"$lineitems.l_shipdate",
+								"$lineitems.l_commitdate"
+							]
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$gte" : ISODate("1992-01-01T00:00:00Z")
+						}
+					},
+					{
+						"lineitems.l_receiptdate" : {
+							"$lt" : ISODate("1993-01-01T00:00:00Z")
+						}
+					}
+				]
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : true,
+				"l_shipmode" : "$lineitems.l_shipmode"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

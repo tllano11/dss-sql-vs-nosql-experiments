@@ -1,0 +1,223 @@
+#!/bin/bash
+
+script_path=`realpath $0`
+script_dir=`dirname $script_path`
+repo_dir="${script_dir%/*}"
+WDIR="$script_dir/$$"
+MODES=(
+    'psql',
+    'psql_json',
+    'mongo_1c',
+    'mongo_2c',
+    'mongo_3c'
+)
+
+function usage {
+    echo "usage: $0 -u uname -p password -d dbgen_path -s scale -m mode -t wdir"
+    echo "       $0 -h"
+    echo
+    echo "  -u uname       PostgreSQL username"
+    echo "  -p password    PostgreSQL password"
+    echo "  -d dbgen_path  Path to directory where DBGEN is at"
+    echo "  -s scale       TPCH scale to produce"
+    echo "  -m mode        Schema to produce. mode can be:"
+    echo "                   psql: PostgreSQL's relational schema"
+    echo "                   psql_json: PostgreSQL's json S1 schema"
+    echo "                   mongo_1c: MongoDB's S1 schema"
+    echo "                   mongo_2c: MongoDB's S3 schema"
+    echo "                   mongo_3c: MongoDB's S2 schema"
+    echo "  -h             Print this mesage"    
+}
+
+function cleanup {
+    rm -r $WDIR
+    sed -i '/^dbgen_path/d' $repo_dir/templates/creation/vars.yml
+    sed -i '/^wdir/d' $repo_dir/templates/creation/vars.yml
+}
+
+function load_env {
+    sed -e 's/:[^:\/\/]/="/g;s/$/"/g;s/ *=/=/g' $repo_dir/templates/creation/vars.yml > $WDIR/env.sh
+    source $WDIR/env.sh
+    echo "wdir: $WDIR" >> $repo_dir/templates/creation/vars.yml
+    echo "dbgen_path: $dbgen_path" >> $repo_dir/templates/creation/vars.yml
+}
+
+function check_mode {
+    local mode="$1"
+    local contained=`expr "${MODES[*]}" : ".*\<$mode\>"`
+    return $contained
+}
+
+function render_templates {
+    echo -n "Rendering creation templates "
+    $repo_dir/bin/create_queries.py -t $repo_dir/templates/creation -o $WDIR
+    echo "... done"
+}
+
+function sort_data {
+    orders="$1"
+    lineitem="$2"
+    echo -n "Sorting orders by customer key (o_custkey) "
+    sort -nk2 -t '|' -T $WDIR $orders -o $WDIR/orders_sorted.tbl
+    echo "... done"
+    echo -n "Sorting lineitem by order key (l_orderkey) "
+    awk -F'|' 'NR==FNR{o[$1]=FNR; next} {print o[$1] "|" $0}' \
+	<(awk -F'|' '{print $1}' $WDIR/orders_sorted.tbl | uniq) $lineitem \
+	| sort -t '|' -T $WDIR -nk1 | cut -d'|' -f2- > $WDIR/lineitem_sorted.tbl
+    echo "... done"
+}
+
+function gendata {
+    ls $dbgen_path/*.tbl >/dev/null
+    if [[ $? != 0 ]]; then
+	cd $dbgen_path
+	echo "Generating TBL files"
+	if [ "$mode" == "psql" ]; then
+	    ./dbgen -s $scale
+	else
+	    ./dbgen -s $scale -T c
+	    ./dbgen -s $scale -T o
+	fi
+	echo "Converting TBLs to valid CSVs"
+	for i in `ls *.tbl`; do 
+	    echo -n "$i "
+	    sed -i 's/|$//' $i 
+	    echo "... done" 
+	done
+    fi
+    cd $WDIR
+    case "$mode" in
+	'psql')
+	    echo -n "Importing data "
+	    PGPASSWORD="$password" psql -h localhost -U $uname -w -f "$WDIR/create_rdb.sql"
+	    echo "... done"
+	    ;;
+	'psql_json')
+	    sort_data $dbgen_path/orders.tbl $dbgen_path/lineitem.tbl
+	    echo -n "Producing json "
+	    $repo_dir/bin/crjoin -m 3 -c $dbgen_path/customer.tbl \
+				 -o $WDIR/orders_sorted.tbl \
+				 -l $WDIR/lineitem_sorted.tbl \
+				 -r $WDIR/data.json
+	    echo '... done'
+	    echo -n "Importing data "
+	    PGPASSWORD="$password" psql -h localhost -U $uname -w -f "$WDIR/create_jsonb.sql"
+	    echo "... done"
+	    ;;
+	'mongo_1c')
+	    sort_data $dbgen_path/orders.tbl $dbgen_path/lineitem.tbl
+	    echo -n "Producing json "
+	    $repo_dir/bin/crjoin -m 0 -c $dbgen_path/customer.tbl \
+				 -o $WDIR/orders_sorted.tbl \
+				 -l $WDIR/lineitem_sorted.tbl \
+				 -r $WDIR/data.json
+	    echo '... done'
+	    echo -n "Importing data "
+	    mongoimport --db $mongo_db_name \
+			--collection {{ variables['mongo_CjOjL'] }} \
+			--file $WDIR/data.json --numInsertionWorkers 8 --drop
+	    echo "... done"
+	    ;;
+	'mongo_2c')
+	    echo -n "Producing json "
+	    $repo_dir/bin/crjoin -m 2 -c $dbgen_path/customer.tbl \
+				 -r $WDIR/customer.json
+	    $repo_dir/bin/crjoin -m 1 \
+				 -o $dbgen_path/orders.tbl \
+				 -l $dbgen_path/lineitem.tbl \
+				 -r $WDIR/orders-lineitem.json
+	    echo '... done'
+	    echo -n "Importing data "
+	    mongoimport --db $mongo_db_name \
+			--collection {{ variables['mongo_C'] }} \
+			--file $WDIR/customer.json --numInsertionWorkers 8 --drop
+	    mongoimport --db $mongo_db_name \
+			--collection {{ variables['mongo_OjL'] }} \
+			--file $WDIR/orders-lineitem.json --numInsertionWorkers 8 --drop
+	    echo "... done"
+	    ;;
+	'mongo_3c')
+	    echo -n "Producing json files "
+	    $repo_dir/bin/crjoin -m 2 -c $dbgen_path/customer.tbl \
+				 -r $WDIR/customer.json
+	    $repo_dir/bin/crjoin -m 2 -o $dbgen_path/orders.tbl \
+				 -r $WDIR/orders.json
+	    $repo_dir/bin/crjoin -m 2 -l $dbgen_path/lineitem.tbl \
+				 -r $WDIR/lineitem.json &
+	    echo '... done'
+	    echo -n "Importing data "
+	    for table in 'customer' 'orders' 'lineitem'; do
+	    mongoimport --db $mongo_db_name \
+			--collection $table \
+			--file $WDIR/$table.json --numInsertionWorkers 8 --drop
+	    done
+	    echo "... done"
+	    ;;
+    esac
+}
+
+s_selected=false
+d_selected=false
+m_selected=false
+while getopts ":u:p:d:s:m:t:h" opt; do
+    case $opt in
+	u)
+	    uname="$OPTARG"
+	    ;;
+	p)
+	    password="$OPTARG"
+	    ;;
+	d)
+	    dbgen_path="$OPTARG"
+	    d_selected=true
+	    ;;
+	s)
+	    scale="$OPTARG"
+	    s_selected=true
+	    ;;
+	m)
+	    mode="$OPTARG"
+	    m_selected=true
+	    ;;
+	t)
+	    WDIR="OPTARG"
+	    ;;
+	h)
+	    usage
+	    exit 0
+	    ;;
+	\?)
+	    echo "Unknown option: -$OPTARG" >&2; exit 1;;
+	:)
+	    echo "Missing argument for option: -$OPTARG" >&2; exit 1;;
+    esac
+done
+
+if ! [ s_selected ] || ! [ d_selected ] || ! [ m_selected ]; then
+    echo "Missing required options. Use -h for help"
+    exit 1
+fi
+
+check_mode $mode
+if ! [ $? ]; then
+    echo "Unexistant operation mode. Use -h for help"
+    exit 1
+fi
+
+if [ -z $uname ]; then
+    echo -n "Enter PostgreSQL username: "
+    read uname
+    echo
+fi
+
+if [ -z $password ]; then
+    echo -n "Enter PostgreSQL password for user $uname: "
+    read -s password
+    echo
+fi
+
+mkdir -p $WDIR
+load_env
+render_templates
+gendata
+cleanup

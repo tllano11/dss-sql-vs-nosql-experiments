@@ -1,0 +1,12 @@
+\c {{ variables['psql_db_name'] }}
+set search_path to {{ variables['psql_db_schema'] }};
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+       *
+from
+       customer
+where
+       c_acctbal < {{ variables['point']['q3']['lt_balance'] }};

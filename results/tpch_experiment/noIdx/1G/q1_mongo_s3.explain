@@ -1,0 +1,760 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orderlineitems",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 21627,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 5588,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 13511,
+						"restoreState" : 13511,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lte" : [
+								"$$l.l_shipdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_returnflag" : "$lineitems.l_returnflag",
+					"l_linestatus" : "$lineitems.l_linestatus"
+				},
+				"sum_qty" : {
+					"$sum" : "$lineitems.l_quantity"
+				},
+				"sum_base_price" : {
+					"$sum" : "$lineitems.l_extendedprice"
+				},
+				"sum_disc_price" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				},
+				"sum_charge" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							},
+							{
+								"$add" : [
+									"$lineitems.l_tax",
+									{
+										"$const" : 1
+									}
+								]
+							}
+						]
+					}
+				},
+				"avg_qty" : {
+					"$avg" : "$lineitems.l_quantity"
+				},
+				"avg_price" : {
+					"$avg" : "$lineitems.l_extendedprice"
+				},
+				"avg_disc" : {
+					"$avg" : "$lineitems.l_discount"
+				},
+				"count_order" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id.l_returnflag" : 1,
+					"_id.l_linestatus" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orderlineitems",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 21762,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 6296,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 13511,
+						"restoreState" : 13511,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lte" : [
+								"$$l.l_shipdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_returnflag" : "$lineitems.l_returnflag",
+					"l_linestatus" : "$lineitems.l_linestatus"
+				},
+				"sum_qty" : {
+					"$sum" : "$lineitems.l_quantity"
+				},
+				"sum_base_price" : {
+					"$sum" : "$lineitems.l_extendedprice"
+				},
+				"sum_disc_price" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				},
+				"sum_charge" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							},
+							{
+								"$add" : [
+									"$lineitems.l_tax",
+									{
+										"$const" : 1
+									}
+								]
+							}
+						]
+					}
+				},
+				"avg_qty" : {
+					"$avg" : "$lineitems.l_quantity"
+				},
+				"avg_price" : {
+					"$avg" : "$lineitems.l_extendedprice"
+				},
+				"avg_disc" : {
+					"$avg" : "$lineitems.l_discount"
+				},
+				"count_order" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id.l_returnflag" : 1,
+					"_id.l_linestatus" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orderlineitems",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 21663,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 5980,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 13510,
+						"restoreState" : 13510,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lte" : [
+								"$$l.l_shipdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_returnflag" : "$lineitems.l_returnflag",
+					"l_linestatus" : "$lineitems.l_linestatus"
+				},
+				"sum_qty" : {
+					"$sum" : "$lineitems.l_quantity"
+				},
+				"sum_base_price" : {
+					"$sum" : "$lineitems.l_extendedprice"
+				},
+				"sum_disc_price" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				},
+				"sum_charge" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							},
+							{
+								"$add" : [
+									"$lineitems.l_tax",
+									{
+										"$const" : 1
+									}
+								]
+							}
+						]
+					}
+				},
+				"avg_qty" : {
+					"$avg" : "$lineitems.l_quantity"
+				},
+				"avg_price" : {
+					"$avg" : "$lineitems.l_extendedprice"
+				},
+				"avg_disc" : {
+					"$avg" : "$lineitems.l_discount"
+				},
+				"count_order" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id.l_returnflag" : 1,
+					"_id.l_linestatus" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orderlineitems",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 21622,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 6085,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 13510,
+						"restoreState" : 13510,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lte" : [
+								"$$l.l_shipdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_returnflag" : "$lineitems.l_returnflag",
+					"l_linestatus" : "$lineitems.l_linestatus"
+				},
+				"sum_qty" : {
+					"$sum" : "$lineitems.l_quantity"
+				},
+				"sum_base_price" : {
+					"$sum" : "$lineitems.l_extendedprice"
+				},
+				"sum_disc_price" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				},
+				"sum_charge" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							},
+							{
+								"$add" : [
+									"$lineitems.l_tax",
+									{
+										"$const" : 1
+									}
+								]
+							}
+						]
+					}
+				},
+				"avg_qty" : {
+					"$avg" : "$lineitems.l_quantity"
+				},
+				"avg_price" : {
+					"$avg" : "$lineitems.l_extendedprice"
+				},
+				"avg_disc" : {
+					"$avg" : "$lineitems.l_discount"
+				},
+				"count_order" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id.l_returnflag" : 1,
+					"_id.l_linestatus" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orderlineitems",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1500000,
+					"executionTimeMillis" : 21643,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 1500000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 1500000,
+						"executionTimeMillisEstimate" : 5966,
+						"works" : 1500002,
+						"advanced" : 1500000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 13510,
+						"restoreState" : 13510,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 1500000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lte" : [
+								"$$l.l_shipdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_returnflag" : "$lineitems.l_returnflag",
+					"l_linestatus" : "$lineitems.l_linestatus"
+				},
+				"sum_qty" : {
+					"$sum" : "$lineitems.l_quantity"
+				},
+				"sum_base_price" : {
+					"$sum" : "$lineitems.l_extendedprice"
+				},
+				"sum_disc_price" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				},
+				"sum_charge" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							},
+							{
+								"$add" : [
+									"$lineitems.l_tax",
+									{
+										"$const" : 1
+									}
+								]
+							}
+						]
+					}
+				},
+				"avg_qty" : {
+					"$avg" : "$lineitems.l_quantity"
+				},
+				"avg_price" : {
+					"$avg" : "$lineitems.l_extendedprice"
+				},
+				"avg_disc" : {
+					"$avg" : "$lineitems.l_discount"
+				},
+				"count_order" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id.l_returnflag" : 1,
+					"_id.l_linestatus" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

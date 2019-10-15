@@ -1,0 +1,5 @@
+\c {{ variables['psql_db_name'] }}
+set search_path to {{ variables['psql_db_schema'] }};
+drop table if exists json_data;
+create table json_data (customers jsonb not null);
+\copy json_data (customers) from '{{ variables['wdir'] }}/jsonb_data.json';

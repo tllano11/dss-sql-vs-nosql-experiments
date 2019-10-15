@@ -1,0 +1,115 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                                    QUERY PLAN                                                                                                    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=1859001.74..1859285.49 rows=200 width=40) (actual time=12013.270..12019.717 rows=5 loops=1)
+   Group Key: ((orders.o ->> 'o_orderpriority'::text))
+   ->  Sort  (cost=1859001.74..1859095.49 rows=37500 width=32) (actual time=12011.669..12013.959 rows=52002 loops=1)
+         Sort Key: ((orders.o ->> 'o_orderpriority'::text))
+         Sort Method: quicksort  Memory: 3974kB
+         ->  Subquery Scan on orders  (cost=0.00..1856152.75 rows=37500 width=32) (actual time=33.026..11980.727 rows=52002 loops=1)
+               Filter: ((((orders.o ->> 'o_orderdate'::text))::date >= '1992-01-01'::date) AND (((orders.o ->> 'o_orderdate'::text))::date < '1992-04-01 00:00:00'::timestamp without time zone) AND (SubPlan 1))
+               Rows Removed by Filter: 1447998
+               ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=23.612..10097.082 rows=1500000 loops=1)
+                     ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=3.608..75.028 rows=150000 loops=1)
+               SubPlan 1
+                 ->  Function Scan on jsonb_array_elements l  (cost=0.01..2.76 rows=33 width=0) (actual time=0.006..0.006 rows=1 loops=56741)
+                       Filter: (((value ->> 'l_commitdate'::text))::date < ((value ->> 'l_receiptdate'::text))::date)
+                       Rows Removed by Filter: 1
+ Planning time: 83.299 ms
+ Execution time: 12020.427 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                    QUERY PLAN                                                                                                    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=1859001.74..1859285.49 rows=200 width=40) (actual time=12280.897..12287.267 rows=5 loops=1)
+   Group Key: ((orders.o ->> 'o_orderpriority'::text))
+   ->  Sort  (cost=1859001.74..1859095.49 rows=37500 width=32) (actual time=12279.310..12281.598 rows=52002 loops=1)
+         Sort Key: ((orders.o ->> 'o_orderpriority'::text))
+         Sort Method: quicksort  Memory: 3974kB
+         ->  Subquery Scan on orders  (cost=0.00..1856152.75 rows=37500 width=32) (actual time=34.784..12248.870 rows=52002 loops=1)
+               Filter: ((((orders.o ->> 'o_orderdate'::text))::date >= '1992-01-01'::date) AND (((orders.o ->> 'o_orderdate'::text))::date < '1992-04-01 00:00:00'::timestamp without time zone) AND (SubPlan 1))
+               Rows Removed by Filter: 1447998
+               ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=25.216..10330.615 rows=1500000 loops=1)
+                     ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=5.217..75.981 rows=150000 loops=1)
+               SubPlan 1
+                 ->  Function Scan on jsonb_array_elements l  (cost=0.01..2.76 rows=33 width=0) (actual time=0.006..0.006 rows=1 loops=56741)
+                       Filter: (((value ->> 'l_commitdate'::text))::date < ((value ->> 'l_receiptdate'::text))::date)
+                       Rows Removed by Filter: 1
+ Planning time: 81.914 ms
+ Execution time: 12287.959 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                    QUERY PLAN                                                                                                    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=1859001.74..1859285.49 rows=200 width=40) (actual time=11890.026..11896.424 rows=5 loops=1)
+   Group Key: ((orders.o ->> 'o_orderpriority'::text))
+   ->  Sort  (cost=1859001.74..1859095.49 rows=37500 width=32) (actual time=11888.440..11890.730 rows=52002 loops=1)
+         Sort Key: ((orders.o ->> 'o_orderpriority'::text))
+         Sort Method: quicksort  Memory: 3974kB
+         ->  Subquery Scan on orders  (cost=0.00..1856152.75 rows=37500 width=32) (actual time=34.391..11856.523 rows=52002 loops=1)
+               Filter: ((((orders.o ->> 'o_orderdate'::text))::date >= '1992-01-01'::date) AND (((orders.o ->> 'o_orderdate'::text))::date < '1992-04-01 00:00:00'::timestamp without time zone) AND (SubPlan 1))
+               Rows Removed by Filter: 1447998
+               ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=24.516..9962.475 rows=1500000 loops=1)
+                     ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=4.690..73.350 rows=150000 loops=1)
+               SubPlan 1
+                 ->  Function Scan on jsonb_array_elements l  (cost=0.01..2.76 rows=33 width=0) (actual time=0.005..0.005 rows=1 loops=56741)
+                       Filter: (((value ->> 'l_commitdate'::text))::date < ((value ->> 'l_receiptdate'::text))::date)
+                       Rows Removed by Filter: 1
+ Planning time: 74.056 ms
+ Execution time: 11897.173 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                    QUERY PLAN                                                                                                    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=1859001.74..1859285.49 rows=200 width=40) (actual time=12352.240..12358.674 rows=5 loops=1)
+   Group Key: ((orders.o ->> 'o_orderpriority'::text))
+   ->  Sort  (cost=1859001.74..1859095.49 rows=37500 width=32) (actual time=12350.653..12352.938 rows=52002 loops=1)
+         Sort Key: ((orders.o ->> 'o_orderpriority'::text))
+         Sort Method: quicksort  Memory: 3974kB
+         ->  Subquery Scan on orders  (cost=0.00..1856152.75 rows=37500 width=32) (actual time=35.805..12318.609 rows=52002 loops=1)
+               Filter: ((((orders.o ->> 'o_orderdate'::text))::date >= '1992-01-01'::date) AND (((orders.o ->> 'o_orderdate'::text))::date < '1992-04-01 00:00:00'::timestamp without time zone) AND (SubPlan 1))
+               Rows Removed by Filter: 1447998
+               ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=25.946..10445.783 rows=1500000 loops=1)
+                     ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=5.921..77.114 rows=150000 loops=1)
+               SubPlan 1
+                 ->  Function Scan on jsonb_array_elements l  (cost=0.01..2.76 rows=33 width=0) (actual time=0.005..0.005 rows=1 loops=56741)
+                       Filter: (((value ->> 'l_commitdate'::text))::date < ((value ->> 'l_receiptdate'::text))::date)
+                       Rows Removed by Filter: 1
+ Planning time: 80.934 ms
+ Execution time: 12359.380 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                    QUERY PLAN                                                                                                    
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=1859001.74..1859285.49 rows=200 width=40) (actual time=12212.382..12218.706 rows=5 loops=1)
+   Group Key: ((orders.o ->> 'o_orderpriority'::text))
+   ->  Sort  (cost=1859001.74..1859095.49 rows=37500 width=32) (actual time=12210.808..12213.091 rows=52002 loops=1)
+         Sort Key: ((orders.o ->> 'o_orderpriority'::text))
+         Sort Method: quicksort  Memory: 3974kB
+         ->  Subquery Scan on orders  (cost=0.00..1856152.75 rows=37500 width=32) (actual time=34.637..12179.777 rows=52002 loops=1)
+               Filter: ((((orders.o ->> 'o_orderdate'::text))::date >= '1992-01-01'::date) AND (((orders.o ->> 'o_orderdate'::text))::date < '1992-04-01 00:00:00'::timestamp without time zone) AND (SubPlan 1))
+               Rows Removed by Filter: 1447998
+               ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=24.672..10310.961 rows=1500000 loops=1)
+                     ->  Seq Scan on json_data j  (cost=0.00..4559.00 rows=150000 width=130) (actual time=4.668..77.789 rows=150000 loops=1)
+               SubPlan 1
+                 ->  Function Scan on jsonb_array_elements l  (cost=0.01..2.76 rows=33 width=0) (actual time=0.006..0.006 rows=1 loops=56741)
+                       Filter: (((value ->> 'l_commitdate'::text))::date < ((value ->> 'l_receiptdate'::text))::date)
+                       Rows Removed by Filter: 1
+ Planning time: 82.436 ms
+ Execution time: 12219.401 ms
+(16 rows)
+
+
+

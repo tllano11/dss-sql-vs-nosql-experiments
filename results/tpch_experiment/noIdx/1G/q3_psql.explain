@@ -1,0 +1,180 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=34855.21..34855.24 rows=10 width=44) (actual time=6414.214..6415.107 rows=10 loops=1)
+   ->  Sort  (cost=34855.21..34856.44 rows=492 width=44) (actual time=6414.212..6414.212 rows=10 loops=1)
+         Sort Key: (sum((lineitem.l_extendedprice * ('1'::numeric - lineitem.l_discount)))) DESC, orders.o_orderdate
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  Finalize GroupAggregate  (cost=34771.65..34844.58 rows=492 width=44) (actual time=6413.936..6414.152 rows=113 loops=1)
+               Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+               ->  Gather Merge  (cost=34771.65..34832.47 rows=477 width=44) (actual time=6413.917..6414.913 rows=113 loops=1)
+                     Workers Planned: 3
+                     Workers Launched: 3
+                     ->  Partial GroupAggregate  (cost=33771.61..33776.38 rows=159 width=44) (actual time=6376.114..6376.199 rows=28 loops=4)
+                           Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                           ->  Sort  (cost=33771.61..33772.01 rows=159 width=24) (actual time=6376.072..6376.078 rows=110 loops=4)
+                                 Sort Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                                 Sort Method: quicksort  Memory: 33kB
+                                 ->  Nested Loop  (cost=0.85..33765.80 rows=159 width=24) (actual time=281.482..6375.861 rows=110 loops=4)
+                                       ->  Nested Loop  (cost=0.42..33425.59 rows=40 width=12) (actual time=248.606..5193.736 rows=28 loops=4)
+                                             ->  Parallel Seq Scan on orders  (cost=0.00..32143.39 rows=200 width=16) (actual time=16.053..3649.037 rows=155 loops=4)
+                                                   Filter: (o_orderdate < '1992-01-02'::date)
+                                                   Rows Removed by Filter: 374845
+                                             ->  Index Scan using customer_pkey on customer  (cost=0.42..6.41 rows=1 width=4) (actual time=9.947..9.947 rows=0 loops=621)
+                                                   Index Cond: (c_custkey = orders.o_custkey)
+                                                   Filter: (c_mktsegment = 'AUTOMOBILE'::bpchar)
+                                                   Rows Removed by Filter: 1
+                                       ->  Index Scan using idx_l_orderkey on lineitem  (cost=0.43..8.46 rows=5 width=16) (actual time=41.727..41.839 rows=4 loops=113)
+                                             Index Cond: (l_orderkey = orders.o_orderkey)
+                                             Filter: (l_shipdate > '1992-01-02'::date)
+                                             Rows Removed by Filter: 0
+ Planning time: 289.788 ms
+ Execution time: 6415.275 ms
+(29 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                 QUERY PLAN                                                                                 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=34855.21..34855.24 rows=10 width=44) (actual time=6430.743..6432.259 rows=10 loops=1)
+   ->  Sort  (cost=34855.21..34856.44 rows=492 width=44) (actual time=6430.740..6430.741 rows=10 loops=1)
+         Sort Key: (sum((lineitem.l_extendedprice * ('1'::numeric - lineitem.l_discount)))) DESC, orders.o_orderdate
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  Finalize GroupAggregate  (cost=34771.65..34844.58 rows=492 width=44) (actual time=6430.453..6430.683 rows=113 loops=1)
+               Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+               ->  Gather Merge  (cost=34771.65..34832.47 rows=477 width=44) (actual time=6430.435..6432.060 rows=113 loops=1)
+                     Workers Planned: 3
+                     Workers Launched: 3
+                     ->  Partial GroupAggregate  (cost=33771.61..33776.38 rows=159 width=44) (actual time=6382.407..6382.488 rows=28 loops=4)
+                           Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                           ->  Sort  (cost=33771.61..33772.01 rows=159 width=24) (actual time=6382.352..6382.358 rows=110 loops=4)
+                                 Sort Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                                 Sort Method: quicksort  Memory: 33kB
+                                 ->  Nested Loop  (cost=0.85..33765.80 rows=159 width=24) (actual time=165.586..6382.149 rows=110 loops=4)
+                                       ->  Nested Loop  (cost=0.42..33425.59 rows=40 width=12) (actual time=137.358..5428.634 rows=28 loops=4)
+                                             ->  Parallel Seq Scan on orders  (cost=0.00..32143.39 rows=200 width=16) (actual time=10.287..3789.768 rows=155 loops=4)
+                                                   Filter: (o_orderdate < '1992-01-02'::date)
+                                                   Rows Removed by Filter: 374845
+                                             ->  Index Scan using customer_pkey on customer  (cost=0.42..6.41 rows=1 width=4) (actual time=10.553..10.553 rows=0 loops=621)
+                                                   Index Cond: (c_custkey = orders.o_custkey)
+                                                   Filter: (c_mktsegment = 'AUTOMOBILE'::bpchar)
+                                                   Rows Removed by Filter: 1
+                                       ->  Index Scan using idx_l_orderkey on lineitem  (cost=0.43..8.46 rows=5 width=16) (actual time=33.594..33.747 rows=4 loops=113)
+                                             Index Cond: (l_orderkey = orders.o_orderkey)
+                                             Filter: (l_shipdate > '1992-01-02'::date)
+                                             Rows Removed by Filter: 0
+ Planning time: 302.298 ms
+ Execution time: 6432.429 ms
+(29 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=34855.21..34855.24 rows=10 width=44) (actual time=6255.715..6261.093 rows=10 loops=1)
+   ->  Sort  (cost=34855.21..34856.44 rows=492 width=44) (actual time=6255.713..6255.713 rows=10 loops=1)
+         Sort Key: (sum((lineitem.l_extendedprice * ('1'::numeric - lineitem.l_discount)))) DESC, orders.o_orderdate
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  Finalize GroupAggregate  (cost=34771.65..34844.58 rows=492 width=44) (actual time=6255.424..6255.652 rows=113 loops=1)
+               Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+               ->  Gather Merge  (cost=34771.65..34832.47 rows=477 width=44) (actual time=6255.384..6260.876 rows=113 loops=1)
+                     Workers Planned: 3
+                     Workers Launched: 3
+                     ->  Partial GroupAggregate  (cost=33771.61..33776.38 rows=159 width=44) (actual time=6190.134..6190.218 rows=28 loops=4)
+                           Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                           ->  Sort  (cost=33771.61..33772.01 rows=159 width=24) (actual time=6190.089..6190.094 rows=110 loops=4)
+                                 Sort Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                                 Sort Method: quicksort  Memory: 32kB
+                                 ->  Nested Loop  (cost=0.85..33765.80 rows=159 width=24) (actual time=133.659..6189.874 rows=110 loops=4)
+                                       ->  Nested Loop  (cost=0.42..33425.59 rows=40 width=12) (actual time=100.567..5181.091 rows=28 loops=4)
+                                             ->  Parallel Seq Scan on orders  (cost=0.00..32143.39 rows=200 width=16) (actual time=10.363..3637.762 rows=155 loops=4)
+                                                   Filter: (o_orderdate < '1992-01-02'::date)
+                                                   Rows Removed by Filter: 374845
+                                             ->  Index Scan using customer_pkey on customer  (cost=0.42..6.41 rows=1 width=4) (actual time=9.938..9.938 rows=0 loops=621)
+                                                   Index Cond: (c_custkey = orders.o_custkey)
+                                                   Filter: (c_mktsegment = 'AUTOMOBILE'::bpchar)
+                                                   Rows Removed by Filter: 1
+                                       ->  Index Scan using idx_l_orderkey on lineitem  (cost=0.43..8.46 rows=5 width=16) (actual time=35.473..35.703 rows=4 loops=113)
+                                             Index Cond: (l_orderkey = orders.o_orderkey)
+                                             Filter: (l_shipdate > '1992-01-02'::date)
+                                             Rows Removed by Filter: 0
+ Planning time: 364.721 ms
+ Execution time: 6261.262 ms
+(29 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                QUERY PLAN                                                                                
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=34855.21..34855.24 rows=10 width=44) (actual time=6180.606..6186.201 rows=10 loops=1)
+   ->  Sort  (cost=34855.21..34856.44 rows=492 width=44) (actual time=6180.604..6180.604 rows=10 loops=1)
+         Sort Key: (sum((lineitem.l_extendedprice * ('1'::numeric - lineitem.l_discount)))) DESC, orders.o_orderdate
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  Finalize GroupAggregate  (cost=34771.65..34844.58 rows=492 width=44) (actual time=6180.309..6180.539 rows=113 loops=1)
+               Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+               ->  Gather Merge  (cost=34771.65..34832.47 rows=477 width=44) (actual time=6180.276..6185.992 rows=113 loops=1)
+                     Workers Planned: 3
+                     Workers Launched: 3
+                     ->  Partial GroupAggregate  (cost=33771.61..33776.38 rows=159 width=44) (actual time=6123.252..6123.335 rows=28 loops=4)
+                           Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                           ->  Sort  (cost=33771.61..33772.01 rows=159 width=24) (actual time=6123.207..6123.213 rows=110 loops=4)
+                                 Sort Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                                 Sort Method: quicksort  Memory: 33kB
+                                 ->  Nested Loop  (cost=0.85..33765.80 rows=159 width=24) (actual time=181.731..6123.000 rows=110 loops=4)
+                                       ->  Nested Loop  (cost=0.42..33425.59 rows=40 width=12) (actual time=152.256..5051.975 rows=28 loops=4)
+                                             ->  Parallel Seq Scan on orders  (cost=0.00..32143.39 rows=200 width=16) (actual time=9.153..3557.097 rows=155 loops=4)
+                                                   Filter: (o_orderdate < '1992-01-02'::date)
+                                                   Rows Removed by Filter: 374845
+                                             ->  Index Scan using customer_pkey on customer  (cost=0.42..6.41 rows=1 width=4) (actual time=9.626..9.626 rows=0 loops=621)
+                                                   Index Cond: (c_custkey = orders.o_custkey)
+                                                   Filter: (c_mktsegment = 'AUTOMOBILE'::bpchar)
+                                                   Rows Removed by Filter: 1
+                                       ->  Index Scan using idx_l_orderkey on lineitem  (cost=0.43..8.46 rows=5 width=16) (actual time=37.759..37.907 rows=4 loops=113)
+                                             Index Cond: (l_orderkey = orders.o_orderkey)
+                                             Filter: (l_shipdate > '1992-01-02'::date)
+                                             Rows Removed by Filter: 0
+ Planning time: 310.801 ms
+ Execution time: 6186.368 ms
+(29 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                 QUERY PLAN                                                                                 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=34855.21..34855.24 rows=10 width=44) (actual time=6055.648..6060.670 rows=10 loops=1)
+   ->  Sort  (cost=34855.21..34856.44 rows=492 width=44) (actual time=6055.645..6055.646 rows=10 loops=1)
+         Sort Key: (sum((lineitem.l_extendedprice * ('1'::numeric - lineitem.l_discount)))) DESC, orders.o_orderdate
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  Finalize GroupAggregate  (cost=34771.65..34844.58 rows=492 width=44) (actual time=6055.310..6055.580 rows=113 loops=1)
+               Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+               ->  Gather Merge  (cost=34771.65..34832.47 rows=477 width=44) (actual time=6055.283..6060.453 rows=113 loops=1)
+                     Workers Planned: 3
+                     Workers Launched: 3
+                     ->  Partial GroupAggregate  (cost=33771.61..33776.38 rows=159 width=44) (actual time=5990.493..5990.578 rows=28 loops=4)
+                           Group Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                           ->  Sort  (cost=33771.61..33772.01 rows=159 width=24) (actual time=5990.455..5990.461 rows=110 loops=4)
+                                 Sort Key: lineitem.l_orderkey, orders.o_orderdate, orders.o_shippriority
+                                 Sort Method: quicksort  Memory: 35kB
+                                 ->  Nested Loop  (cost=0.85..33765.80 rows=159 width=24) (actual time=239.067..5990.257 rows=110 loops=4)
+                                       ->  Nested Loop  (cost=0.42..33425.59 rows=40 width=12) (actual time=203.531..4926.966 rows=28 loops=4)
+                                             ->  Parallel Seq Scan on orders  (cost=0.00..32143.39 rows=200 width=16) (actual time=9.013..3356.320 rows=155 loops=4)
+                                                   Filter: (o_orderdate < '1992-01-02'::date)
+                                                   Rows Removed by Filter: 374845
+                                             ->  Index Scan using customer_pkey on customer  (cost=0.42..6.41 rows=1 width=4) (actual time=10.114..10.114 rows=0 loops=621)
+                                                   Index Cond: (c_custkey = orders.o_custkey)
+                                                   Filter: (c_mktsegment = 'AUTOMOBILE'::bpchar)
+                                                   Rows Removed by Filter: 1
+                                       ->  Index Scan using idx_l_orderkey on lineitem  (cost=0.43..8.46 rows=5 width=16) (actual time=37.228..37.633 rows=4 loops=113)
+                                             Index Cond: (l_orderkey = orders.o_orderkey)
+                                             Filter: (l_shipdate > '1992-01-02'::date)
+                                             Rows Removed by Filter: 0
+ Planning time: 302.679 ms
+ Execution time: 6060.835 ms
+(29 rows)
+
+
+

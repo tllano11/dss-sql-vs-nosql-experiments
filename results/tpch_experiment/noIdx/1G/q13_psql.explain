@@ -1,0 +1,125 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=65691.92..65692.42 rows=200 width=16) (actual time=1863.367..1863.368 rows=42 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 26kB
+   ->  HashAggregate  (cost=65682.28..65684.28 rows=200 width=16) (actual time=1863.305..1863.313 rows=42 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  HashAggregate  (cost=61932.28..63432.28 rows=150000 width=12) (actual time=1809.997..1838.476 rows=150000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Hash Right Join  (cost=5781.42..54518.67 rows=1482721 width=8) (actual time=70.456..1362.273 rows=1533945 loops=1)
+                     Hash Cond: (orders.o_custkey = customer.c_custkey)
+                     ->  Seq Scan on orders  (cost=0.00..44845.00 rows=1482721 width=8) (actual time=8.042..804.424 rows=1483941 loops=1)
+                           Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                           Rows Removed by Filter: 16059
+                     ->  Hash  (cost=3906.42..3906.42 rows=150000 width=4) (actual time=61.498..61.498 rows=150000 loops=1)
+                           Buckets: 262144  Batches: 1  Memory Usage: 7322kB
+                           ->  Index Only Scan using customer_pkey on customer  (cost=0.42..3906.42 rows=150000 width=4) (actual time=7.042..39.414 rows=150000 loops=1)
+                                 Heap Fetches: 0
+ Planning time: 177.645 ms
+ Execution time: 1868.126 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=65691.92..65692.42 rows=200 width=16) (actual time=1865.752..1865.754 rows=42 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 26kB
+   ->  HashAggregate  (cost=65682.28..65684.28 rows=200 width=16) (actual time=1865.692..1865.699 rows=42 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  HashAggregate  (cost=61932.28..63432.28 rows=150000 width=12) (actual time=1812.590..1841.220 rows=150000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Hash Right Join  (cost=5781.42..54518.67 rows=1482721 width=8) (actual time=70.274..1346.930 rows=1533945 loops=1)
+                     Hash Cond: (orders.o_custkey = customer.c_custkey)
+                     ->  Seq Scan on orders  (cost=0.00..44845.00 rows=1482721 width=8) (actual time=4.518..794.316 rows=1483941 loops=1)
+                           Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                           Rows Removed by Filter: 16059
+                     ->  Hash  (cost=3906.42..3906.42 rows=150000 width=4) (actual time=64.834..64.834 rows=150000 loops=1)
+                           Buckets: 262144  Batches: 1  Memory Usage: 7322kB
+                           ->  Index Only Scan using customer_pkey on customer  (cost=0.42..3906.42 rows=150000 width=4) (actual time=0.274..38.989 rows=150000 loops=1)
+                                 Heap Fetches: 0
+ Planning time: 178.050 ms
+ Execution time: 1870.652 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=65691.92..65692.42 rows=200 width=16) (actual time=1954.357..1954.359 rows=42 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 26kB
+   ->  HashAggregate  (cost=65682.28..65684.28 rows=200 width=16) (actual time=1954.292..1954.299 rows=42 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  HashAggregate  (cost=61932.28..63432.28 rows=150000 width=12) (actual time=1902.496..1929.811 rows=150000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Hash Right Join  (cost=5781.42..54518.67 rows=1482721 width=8) (actual time=128.835..1433.225 rows=1533945 loops=1)
+                     Hash Cond: (orders.o_custkey = customer.c_custkey)
+                     ->  Seq Scan on orders  (cost=0.00..44845.00 rows=1482721 width=8) (actual time=7.308..821.695 rows=1483941 loops=1)
+                           Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                           Rows Removed by Filter: 16059
+                     ->  Hash  (cost=3906.42..3906.42 rows=150000 width=4) (actual time=120.616..120.616 rows=150000 loops=1)
+                           Buckets: 262144  Batches: 1  Memory Usage: 7322kB
+                           ->  Index Only Scan using customer_pkey on customer  (cost=0.42..3906.42 rows=150000 width=4) (actual time=0.302..98.192 rows=150000 loops=1)
+                                 Heap Fetches: 0
+ Planning time: 177.960 ms
+ Execution time: 1959.344 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=65691.92..65692.42 rows=200 width=16) (actual time=1864.759..1864.761 rows=42 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 26kB
+   ->  HashAggregate  (cost=65682.28..65684.28 rows=200 width=16) (actual time=1864.699..1864.706 rows=42 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  HashAggregate  (cost=61932.28..63432.28 rows=150000 width=12) (actual time=1812.770..1842.054 rows=150000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Hash Right Join  (cost=5781.42..54518.67 rows=1482721 width=8) (actual time=70.487..1366.465 rows=1533945 loops=1)
+                     Hash Cond: (orders.o_custkey = customer.c_custkey)
+                     ->  Seq Scan on orders  (cost=0.00..44845.00 rows=1482721 width=8) (actual time=7.949..808.289 rows=1483941 loops=1)
+                           Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                           Rows Removed by Filter: 16059
+                     ->  Hash  (cost=3906.42..3906.42 rows=150000 width=4) (actual time=61.634..61.634 rows=150000 loops=1)
+                           Buckets: 262144  Batches: 1  Memory Usage: 7322kB
+                           ->  Index Only Scan using customer_pkey on customer  (cost=0.42..3906.42 rows=150000 width=4) (actual time=0.288..39.486 rows=150000 loops=1)
+                                 Heap Fetches: 0
+ Planning time: 178.193 ms
+ Execution time: 1869.581 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=65691.92..65692.42 rows=200 width=16) (actual time=1928.414..1928.416 rows=42 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 26kB
+   ->  HashAggregate  (cost=65682.28..65684.28 rows=200 width=16) (actual time=1928.353..1928.360 rows=42 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  HashAggregate  (cost=61932.28..63432.28 rows=150000 width=12) (actual time=1875.690..1904.655 rows=150000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Hash Right Join  (cost=5781.42..54518.67 rows=1482721 width=8) (actual time=70.504..1416.210 rows=1533945 loops=1)
+                     Hash Cond: (orders.o_custkey = customer.c_custkey)
+                     ->  Seq Scan on orders  (cost=0.00..44845.00 rows=1482721 width=8) (actual time=8.063..869.157 rows=1483941 loops=1)
+                           Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                           Rows Removed by Filter: 16059
+                     ->  Hash  (cost=3906.42..3906.42 rows=150000 width=4) (actual time=61.532..61.532 rows=150000 loops=1)
+                           Buckets: 262144  Batches: 1  Memory Usage: 7322kB
+                           ->  Index Only Scan using customer_pkey on customer  (cost=0.42..3906.42 rows=150000 width=4) (actual time=0.256..39.501 rows=150000 loops=1)
+                                 Heap Fetches: 0
+ Planning time: 178.059 ms
+ Execution time: 1933.222 ms
+(18 rows)
+
+
+

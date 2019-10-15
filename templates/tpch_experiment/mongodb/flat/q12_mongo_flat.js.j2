@@ -1,0 +1,52 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_F'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_F'] }}.aggregate([
+{% endif %}
+    {$match: 
+     {$and: [
+	 {l_shipmode:{$in:["{{ variables['tpch']['q12']['shipmode_1'] }}", "{{ variables['tpch']['q12']['shipmode_2'] }}"]}},
+	 {$expr:{$lt: ["$l_commitdate", "$l_receiptdate"]}},
+	 {$expr:{$lt: ["$l_shipdate", "$l_commitdate"]}},
+	 {l_receiptdate: {$gte:ISODate("{{ variables['tpch']['q12']['date'] }}T00:00:00Z")}},
+	 {l_receiptdate: {$lt:ISODate("{{ variables['tpch']['q12']['delta_date'] }}T00:00:00Z")}}
+     ]}
+    },
+    { $group: {
+	_id: "$l_shipmode",
+	high_line_count: {$sum: {
+	    $switch: {
+		branches: [
+		    { 
+			case: {$or:[{$eq:["$o_orderpriority", "1-URGENT"]}, 
+				    {$eq:["$o_orderpriority", "2-HIGH"]}]},
+			then: 1
+		    }
+		],
+		default: 0
+	    }
+	}},
+	low_line_count: {$sum: {
+	    $switch: {
+		branches: [
+		    {
+			case: {$and:[{$ne:["$o_orderpriority", "1-URGENT"]}, 
+				     {$ne:["$o_orderpriority", "2-HIGH"]}]},
+			then: 1
+		    }
+		],
+		default: 0
+	    }
+	}}
+    }},
+    { $sort: { "_id": 1 } }
+{% if explain %}
+]));
+{% else %}
+]);
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

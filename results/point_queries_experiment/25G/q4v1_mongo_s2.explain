@@ -1,0 +1,380 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"orders._id" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 1476519,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 14468,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 29686,
+						"restoreState" : 29686,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"o_totalprice" : {
+						"$gt" : 37500
+					}
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderkey" : "$orders._id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"orders._id" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 1481519,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 25838,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 29692,
+						"restoreState" : 29692,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"o_totalprice" : {
+						"$gt" : 37500
+					}
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderkey" : "$orders._id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"orders._id" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 1479219,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 22478,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 29690,
+						"restoreState" : 29690,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"o_totalprice" : {
+						"$gt" : 37500
+					}
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderkey" : "$orders._id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"orders._id" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 1489674,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 27347,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 29701,
+						"restoreState" : 29701,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"o_totalprice" : {
+						"$gt" : 37500
+					}
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderkey" : "$orders._id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"orders._id" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 1481609,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 22714,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 29692,
+						"restoreState" : 29692,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "orders",
+				"localField" : "_id",
+				"foreignField" : "o_custkey",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"o_totalprice" : {
+						"$gt" : 37500
+					}
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderkey" : "$orders._id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

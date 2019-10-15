@@ -1,0 +1,46 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_C'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_C'] }}.aggregate([
+{% endif %}
+    { $project: {
+	_id: 1
+    }},
+    { $lookup: {
+	from: "{{ variables['mongo_O'] }}",
+	localField: "_id",
+	foreignField: "o_custkey",
+	as: "orders"
+    }},
+    { $unwind: {
+    	path: "$orders",
+    	preserveNullAndEmptyArrays: true
+    }},
+    { $project: {
+    	_id: 1,
+    	ordercomment: "$orders.o_comment"
+    }},
+    { $match: {
+    	ordercomment: {$not: /.*{{ variables['tpch']['q13']['comment_1'] }}.*{{ variables['tpch']['q13']['comment_2'] }}.*/}
+    }},
+    { $group: {
+    	_id: "$_id",
+    	c_count: { $sum: {
+    	    $cond: [ {$eq:["$ordercomment", undefined]}, 0, 1 ]
+    	}}
+    }},
+    { $group: {
+    	_id: "$c_count",
+    	custdist: {$sum: 1}
+    }},
+    {$sort: {"custdist": -1, "_id": -1}}
+{% if explain %}
+], {allowDiskUse:true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

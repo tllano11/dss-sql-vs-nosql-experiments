@@ -1,0 +1,35 @@
+\c {{ variables['psql_db_name'] }}
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+	c_count,
+	count(*) as custdist
+from (
+  select
+    custkey,
+    count(*) filter (where j.c_orders->'o_comment' is not null)
+  from
+     (select 
+            cast(j.customers->>'c_custkey' as integer) as custkey,
+            jsonb_array_elements(
+            case 
+              when jsonb_array_length(j.customers->'c_orders') >= 1 then
+     	      j.customers->'c_orders'
+              else
+     	      jsonb_build_array(null)
+            end) as c_orders
+     from {{ variables['psql_db_schema'] }}.json_data j
+     group by custkey, c_orders) j
+  where 
+        j.c_orders->'o_orderkey' is null
+        or j.c_orders->>'o_comment' not like '%{{ variables['tpch']['q13']['comment_1'] }}%{{ variables['tpch']['q13']['comment_2'] }}%'
+   group by
+    custkey
+) as c_orders (c_custkey, c_count)
+group by
+	c_count
+order by
+	custdist desc,
+	c_count desc;

@@ -1,0 +1,62 @@
+# MongoDB parameters
+mongo_db_name: tpch_1
+mongo_C: customer
+mongo_O: orders
+mongo_L: lineitem
+mongo_OjL: orderlineitems
+mongo_CjOjL: scale1
+mongo_F: flat
+
+# PostgreSQL parameters
+psql_db_name: tpch
+psql_db_schema: scale1
+
+# TPCH parameters
+tpch:
+  q1:
+    date: 1992-04-30
+    delta: 119
+  
+  q3:
+    c_mktsegment: AUTOMOBILE
+    date: 1992-01-02
+  
+  q4:
+    date: 1992-01-01
+    # This is necessary for mongoDB. Unlike PSQL, there is no "interval" and
+    # date arithmetic takes the exact days of months into consideration
+    # (e.g. feb: 28 days, august: 31 days)
+    delta_date: 1992-04-01
+  
+  q12:
+    shipmode_1: RAIL
+    shipmode_2: REG AIR
+    date: 1992-01-01
+    delta_date: 1993-01-01
+  
+  q13:
+    comment_1: express
+    comment_2: packages
+  
+  q22:
+    code1: 30
+    code2: 17 
+    code3: 25
+    code4: 10
+    code5: 22
+    code6: 15
+    code7: 21
+
+# Point Queries
+point:
+  q1:
+    orderkey: 7
+  
+  q2:
+    custkey: 7
+  
+  q4:
+    lt_balance: -10
+  
+  q5:
+    price: 37500 #~90.4% of the orders

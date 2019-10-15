@@ -1,0 +1,150 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                     QUERY PLAN                                                                                      
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=11704.63..11725.04 rows=583 width=72) (actual time=15540.170..15543.443 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $0)
+     ->  Aggregate  (cost=5658.86..5658.87 rows=1 width=32) (actual time=12690.140..12690.140 rows=1 loops=1)
+           ->  Bitmap Heap Scan on json_data j_1  (cost=927.86..5641.36 rows=1750 width=129) (actual time=77.356..11066.034 rows=37676 loops=1)
+                 Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+                 Filter: ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[]))
+                 Rows Removed by Filter: 98632
+                 Heap Blocks: exact=3026
+                 ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=47.376..47.376 rows=136308 loops=1)
+                       Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+   ->  Sort  (cost=6045.76..6047.22 rows=583 width=161) (actual time=15539.597..15539.973 rows=6281 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 3431kB
+         ->  Bitmap Heap Scan on json_data j  (cost=927.57..6018.98 rows=583 width=161) (actual time=12697.969..15531.193 rows=6281 loops=1)
+               Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 61831
+               Heap Blocks: exact=3026
+               ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=12697.553..12697.553 rows=68112 loops=1)
+                     Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+ Planning time: 78.345 ms
+ Execution time: 15543.834 ms
+(23 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                     QUERY PLAN                                                                                      
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=11704.63..11725.04 rows=583 width=72) (actual time=15495.105..15499.382 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $0)
+     ->  Aggregate  (cost=5658.86..5658.87 rows=1 width=32) (actual time=12547.642..12547.642 rows=1 loops=1)
+           ->  Bitmap Heap Scan on json_data j_1  (cost=927.86..5641.36 rows=1750 width=129) (actual time=77.002..10926.540 rows=37676 loops=1)
+                 Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+                 Filter: ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[]))
+                 Rows Removed by Filter: 98632
+                 Heap Blocks: exact=3026
+                 ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=49.818..49.818 rows=136308 loops=1)
+                       Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+   ->  Sort  (cost=6045.76..6047.22 rows=583 width=161) (actual time=15494.356..15494.808 rows=6281 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 3431kB
+         ->  Bitmap Heap Scan on json_data j  (cost=927.57..6018.98 rows=583 width=161) (actual time=12555.208..15485.617 rows=6281 loops=1)
+               Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 61831
+               Heap Blocks: exact=3026
+               ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=12554.847..12554.847 rows=68112 loops=1)
+                     Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+ Planning time: 126.106 ms
+ Execution time: 15499.814 ms
+(23 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                     QUERY PLAN                                                                                      
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=11704.63..11725.04 rows=583 width=72) (actual time=15304.504..15308.046 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $0)
+     ->  Aggregate  (cost=5658.86..5658.87 rows=1 width=32) (actual time=12458.738..12458.738 rows=1 loops=1)
+           ->  Bitmap Heap Scan on json_data j_1  (cost=927.86..5641.36 rows=1750 width=129) (actual time=81.807..10834.385 rows=37676 loops=1)
+                 Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+                 Filter: ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[]))
+                 Rows Removed by Filter: 98632
+                 Heap Blocks: exact=3026
+                 ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=54.748..54.748 rows=136308 loops=1)
+                       Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+   ->  Sort  (cost=6045.76..6047.22 rows=583 width=161) (actual time=15303.939..15304.361 rows=6281 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 3431kB
+         ->  Bitmap Heap Scan on json_data j  (cost=927.57..6018.98 rows=583 width=161) (actual time=12466.314..15295.382 rows=6281 loops=1)
+               Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 61831
+               Heap Blocks: exact=3026
+               ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=12465.953..12465.953 rows=68112 loops=1)
+                     Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+ Planning time: 113.134 ms
+ Execution time: 15308.409 ms
+(23 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                     QUERY PLAN                                                                                      
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=11704.63..11725.04 rows=583 width=72) (actual time=15479.110..15482.595 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $0)
+     ->  Aggregate  (cost=5658.86..5658.87 rows=1 width=32) (actual time=12472.755..12472.755 rows=1 loops=1)
+           ->  Bitmap Heap Scan on json_data j_1  (cost=927.86..5641.36 rows=1750 width=129) (actual time=68.556..10841.300 rows=37676 loops=1)
+                 Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+                 Filter: ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[]))
+                 Rows Removed by Filter: 98632
+                 Heap Blocks: exact=3026
+                 ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=41.691..41.691 rows=136308 loops=1)
+                       Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+   ->  Sort  (cost=6045.76..6047.22 rows=583 width=161) (actual time=15478.529..15478.910 rows=6281 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 3431kB
+         ->  Bitmap Heap Scan on json_data j  (cost=927.57..6018.98 rows=583 width=161) (actual time=12480.689..15468.083 rows=6281 loops=1)
+               Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 61831
+               Heap Blocks: exact=3026
+               ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=12480.282..12480.282 rows=68112 loops=1)
+                     Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+ Planning time: 134.670 ms
+ Execution time: 15482.955 ms
+(23 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                     QUERY PLAN                                                                                      
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=11704.63..11725.04 rows=583 width=72) (actual time=15377.006..15380.548 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $0)
+     ->  Aggregate  (cost=5658.86..5658.87 rows=1 width=32) (actual time=12520.936..12520.936 rows=1 loops=1)
+           ->  Bitmap Heap Scan on json_data j_1  (cost=927.86..5641.36 rows=1750 width=129) (actual time=76.208..10901.313 rows=37676 loops=1)
+                 Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+                 Filter: ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[]))
+                 Rows Removed by Filter: 98632
+                 Heap Blocks: exact=3026
+                 ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=49.747..49.747 rows=136308 loops=1)
+                       Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > 0.00)
+   ->  Sort  (cost=6045.76..6047.22 rows=583 width=161) (actual time=15376.407..15376.808 rows=6281 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 3431kB
+         ->  Bitmap Heap Scan on json_data j  (cost=927.57..6018.98 rows=583 width=161) (actual time=12528.732..15368.367 rows=6281 loops=1)
+               Recheck Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 61831
+               Heap Blocks: exact=3026
+               ->  Bitmap Index Scan on c_acctbal_jbindex  (cost=0.00..927.42 rows=50000 width=0) (actual time=12528.364..12528.364 rows=68112 loops=1)
+                     Index Cond: (((customers ->> 'c_acctbal'::text))::numeric > $0)
+ Planning time: 118.445 ms
+ Execution time: 15380.906 ms
+(23 rows)
+
+
+

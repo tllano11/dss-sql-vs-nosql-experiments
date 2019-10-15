@@ -1,0 +1,30 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_F'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_F'] }}.aggregate([
+{% endif %}
+    { $match: 
+      {$and:
+       [
+	   {c_mktsegment: "{{ variables['tpch']['q3']['c_mktsegment'] }}"}, 
+	   {o_orderdate: {$lt: ISODate("{{ variables['tpch']['q3']['date'] }}T00:00:00Z")}},
+	   {l_shipdate: {$gt: ISODate("{{ variables['tpch']['q3']['date'] }}T00:00:00Z")}}
+       ]
+      }
+    },
+    { $group: { 
+    	_id: {l_orderkey: "$o_orderkey", o_orderdate: "$o_orderdate", o_shippriority: "$o_shippriority"},
+    	revenue: {$sum: {$multiply: ["$l_extendedprice", {$subtract: [1, "$l_discount"]}]}}
+    }},
+    { $sort: { "revenue": -1, "_id.o_orderdate": 1 }},
+    { $limit : 10 }
+{% if explain %}
+]));
+{% else %}
+]);
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

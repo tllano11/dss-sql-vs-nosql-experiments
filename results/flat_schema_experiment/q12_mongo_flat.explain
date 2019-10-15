@@ -1,0 +1,1425 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"l_shipmode" : {
+								"$in" : [
+									"RAIL",
+									"REG AIR"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_shipdate",
+									"$l_commitdate"
+								]
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$lt" : ISODate("1993-01-01T00:00:00Z")
+							}
+						}
+					]
+				},
+				"fields" : {
+					"l_shipmode" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"l_receiptdate" : {
+									"$lt" : ISODate("1993-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_receiptdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_shipmode" : {
+									"$in" : [
+										"RAIL",
+										"REG AIR"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_shipdate",
+										"$l_commitdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 25034,
+					"executionTimeMillis" : 29328,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 25034,
+						"executionTimeMillisEstimate" : 28596,
+						"works" : 6051221,
+						"advanced" : 25034,
+						"needTime" : 6026186,
+						"needYield" : 0,
+						"saveState" : 47321,
+						"restoreState" : 47321,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"l_shipmode" : {
+								"$in" : [
+									"RAIL",
+									"REG AIR"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_shipdate",
+									"$l_commitdate"
+								]
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$lt" : ISODate("1993-01-01T00:00:00Z")
+							}
+						}
+					]
+				},
+				"fields" : {
+					"l_shipmode" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"l_receiptdate" : {
+									"$lt" : ISODate("1993-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_receiptdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_shipmode" : {
+									"$in" : [
+										"RAIL",
+										"REG AIR"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_shipdate",
+										"$l_commitdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 25034,
+					"executionTimeMillis" : 28997,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 25034,
+						"executionTimeMillisEstimate" : 28433,
+						"works" : 6051221,
+						"advanced" : 25034,
+						"needTime" : 6026186,
+						"needYield" : 0,
+						"saveState" : 47328,
+						"restoreState" : 47328,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"l_shipmode" : {
+								"$in" : [
+									"RAIL",
+									"REG AIR"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_shipdate",
+									"$l_commitdate"
+								]
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$lt" : ISODate("1993-01-01T00:00:00Z")
+							}
+						}
+					]
+				},
+				"fields" : {
+					"l_shipmode" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"l_receiptdate" : {
+									"$lt" : ISODate("1993-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_receiptdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_shipmode" : {
+									"$in" : [
+										"RAIL",
+										"REG AIR"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_shipdate",
+										"$l_commitdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 25034,
+					"executionTimeMillis" : 28863,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 25034,
+						"executionTimeMillisEstimate" : 28161,
+						"works" : 6051221,
+						"advanced" : 25034,
+						"needTime" : 6026186,
+						"needYield" : 0,
+						"saveState" : 47323,
+						"restoreState" : 47323,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"l_shipmode" : {
+								"$in" : [
+									"RAIL",
+									"REG AIR"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_shipdate",
+									"$l_commitdate"
+								]
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$lt" : ISODate("1993-01-01T00:00:00Z")
+							}
+						}
+					]
+				},
+				"fields" : {
+					"l_shipmode" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"l_receiptdate" : {
+									"$lt" : ISODate("1993-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_receiptdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_shipmode" : {
+									"$in" : [
+										"RAIL",
+										"REG AIR"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_shipdate",
+										"$l_commitdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 25034,
+					"executionTimeMillis" : 28897,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 25034,
+						"executionTimeMillisEstimate" : 28322,
+						"works" : 6051221,
+						"advanced" : 25034,
+						"needTime" : 6026186,
+						"needYield" : 0,
+						"saveState" : 47324,
+						"restoreState" : 47324,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"l_shipmode" : {
+								"$in" : [
+									"RAIL",
+									"REG AIR"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_shipdate",
+									"$l_commitdate"
+								]
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"l_receiptdate" : {
+								"$lt" : ISODate("1993-01-01T00:00:00Z")
+							}
+						}
+					]
+				},
+				"fields" : {
+					"l_shipmode" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"l_receiptdate" : {
+									"$lt" : ISODate("1993-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_receiptdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"l_shipmode" : {
+									"$in" : [
+										"RAIL",
+										"REG AIR"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_shipdate",
+										"$l_commitdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 25034,
+					"executionTimeMillis" : 28720,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"l_receiptdate" : {
+										"$lt" : ISODate("1993-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_receiptdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"l_shipmode" : {
+										"$in" : [
+											"RAIL",
+											"REG AIR"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_shipdate",
+											"$l_commitdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 25034,
+						"executionTimeMillisEstimate" : 28082,
+						"works" : 6051221,
+						"advanced" : 25034,
+						"needTime" : 6026186,
+						"needYield" : 0,
+						"saveState" : 47327,
+						"restoreState" : 47327,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$l_shipmode",
+				"high_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$or" : [
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$eq" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				},
+				"low_line_count" : {
+					"$sum" : {
+						"$switch" : {
+							"branches" : [
+								{
+									"case" : {
+										"$and" : [
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "1-URGENT"
+													}
+												]
+											},
+											{
+												"$ne" : [
+													"$o_orderpriority",
+													{
+														"$const" : "2-HIGH"
+													}
+												]
+											}
+										]
+									},
+									"then" : {
+										"$const" : 1
+									}
+								}
+							],
+							"default" : {
+								"$const" : 0
+							}
+						}
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

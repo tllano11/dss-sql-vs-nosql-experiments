@@ -1,0 +1,100 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                                                                                                             QUERY PLAN                                                                                                                                                                                                                                              
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=112919122.50..112919291.66 rows=200 width=48) (actual time=19145.810..19149.563 rows=2 loops=1)
+   Group Key: ((j.lineitems ->> 'l_shipmode'::text))
+   ->  Sort  (cost=112919122.50..112919143.34 rows=8333 width=64) (actual time=19142.023..19143.048 rows=25034 loops=1)
+         Sort Key: ((j.lineitems ->> 'l_shipmode'::text))
+         Sort Method: quicksort  Memory: 2254kB
+         ->  Subquery Scan on j  (cost=0.00..112918579.83 rows=8333 width=64) (actual time=48.271..19126.406 rows=25034 loops=1)
+               Filter: (((j.lineitems ->> 'l_shipmode'::text) = ANY ('{RAIL,"REG AIR"}'::text[])) AND (((j.lineitems ->> 'l_receiptdate'::text))::date >= '1992-01-01'::date) AND (((j.lineitems ->> 'l_receiptdate'::text))::date < '1993-01-01 00:00:00'::timestamp without time zone) AND (((j.lineitems ->> 'l_commitdate'::text))::date < ((j.lineitems ->> 'l_receiptdate'::text))::date) AND (((j.lineitems ->> 'l_shipdate'::text))::date < ((j.lineitems ->> 'l_commitdate'::text))::date))
+               Rows Removed by Filter: 5976181
+               ->  ProjectSet  (cost=0.00..7918559.00 rows=1500000000 width=64) (actual time=38.152..14879.895 rows=6001215 loops=1)
+                     ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=38.129..10020.987 rows=1500000 loops=1)
+                           ->  Seq Scan on json_data j_1  (cost=0.00..4559.00 rows=150000 width=130) (actual time=9.778..81.247 rows=150000 loops=1)
+ Planning time: 102.542 ms
+ Execution time: 19149.841 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                                                                                                             QUERY PLAN                                                                                                                                                                                                                                              
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=112919122.50..112919291.66 rows=200 width=48) (actual time=19272.920..19276.657 rows=2 loops=1)
+   Group Key: ((j.lineitems ->> 'l_shipmode'::text))
+   ->  Sort  (cost=112919122.50..112919143.34 rows=8333 width=64) (actual time=19269.109..19270.174 rows=25034 loops=1)
+         Sort Key: ((j.lineitems ->> 'l_shipmode'::text))
+         Sort Method: quicksort  Memory: 2254kB
+         ->  Subquery Scan on j  (cost=0.00..112918579.83 rows=8333 width=64) (actual time=48.470..19254.308 rows=25034 loops=1)
+               Filter: (((j.lineitems ->> 'l_shipmode'::text) = ANY ('{RAIL,"REG AIR"}'::text[])) AND (((j.lineitems ->> 'l_receiptdate'::text))::date >= '1992-01-01'::date) AND (((j.lineitems ->> 'l_receiptdate'::text))::date < '1993-01-01 00:00:00'::timestamp without time zone) AND (((j.lineitems ->> 'l_commitdate'::text))::date < ((j.lineitems ->> 'l_receiptdate'::text))::date) AND (((j.lineitems ->> 'l_shipdate'::text))::date < ((j.lineitems ->> 'l_commitdate'::text))::date))
+               Rows Removed by Filter: 5976181
+               ->  ProjectSet  (cost=0.00..7918559.00 rows=1500000000 width=64) (actual time=38.200..14950.604 rows=6001215 loops=1)
+                     ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=38.181..10041.034 rows=1500000 loops=1)
+                           ->  Seq Scan on json_data j_1  (cost=0.00..4559.00 rows=150000 width=130) (actual time=9.778..80.427 rows=150000 loops=1)
+ Planning time: 102.571 ms
+ Execution time: 19276.942 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                                                                                                             QUERY PLAN                                                                                                                                                                                                                                              
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=112919122.50..112919291.66 rows=200 width=48) (actual time=19110.515..19114.268 rows=2 loops=1)
+   Group Key: ((j.lineitems ->> 'l_shipmode'::text))
+   ->  Sort  (cost=112919122.50..112919143.34 rows=8333 width=64) (actual time=19106.698..19107.742 rows=25034 loops=1)
+         Sort Key: ((j.lineitems ->> 'l_shipmode'::text))
+         Sort Method: quicksort  Memory: 2254kB
+         ->  Subquery Scan on j  (cost=0.00..112918579.83 rows=8333 width=64) (actual time=48.734..19091.353 rows=25034 loops=1)
+               Filter: (((j.lineitems ->> 'l_shipmode'::text) = ANY ('{RAIL,"REG AIR"}'::text[])) AND (((j.lineitems ->> 'l_receiptdate'::text))::date >= '1992-01-01'::date) AND (((j.lineitems ->> 'l_receiptdate'::text))::date < '1993-01-01 00:00:00'::timestamp without time zone) AND (((j.lineitems ->> 'l_commitdate'::text))::date < ((j.lineitems ->> 'l_receiptdate'::text))::date) AND (((j.lineitems ->> 'l_shipdate'::text))::date < ((j.lineitems ->> 'l_commitdate'::text))::date))
+               Rows Removed by Filter: 5976181
+               ->  ProjectSet  (cost=0.00..7918559.00 rows=1500000000 width=64) (actual time=38.133..14725.154 rows=6001215 loops=1)
+                     ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=38.110..9797.112 rows=1500000 loops=1)
+                           ->  Seq Scan on json_data j_1  (cost=0.00..4559.00 rows=150000 width=130) (actual time=9.743..84.357 rows=150000 loops=1)
+ Planning time: 85.123 ms
+ Execution time: 19114.538 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                                                                                                             QUERY PLAN                                                                                                                                                                                                                                              
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=112919122.50..112919291.66 rows=200 width=48) (actual time=19694.714..19698.407 rows=2 loops=1)
+   Group Key: ((j.lineitems ->> 'l_shipmode'::text))
+   ->  Sort  (cost=112919122.50..112919143.34 rows=8333 width=64) (actual time=19690.949..19691.988 rows=25034 loops=1)
+         Sort Key: ((j.lineitems ->> 'l_shipmode'::text))
+         Sort Method: quicksort  Memory: 2254kB
+         ->  Subquery Scan on j  (cost=0.00..112918579.83 rows=8333 width=64) (actual time=47.611..19675.895 rows=25034 loops=1)
+               Filter: (((j.lineitems ->> 'l_shipmode'::text) = ANY ('{RAIL,"REG AIR"}'::text[])) AND (((j.lineitems ->> 'l_receiptdate'::text))::date >= '1992-01-01'::date) AND (((j.lineitems ->> 'l_receiptdate'::text))::date < '1993-01-01 00:00:00'::timestamp without time zone) AND (((j.lineitems ->> 'l_commitdate'::text))::date < ((j.lineitems ->> 'l_receiptdate'::text))::date) AND (((j.lineitems ->> 'l_shipdate'::text))::date < ((j.lineitems ->> 'l_commitdate'::text))::date))
+               Rows Removed by Filter: 5976181
+               ->  ProjectSet  (cost=0.00..7918559.00 rows=1500000000 width=64) (actual time=36.734..15153.003 rows=6001215 loops=1)
+                     ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=36.711..9936.699 rows=1500000 loops=1)
+                           ->  Seq Scan on json_data j_1  (cost=0.00..4559.00 rows=150000 width=130) (actual time=8.346..84.341 rows=150000 loops=1)
+ Planning time: 77.804 ms
+ Execution time: 19698.683 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                                                                                                                             QUERY PLAN                                                                                                                                                                                                                                              
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=112919122.50..112919291.66 rows=200 width=48) (actual time=19077.310..19081.027 rows=2 loops=1)
+   Group Key: ((j.lineitems ->> 'l_shipmode'::text))
+   ->  Sort  (cost=112919122.50..112919143.34 rows=8333 width=64) (actual time=19073.532..19074.605 rows=25034 loops=1)
+         Sort Key: ((j.lineitems ->> 'l_shipmode'::text))
+         Sort Method: quicksort  Memory: 2254kB
+         ->  Subquery Scan on j  (cost=0.00..112918579.83 rows=8333 width=64) (actual time=47.847..19057.643 rows=25034 loops=1)
+               Filter: (((j.lineitems ->> 'l_shipmode'::text) = ANY ('{RAIL,"REG AIR"}'::text[])) AND (((j.lineitems ->> 'l_receiptdate'::text))::date >= '1992-01-01'::date) AND (((j.lineitems ->> 'l_receiptdate'::text))::date < '1993-01-01 00:00:00'::timestamp without time zone) AND (((j.lineitems ->> 'l_commitdate'::text))::date < ((j.lineitems ->> 'l_receiptdate'::text))::date) AND (((j.lineitems ->> 'l_shipdate'::text))::date < ((j.lineitems ->> 'l_commitdate'::text))::date))
+               Rows Removed by Filter: 5976181
+               ->  ProjectSet  (cost=0.00..7918559.00 rows=1500000000 width=64) (actual time=36.708..14843.032 rows=6001215 loops=1)
+                     ->  ProjectSet  (cost=0.00..81059.00 rows=15000000 width=32) (actual time=36.687..9992.165 rows=1500000 loops=1)
+                           ->  Seq Scan on json_data j_1  (cost=0.00..4559.00 rows=150000 width=130) (actual time=8.336..103.492 rows=150000 loops=1)
+ Planning time: 77.705 ms
+ Execution time: 19081.300 ms
+(13 rows)
+
+
+

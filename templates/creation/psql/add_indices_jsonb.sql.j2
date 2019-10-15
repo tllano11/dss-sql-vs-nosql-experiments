@@ -1,0 +1,45 @@
+\c {{ variables['psql_db_name'] }}
+SET search_path TO {{ variables['psql_db_schema'] }};
+
+DROP INDEX IF EXISTS l_shipdate_jbindex;
+DROP INDEX IF EXISTS l_commitdate_jbindex;
+DROP INDEX IF EXISTS l_receiptdate_jbindex;
+DROP INDEX IF EXISTS o_orderdate_jbindex;
+DROP INDEX IF EXISTS c_acctbal_jbindex;
+DROP INDEX IF EXISTS c_mktsegment_jbindex;
+
+CREATE OR REPLACE FUNCTION make_date(text) RETURNS timestamptz AS
+$$
+	SELECT to_timestamp($1, 'YYYY-MM-DD')
+$$
+LANGUAGE sql IMMUTABLE;
+
+CREATE INDEX l_shipdate_jbindex ON
+json_data (
+	 make_date(customers->'c_orders'->'o_lineitems'->>'l_shipdate')
+);
+
+CREATE INDEX l_commitdate_jbindex ON
+json_data (
+	 make_date(customers->'c_orders'->'o_lineitems'->>'l_commitdate')
+);
+
+CREATE INDEX l_receiptdate_jbindex ON
+json_data (
+	 make_date(customers->'c_orders'->'o_lineitems'->>'l_receiptdate')
+);
+
+CREATE INDEX o_orderdate_jbindex ON
+json_data (
+	make_date(customers->'c_orders'->>'o_orderdate')
+);
+
+CREATE INDEX c_acctbal_jbindex ON
+json_data (
+	  cast(customers->>'c_acctbal' as decimal)
+);
+
+CREATE INDEX c_mktsegment_jbindex ON
+json_data ((
+	  customers->>'c_mktsegment'
+));

@@ -1,0 +1,28 @@
+\c {{ variables['psql_db_name'] }}
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+       li.l->>'l_returnflag' as l_returnflag,
+       li.l->>'l_linestatus' as l_linestatus,
+       sum(cast(li.l->>'l_quantity' as decimal)) as sum_qty,
+       sum(cast(li.l->>'l_extendedprice' as decimal)) as sum_base_price,
+       sum(cast(li.l->>'l_extendedprice' as decimal) * (1 - cast(li.l->>'l_discount' as decimal))) as sum_disc_price,
+       sum(cast(li.l->>'l_extendedprice' as decimal) * (1 - cast(li.l->>'l_discount' as decimal)) * (1 + cast(li.l->>'l_tax' as decimal))) as sum_charge,
+       avg(cast(li.l->>'l_quantity' as decimal)) as avg_qty,
+       avg(cast(li.l->>'l_extendedprice' as decimal)) as avg_price,
+       avg(cast(li.l->>'l_discount' as decimal)) as avg_disc,
+       count(*) as count_order
+from
+       (select jsonb_array_elements(jsonb_array_elements(j.customers->'c_orders')->'o_lineitems')
+       AS l
+       from {{ variables['psql_db_schema'] }}.json_data j) li
+where cast(li.l->>'l_shipdate' as date) <= date '{{ variables['tpch']['q1']['date'] }}' - interval '{{ variables['tpch']['q1']['delta'] }} days'
+group by
+      l_returnflag,
+      l_linestatus
+order by
+      l_returnflag,
+      l_linestatus
+limit 1;

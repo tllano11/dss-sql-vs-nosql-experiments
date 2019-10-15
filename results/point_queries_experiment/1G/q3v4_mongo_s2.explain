@@ -1,0 +1,290 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.lineitem",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 6001215,
+					"executionTimeMillis" : 502654,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6001215,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 6001215,
+						"executionTimeMillisEstimate" : 15650,
+						"works" : 6001217,
+						"advanced" : 6001215,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 49627,
+						"restoreState" : 49627,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6001215
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "order",
+				"localField" : "_id.l_orderkey",
+				"foreignField" : "_id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.lineitem",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 6001215,
+					"executionTimeMillis" : 497431,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6001215,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 6001215,
+						"executionTimeMillisEstimate" : 14919,
+						"works" : 6001217,
+						"advanced" : 6001215,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 49616,
+						"restoreState" : 49616,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6001215
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "order",
+				"localField" : "_id.l_orderkey",
+				"foreignField" : "_id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.lineitem",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 6001215,
+					"executionTimeMillis" : 500007,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6001215,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 6001215,
+						"executionTimeMillisEstimate" : 15556,
+						"works" : 6001217,
+						"advanced" : 6001215,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 49627,
+						"restoreState" : 49627,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6001215
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "order",
+				"localField" : "_id.l_orderkey",
+				"foreignField" : "_id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.lineitem",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 6001215,
+					"executionTimeMillis" : 500340,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6001215,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 6001215,
+						"executionTimeMillisEstimate" : 14712,
+						"works" : 6001217,
+						"advanced" : 6001215,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 49623,
+						"restoreState" : 49623,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6001215
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "order",
+				"localField" : "_id.l_orderkey",
+				"foreignField" : "_id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.lineitem",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 6001215,
+					"executionTimeMillis" : 499975,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6001215,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 6001215,
+						"executionTimeMillisEstimate" : 15392,
+						"works" : 6001217,
+						"advanced" : 6001215,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 49624,
+						"restoreState" : 49624,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6001215
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "order",
+				"localField" : "_id.l_orderkey",
+				"foreignField" : "_id"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

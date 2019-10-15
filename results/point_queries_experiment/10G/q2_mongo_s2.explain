@@ -1,0 +1,255 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 149,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 149,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 2,
+						"restoreState" : 2,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 50,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 50,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 2,
+						"restoreState" : 2,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 11,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 10,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 1,
+						"restoreState" : 1,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 14,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 10,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 1,
+						"restoreState" : 1,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.customer",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 15,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 10,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 1,
+						"restoreState" : 1,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

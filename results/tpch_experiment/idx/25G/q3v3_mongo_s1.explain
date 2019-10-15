@@ -1,0 +1,960 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_mktsegment" : "AUTOMOBILE"
+				},
+				"fields" : {
+					"c_mktsegment" : 1,
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_mktsegment" : {
+							"$eq" : "AUTOMOBILE"
+						}
+					},
+					"winningPlan" : {
+						"stage" : "FETCH",
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							}
+						}
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 750267,
+					"executionTimeMillis" : 275177,
+					"totalKeysExamined" : 750267,
+					"totalDocsExamined" : 750267,
+					"executionStages" : {
+						"stage" : "FETCH",
+						"nReturned" : 750267,
+						"executionTimeMillisEstimate" : 191180,
+						"works" : 750268,
+						"advanced" : 750267,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 23360,
+						"restoreState" : 23360,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"docsExamined" : 750267,
+						"alreadyHasObj" : 0,
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"nReturned" : 750267,
+							"executionTimeMillisEstimate" : 2022,
+							"works" : 750268,
+							"advanced" : 750267,
+							"needTime" : 0,
+							"needYield" : 0,
+							"saveState" : 23360,
+							"restoreState" : 23360,
+							"isEOF" : 1,
+							"invalidates" : 0,
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							},
+							"keysExamined" : 750267,
+							"seeks" : 1,
+							"dupsTested" : 0,
+							"dupsDropped" : 0,
+							"seenInvalidated" : 0
+						}
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_mktsegment" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$lt" : [
+								"$$o.o_orderdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"o_orderkey" : "$c_orders.o_orderkey",
+				"o_orderdate" : "$c_orders.o_orderdate",
+				"o_shippriority" : "$c_orders.o_shippriority",
+				"lineitems" : "$c_orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"lineitems.l_shipdate" : {
+					"$gt" : ISODate("1992-01-02T00:00:00Z")
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_orderkey" : "$o_orderkey",
+					"o_orderdate" : "$o_orderdate",
+					"o_shippriority" : "$o_shippriority"
+				},
+				"revenue" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"revenue" : -1,
+					"_id.o_orderdate" : 1
+				},
+				"limit" : NumberLong(10)
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_mktsegment" : "AUTOMOBILE"
+				},
+				"fields" : {
+					"c_mktsegment" : 1,
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_mktsegment" : {
+							"$eq" : "AUTOMOBILE"
+						}
+					},
+					"winningPlan" : {
+						"stage" : "FETCH",
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							}
+						}
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 750267,
+					"executionTimeMillis" : 274497,
+					"totalKeysExamined" : 750267,
+					"totalDocsExamined" : 750267,
+					"executionStages" : {
+						"stage" : "FETCH",
+						"nReturned" : 750267,
+						"executionTimeMillisEstimate" : 191599,
+						"works" : 750268,
+						"advanced" : 750267,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 23340,
+						"restoreState" : 23340,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"docsExamined" : 750267,
+						"alreadyHasObj" : 0,
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"nReturned" : 750267,
+							"executionTimeMillisEstimate" : 1771,
+							"works" : 750268,
+							"advanced" : 750267,
+							"needTime" : 0,
+							"needYield" : 0,
+							"saveState" : 23340,
+							"restoreState" : 23340,
+							"isEOF" : 1,
+							"invalidates" : 0,
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							},
+							"keysExamined" : 750267,
+							"seeks" : 1,
+							"dupsTested" : 0,
+							"dupsDropped" : 0,
+							"seenInvalidated" : 0
+						}
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_mktsegment" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$lt" : [
+								"$$o.o_orderdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"o_orderkey" : "$c_orders.o_orderkey",
+				"o_orderdate" : "$c_orders.o_orderdate",
+				"o_shippriority" : "$c_orders.o_shippriority",
+				"lineitems" : "$c_orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"lineitems.l_shipdate" : {
+					"$gt" : ISODate("1992-01-02T00:00:00Z")
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_orderkey" : "$o_orderkey",
+					"o_orderdate" : "$o_orderdate",
+					"o_shippriority" : "$o_shippriority"
+				},
+				"revenue" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"revenue" : -1,
+					"_id.o_orderdate" : 1
+				},
+				"limit" : NumberLong(10)
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_mktsegment" : "AUTOMOBILE"
+				},
+				"fields" : {
+					"c_mktsegment" : 1,
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_mktsegment" : {
+							"$eq" : "AUTOMOBILE"
+						}
+					},
+					"winningPlan" : {
+						"stage" : "FETCH",
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							}
+						}
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 750267,
+					"executionTimeMillis" : 274365,
+					"totalKeysExamined" : 750267,
+					"totalDocsExamined" : 750267,
+					"executionStages" : {
+						"stage" : "FETCH",
+						"nReturned" : 750267,
+						"executionTimeMillisEstimate" : 192112,
+						"works" : 750268,
+						"advanced" : 750267,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 23338,
+						"restoreState" : 23338,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"docsExamined" : 750267,
+						"alreadyHasObj" : 0,
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"nReturned" : 750267,
+							"executionTimeMillisEstimate" : 1885,
+							"works" : 750268,
+							"advanced" : 750267,
+							"needTime" : 0,
+							"needYield" : 0,
+							"saveState" : 23338,
+							"restoreState" : 23338,
+							"isEOF" : 1,
+							"invalidates" : 0,
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							},
+							"keysExamined" : 750267,
+							"seeks" : 1,
+							"dupsTested" : 0,
+							"dupsDropped" : 0,
+							"seenInvalidated" : 0
+						}
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_mktsegment" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$lt" : [
+								"$$o.o_orderdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"o_orderkey" : "$c_orders.o_orderkey",
+				"o_orderdate" : "$c_orders.o_orderdate",
+				"o_shippriority" : "$c_orders.o_shippriority",
+				"lineitems" : "$c_orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"lineitems.l_shipdate" : {
+					"$gt" : ISODate("1992-01-02T00:00:00Z")
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_orderkey" : "$o_orderkey",
+					"o_orderdate" : "$o_orderdate",
+					"o_shippriority" : "$o_shippriority"
+				},
+				"revenue" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"revenue" : -1,
+					"_id.o_orderdate" : 1
+				},
+				"limit" : NumberLong(10)
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_mktsegment" : "AUTOMOBILE"
+				},
+				"fields" : {
+					"c_mktsegment" : 1,
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_mktsegment" : {
+							"$eq" : "AUTOMOBILE"
+						}
+					},
+					"winningPlan" : {
+						"stage" : "FETCH",
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							}
+						}
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 750267,
+					"executionTimeMillis" : 276575,
+					"totalKeysExamined" : 750267,
+					"totalDocsExamined" : 750267,
+					"executionStages" : {
+						"stage" : "FETCH",
+						"nReturned" : 750267,
+						"executionTimeMillisEstimate" : 191919,
+						"works" : 750268,
+						"advanced" : 750267,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 23421,
+						"restoreState" : 23421,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"docsExamined" : 750267,
+						"alreadyHasObj" : 0,
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"nReturned" : 750267,
+							"executionTimeMillisEstimate" : 1815,
+							"works" : 750268,
+							"advanced" : 750267,
+							"needTime" : 0,
+							"needYield" : 0,
+							"saveState" : 23421,
+							"restoreState" : 23421,
+							"isEOF" : 1,
+							"invalidates" : 0,
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							},
+							"keysExamined" : 750267,
+							"seeks" : 1,
+							"dupsTested" : 0,
+							"dupsDropped" : 0,
+							"seenInvalidated" : 0
+						}
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_mktsegment" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$lt" : [
+								"$$o.o_orderdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"o_orderkey" : "$c_orders.o_orderkey",
+				"o_orderdate" : "$c_orders.o_orderdate",
+				"o_shippriority" : "$c_orders.o_shippriority",
+				"lineitems" : "$c_orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"lineitems.l_shipdate" : {
+					"$gt" : ISODate("1992-01-02T00:00:00Z")
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_orderkey" : "$o_orderkey",
+					"o_orderdate" : "$o_orderdate",
+					"o_shippriority" : "$o_shippriority"
+				},
+				"revenue" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"revenue" : -1,
+					"_id.o_orderdate" : 1
+				},
+				"limit" : NumberLong(10)
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"c_mktsegment" : "AUTOMOBILE"
+				},
+				"fields" : {
+					"c_mktsegment" : 1,
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"c_mktsegment" : {
+							"$eq" : "AUTOMOBILE"
+						}
+					},
+					"winningPlan" : {
+						"stage" : "FETCH",
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							}
+						}
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 750267,
+					"executionTimeMillis" : 278885,
+					"totalKeysExamined" : 750267,
+					"totalDocsExamined" : 750267,
+					"executionStages" : {
+						"stage" : "FETCH",
+						"nReturned" : 750267,
+						"executionTimeMillisEstimate" : 193890,
+						"works" : 750268,
+						"advanced" : 750267,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 23536,
+						"restoreState" : 23536,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"docsExamined" : 750267,
+						"alreadyHasObj" : 0,
+						"inputStage" : {
+							"stage" : "IXSCAN",
+							"nReturned" : 750267,
+							"executionTimeMillisEstimate" : 1972,
+							"works" : 750268,
+							"advanced" : 750267,
+							"needTime" : 0,
+							"needYield" : 0,
+							"saveState" : 23536,
+							"restoreState" : 23536,
+							"isEOF" : 1,
+							"invalidates" : 0,
+							"keyPattern" : {
+								"c_mktsegment" : 1
+							},
+							"indexName" : "idx_mktsegment",
+							"isMultiKey" : false,
+							"multiKeyPaths" : {
+								"c_mktsegment" : [ ]
+							},
+							"isUnique" : false,
+							"isSparse" : false,
+							"isPartial" : false,
+							"indexVersion" : 2,
+							"direction" : "forward",
+							"indexBounds" : {
+								"c_mktsegment" : [
+									"[\"AUTOMOBILE\", \"AUTOMOBILE\"]"
+								]
+							},
+							"keysExamined" : 750267,
+							"seeks" : 1,
+							"dupsTested" : 0,
+							"dupsDropped" : 0,
+							"seenInvalidated" : 0
+						}
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_mktsegment" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$lt" : [
+								"$$o.o_orderdate",
+								{
+									"$const" : ISODate("1992-01-02T00:00:00Z")
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"o_orderkey" : "$c_orders.o_orderkey",
+				"o_orderdate" : "$c_orders.o_orderdate",
+				"o_shippriority" : "$c_orders.o_shippriority",
+				"lineitems" : "$c_orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$match" : {
+				"lineitems.l_shipdate" : {
+					"$gt" : ISODate("1992-01-02T00:00:00Z")
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_orderkey" : "$o_orderkey",
+					"o_orderdate" : "$o_orderdate",
+					"o_shippriority" : "$o_shippriority"
+				},
+				"revenue" : {
+					"$sum" : {
+						"$multiply" : [
+							"$lineitems.l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$lineitems.l_discount"
+								]
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"revenue" : -1,
+					"_id.o_orderdate" : 1
+				},
+				"limit" : NumberLong(10)
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

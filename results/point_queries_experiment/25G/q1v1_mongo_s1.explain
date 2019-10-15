@@ -1,0 +1,465 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 797704,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 189877,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 89574,
+						"restoreState" : 89574,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$match" : {
+				"c_orders.o_orderkey" : {
+					"$eq" : 7
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 802267,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 195568,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 89686,
+						"restoreState" : 89686,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$match" : {
+				"c_orders.o_orderkey" : {
+					"$eq" : 7
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 817913,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 194231,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 90113,
+						"restoreState" : 90113,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$match" : {
+				"c_orders.o_orderkey" : {
+					"$eq" : 7
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 797821,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 190335,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 89579,
+						"restoreState" : 89579,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$match" : {
+				"c_orders.o_orderkey" : {
+					"$eq" : 7
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 805308,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 190137,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 89769,
+						"restoreState" : 89769,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$match" : {
+				"c_orders.o_orderkey" : {
+					"$eq" : 7
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

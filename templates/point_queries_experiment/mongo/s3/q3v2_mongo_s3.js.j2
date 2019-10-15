@@ -1,0 +1,24 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+db.{{ variables['mongo_OjL'] }}.createIndex({o_custkey:1}, {name:"idx_o_custkey_mol"});
+{% if explain -%} 
+printjson(db.{{ variables['mongo_C'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_C'] }}.aggregate([
+{% endif %}
+   {$lookup:{
+	from:"{{ variables['mongo_OjL'] }}",
+	localField:"_id",
+	foreignField:"o_custkey",
+	as:"orders"
+   }},
+   {$unwind:"$orders"}, 
+   {$project:{c_name:1, o_orderdate:"$orders.o_orderdate"}}
+{% if explain %}
+], {allowDiskUse: true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

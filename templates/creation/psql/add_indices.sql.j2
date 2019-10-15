@@ -1,0 +1,17 @@
+\c {{ variables['psql_db_name'] }}
+SET search_path TO {{ variables['psql_db_schema'] }};
+
+DROP INDEX IF EXISTS l_shipdate_index;
+DROP INDEX IF EXISTS l_commitdate_index;
+DROP INDEX IF EXISTS l_receiptdate_index;
+DROP INDEX IF EXISTS o_orderdate_index;
+DROP INDEX IF EXISTS c_acctbal_index;
+DROP INDEX IF EXISTS c_mktsegment_index;
+
+CREATE INDEX l_shipdate_index ON LINEITEM (L_SHIPDATE);
+CREATE INDEX l_commitdate_index ON LINEITEM (L_COMMITDATE);
+CREATE INDEX l_receiptdate_index ON LINEITEM (L_RECEIPTDATE);
+CREATE INDEX o_orderdate_index ON ORDERS (O_ORDERDATE);
+CREATE INDEX c_acctbal_index ON CUSTOMER (C_ACCTBAL);
+CREATE INDEX c_mktsegment_index ON CUSTOMER (C_MKTSEGMENT);
+COMMIT WORK;

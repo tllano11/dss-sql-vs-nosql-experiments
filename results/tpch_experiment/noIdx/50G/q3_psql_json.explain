@@ -1,0 +1,115 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                 QUERY PLAN                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=15044648.33..15044648.36 rows=10 width=128) (actual time=747251.640..747251.646 rows=10 loops=1)
+   ->  Sort  (cost=15044648.33..15044648.83 rows=200 width=128) (actual time=747251.635..747251.636 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=15044640.01..15044644.01 rows=200 width=128) (actual time=747244.129..747247.765 rows=6175 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=0.00..13794640.00 rows=41666667 width=128) (actual time=115.177..747124.019 rows=24418 loops=1)
+                     Filter: ((((ol.o ->> 'o_orderdate'::text))::date < '1992-01-02'::date) AND (((ol.l ->> 'l_shipdate'::text))::date > '1992-01-02'::date))
+                     Rows Removed by Filter: 59978807
+                     ->  ProjectSet  (cost=0.00..2232140.00 rows=375000000 width=64) (actual time=24.659..705920.721 rows=60003225 loops=1)
+                           ->  ProjectSet  (cost=0.00..282140.00 rows=3750000 width=32) (actual time=24.652..667245.211 rows=14998183 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..263015.00 rows=37500 width=128) (actual time=24.553..587415.790 rows=1501166 loops=1)
+                                       Filter: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Rows Removed by Filter: 5998834
+ Planning time: 50.946 ms
+ Execution time: 747251.922 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                 QUERY PLAN                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=15044648.33..15044648.36 rows=10 width=128) (actual time=746251.141..746251.147 rows=10 loops=1)
+   ->  Sort  (cost=15044648.33..15044648.83 rows=200 width=128) (actual time=746251.137..746251.138 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=15044640.01..15044644.01 rows=200 width=128) (actual time=746243.666..746247.255 rows=6175 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=0.00..13794640.00 rows=41666667 width=128) (actual time=107.429..746137.007 rows=24418 loops=1)
+                     Filter: ((((ol.o ->> 'o_orderdate'::text))::date < '1992-01-02'::date) AND (((ol.l ->> 'l_shipdate'::text))::date > '1992-01-02'::date))
+                     Rows Removed by Filter: 59978807
+                     ->  ProjectSet  (cost=0.00..2232140.00 rows=375000000 width=64) (actual time=33.362..705500.832 rows=60003225 loops=1)
+                           ->  ProjectSet  (cost=0.00..282140.00 rows=3750000 width=32) (actual time=33.355..666897.387 rows=14998183 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..263015.00 rows=37500 width=128) (actual time=33.257..587345.489 rows=1501166 loops=1)
+                                       Filter: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Rows Removed by Filter: 5998834
+ Planning time: 42.182 ms
+ Execution time: 746251.389 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                 QUERY PLAN                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=15044648.33..15044648.36 rows=10 width=128) (actual time=747933.175..747933.182 rows=10 loops=1)
+   ->  Sort  (cost=15044648.33..15044648.83 rows=200 width=128) (actual time=747933.171..747933.172 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=15044640.01..15044644.01 rows=200 width=128) (actual time=747925.611..747929.248 rows=6175 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=0.00..13794640.00 rows=41666667 width=128) (actual time=134.936..747806.197 rows=24418 loops=1)
+                     Filter: ((((ol.o ->> 'o_orderdate'::text))::date < '1992-01-02'::date) AND (((ol.l ->> 'l_shipdate'::text))::date > '1992-01-02'::date))
+                     Rows Removed by Filter: 59978807
+                     ->  ProjectSet  (cost=0.00..2232140.00 rows=375000000 width=64) (actual time=36.109..706708.631 rows=60003225 loops=1)
+                           ->  ProjectSet  (cost=0.00..282140.00 rows=3750000 width=32) (actual time=36.102..668565.830 rows=14998183 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..263015.00 rows=37500 width=128) (actual time=36.005..588862.565 rows=1501166 loops=1)
+                                       Filter: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Rows Removed by Filter: 5998834
+ Planning time: 64.456 ms
+ Execution time: 747933.437 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                 QUERY PLAN                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=15044648.33..15044648.36 rows=10 width=128) (actual time=747905.295..747905.301 rows=10 loops=1)
+   ->  Sort  (cost=15044648.33..15044648.83 rows=200 width=128) (actual time=747905.290..747905.291 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=15044640.01..15044644.01 rows=200 width=128) (actual time=747897.774..747901.440 rows=6175 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=0.00..13794640.00 rows=41666667 width=128) (actual time=136.380..747785.267 rows=24418 loops=1)
+                     Filter: ((((ol.o ->> 'o_orderdate'::text))::date < '1992-01-02'::date) AND (((ol.l ->> 'l_shipdate'::text))::date > '1992-01-02'::date))
+                     Rows Removed by Filter: 59978807
+                     ->  ProjectSet  (cost=0.00..2232140.00 rows=375000000 width=64) (actual time=37.558..706630.221 rows=60003225 loops=1)
+                           ->  ProjectSet  (cost=0.00..282140.00 rows=3750000 width=32) (actual time=37.550..667657.192 rows=14998183 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..263015.00 rows=37500 width=128) (actual time=37.452..587996.163 rows=1501166 loops=1)
+                                       Filter: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Rows Removed by Filter: 5998834
+ Planning time: 54.793 ms
+ Execution time: 747905.551 ms
+(16 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                 QUERY PLAN                                                                                  
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=15044648.33..15044648.36 rows=10 width=128) (actual time=746617.943..746617.948 rows=10 loops=1)
+   ->  Sort  (cost=15044648.33..15044648.83 rows=200 width=128) (actual time=746617.938..746617.939 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=15044640.01..15044644.01 rows=200 width=128) (actual time=746610.460..746614.075 rows=6175 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=0.00..13794640.00 rows=41666667 width=128) (actual time=124.425..746499.360 rows=24418 loops=1)
+                     Filter: ((((ol.o ->> 'o_orderdate'::text))::date < '1992-01-02'::date) AND (((ol.l ->> 'l_shipdate'::text))::date > '1992-01-02'::date))
+                     Rows Removed by Filter: 59978807
+                     ->  ProjectSet  (cost=0.00..2232140.00 rows=375000000 width=64) (actual time=33.701..702989.709 rows=60003225 loops=1)
+                           ->  ProjectSet  (cost=0.00..282140.00 rows=3750000 width=32) (actual time=33.694..664355.012 rows=14998183 loops=1)
+                                 ->  Seq Scan on json_data j  (cost=0.00..263015.00 rows=37500 width=128) (actual time=33.595..584717.766 rows=1501166 loops=1)
+                                       Filter: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Rows Removed by Filter: 5998834
+ Planning time: 51.926 ms
+ Execution time: 746618.196 ms
+(16 rows)
+
+
+

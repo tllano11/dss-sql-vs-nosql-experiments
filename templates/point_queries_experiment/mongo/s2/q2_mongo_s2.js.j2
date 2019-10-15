@@ -1,0 +1,16 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_C'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_C'] }}.aggregate([
+{% endif %}
+   {$match:{_id: {{ variables['point']['q2']['custkey'] }} }}
+{% if explain %}
+], {allowDiskUse: true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

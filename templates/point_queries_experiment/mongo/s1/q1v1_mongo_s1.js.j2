@@ -1,0 +1,22 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_CjOjL'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_CjOjL'] }}.aggregate([
+{% endif %}
+   {$unwind:"$c_orders"},
+   {$project:{_id:0, orders:"$c_orders"}},
+   {$match:{ "orders.o_orderkey":{{ variables['point']['q1']['orderkey'] }} }},
+   {$unwind:"$orders.o_lineitems"},
+   {$project:{lineitems:"$orders.o_lineitems"}},
+   {$unwind:"$lineitems"},
+   {$replaceRoot:{newRoot:"$lineitems"}}   
+{% if explain %}
+], {allowDiskUse: true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

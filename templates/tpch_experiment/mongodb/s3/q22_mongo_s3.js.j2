@@ -1,0 +1,65 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_C'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_C'] }}.aggregate([
+{% endif %}
+    {$match: {
+	c_acctbal: {$gt: 0.0}
+    }},
+    {$project: {
+	c_acctbal: 1,
+	cntrycode: {$substr:["$c_phone", 0, 2]}
+    }},
+    {$match: {
+	cntrycode: {$in: ['{{ variables['tpch']['q22']['code1'] }}', '{{ variables['tpch']['q22']['code2'] }}', '{{ variables['tpch']['q22']['code3'] }}', '{{ variables['tpch']['q22']['code4'] }}', '{{ variables['tpch']['q22']['code5'] }}', '{{ variables['tpch']['q22']['code6'] }}', '{{ variables['tpch']['q22']['code7'] }}'] }
+    }},
+    {$group: {
+	_id: null,
+	c_acctbal_avg: {$avg: "$c_acctbal"}
+    }},
+    {$project: { _id:0, c_acctbal_avg: 1 }},
+    // TODO: Make a variable for the lookup collection
+    {$lookup:{
+	from: "{{ variables['mongo_C'] }}",
+	pipeline:[
+	    {$lookup: {
+		from: "{{ variables['mongo_OjL'] }}",
+		localField: "_id",
+		foreignField: "o_custkey",
+		as: "c_orders"
+	    }},
+	    {$match: {
+		c_acctbal: {$gt: 0.0},
+		c_orders: {$eq: []}
+	    }},
+	    {$project: {
+		_id: 0,
+		c_acctbal: 1,
+		cntrycode: {$substr:["$c_phone", 0, 2]}
+	    }},
+	    {$match: {
+		cntrycode: {$in: ['{{ variables['tpch']['q22']['code1'] }}', '{{ variables['tpch']['q22']['code2'] }}', '{{ variables['tpch']['q22']['code3'] }}', '{{ variables['tpch']['q22']['code4'] }}', '{{ variables['tpch']['q22']['code5'] }}', '{{ variables['tpch']['q22']['code6'] }}', '{{ variables['tpch']['q22']['code7'] }}'] }
+	    }}
+	],
+	as: "c_acctbals"
+    }},
+    {$unwind: "$c_acctbals"},
+    {$match: {
+	$expr: {$gt:["$c_acctbals.c_acctbal", "$c_acctbal_avg"]}
+    }},
+    {$group: {
+	_id: "$c_acctbals.cntrycode",
+	numcust: {$sum: 1},
+	totacctbal: {$sum: "$c_acctbals.c_acctbal"}
+    }},
+    {$sort: {"_id": 1}}
+{% if explain %}
+], {allowDiskUse:true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

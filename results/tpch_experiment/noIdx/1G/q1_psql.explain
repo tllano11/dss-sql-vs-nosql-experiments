@@ -1,0 +1,100 @@
+You are now connected to database "tpch" as user "tomas".
+                                                               QUERY PLAN                                                               
+----------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=128507.96..128508.80 rows=6 width=236) (actual time=3553.084..3553.107 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Sort  (cost=128507.96..128508.00 rows=16 width=25) (actual time=3553.015..3553.017 rows=17 loops=1)
+         Sort Key: l_returnflag, l_linestatus
+         Sort Method: quicksort  Memory: 26kB
+         ->  Gather  (cost=1000.00..128507.64 rows=16 width=25) (actual time=677.121..3573.801 rows=17 loops=1)
+               Workers Planned: 5
+               Workers Launched: 5
+               ->  Parallel Seq Scan on lineitem  (cost=0.00..127506.04 rows=3 width=25) (actual time=890.823..3512.108 rows=3 loops=6)
+                     Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 1000200
+ Planning time: 77.010 ms
+ Execution time: 3574.125 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                               QUERY PLAN                                                               
+----------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=128507.96..128508.80 rows=6 width=236) (actual time=3935.246..3935.290 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Sort  (cost=128507.96..128508.00 rows=16 width=25) (actual time=3935.183..3935.186 rows=17 loops=1)
+         Sort Key: l_returnflag, l_linestatus
+         Sort Method: quicksort  Memory: 26kB
+         ->  Gather  (cost=1000.00..128507.64 rows=16 width=25) (actual time=1280.388..3954.889 rows=17 loops=1)
+               Workers Planned: 5
+               Workers Launched: 5
+               ->  Parallel Seq Scan on lineitem  (cost=0.00..127506.04 rows=3 width=25) (actual time=700.654..3919.254 rows=3 loops=6)
+                     Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 1000200
+ Planning time: 79.302 ms
+ Execution time: 3955.192 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                               QUERY PLAN                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=128507.96..128508.80 rows=6 width=236) (actual time=3863.499..3863.534 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Sort  (cost=128507.96..128508.00 rows=16 width=25) (actual time=3863.417..3863.419 rows=17 loops=1)
+         Sort Key: l_returnflag, l_linestatus
+         Sort Method: quicksort  Memory: 26kB
+         ->  Gather  (cost=1000.00..128507.64 rows=16 width=25) (actual time=2376.811..3881.200 rows=17 loops=1)
+               Workers Planned: 5
+               Workers Launched: 5
+               ->  Parallel Seq Scan on lineitem  (cost=0.00..127506.04 rows=3 width=25) (actual time=1404.459..3847.800 rows=3 loops=6)
+                     Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 1000200
+ Planning time: 79.413 ms
+ Execution time: 3881.529 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                               QUERY PLAN                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=128507.96..128508.80 rows=6 width=236) (actual time=3589.217..3589.238 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Sort  (cost=128507.96..128508.00 rows=16 width=25) (actual time=3589.164..3589.166 rows=17 loops=1)
+         Sort Key: l_returnflag, l_linestatus
+         Sort Method: quicksort  Memory: 26kB
+         ->  Gather  (cost=1000.00..128507.64 rows=16 width=25) (actual time=524.274..3607.151 rows=17 loops=1)
+               Workers Planned: 5
+               Workers Launched: 5
+               ->  Parallel Seq Scan on lineitem  (cost=0.00..127506.04 rows=3 width=25) (actual time=1110.311..3572.636 rows=3 loops=6)
+                     Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 1000200
+ Planning time: 79.183 ms
+ Execution time: 3607.442 ms
+(13 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                               QUERY PLAN                                                                
+-----------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=128507.96..128508.80 rows=6 width=236) (actual time=3660.500..3660.538 rows=2 loops=1)
+   Group Key: l_returnflag, l_linestatus
+   ->  Sort  (cost=128507.96..128508.00 rows=16 width=25) (actual time=3660.423..3660.425 rows=17 loops=1)
+         Sort Key: l_returnflag, l_linestatus
+         Sort Method: quicksort  Memory: 26kB
+         ->  Gather  (cost=1000.00..128507.64 rows=16 width=25) (actual time=677.409..3679.451 rows=17 loops=1)
+               Workers Planned: 5
+               Workers Launched: 5
+               ->  Parallel Seq Scan on lineitem  (cost=0.00..127506.04 rows=3 width=25) (actual time=1580.935..3643.899 rows=3 loops=6)
+                     Filter: (l_shipdate <= '1992-01-02 00:00:00'::timestamp without time zone)
+                     Rows Removed by Filter: 1000200
+ Planning time: 87.652 ms
+ Execution time: 3679.787 ms
+(13 rows)
+
+
+

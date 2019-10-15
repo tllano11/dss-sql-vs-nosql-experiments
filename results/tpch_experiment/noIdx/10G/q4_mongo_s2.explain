@@ -1,0 +1,755 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"o_orderdate" : {
+						"$gte" : ISODate("1992-01-01T00:00:00Z"),
+						"$lt" : ISODate("1992-04-01T00:00:00Z")
+					}
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orders",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 566745,
+					"executionTimeMillis" : 145400,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 15000000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"nReturned" : 566745,
+						"executionTimeMillisEstimate" : 15784,
+						"works" : 15000002,
+						"advanced" : 566745,
+						"needTime" : 14433256,
+						"needYield" : 0,
+						"saveState" : 117247,
+						"restoreState" : 117247,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 15000000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "lineitem",
+				"as" : "o_lineitems",
+				"localField" : "_id",
+				"foreignField" : "_id.l_orderkey"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$o_orderpriority",
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lt" : [
+								"$$l.l_commitdate",
+								"$$l.l_receiptdate"
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"lineitems" : {
+							"$eq" : [ ]
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"o_orderdate" : {
+						"$gte" : ISODate("1992-01-01T00:00:00Z"),
+						"$lt" : ISODate("1992-04-01T00:00:00Z")
+					}
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orders",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 566745,
+					"executionTimeMillis" : 147494,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 15000000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"nReturned" : 566745,
+						"executionTimeMillisEstimate" : 16095,
+						"works" : 15000002,
+						"advanced" : 566745,
+						"needTime" : 14433256,
+						"needYield" : 0,
+						"saveState" : 117249,
+						"restoreState" : 117249,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 15000000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "lineitem",
+				"as" : "o_lineitems",
+				"localField" : "_id",
+				"foreignField" : "_id.l_orderkey"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$o_orderpriority",
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lt" : [
+								"$$l.l_commitdate",
+								"$$l.l_receiptdate"
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"lineitems" : {
+							"$eq" : [ ]
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"o_orderdate" : {
+						"$gte" : ISODate("1992-01-01T00:00:00Z"),
+						"$lt" : ISODate("1992-04-01T00:00:00Z")
+					}
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orders",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 566745,
+					"executionTimeMillis" : 145701,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 15000000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"nReturned" : 566745,
+						"executionTimeMillisEstimate" : 16564,
+						"works" : 15000002,
+						"advanced" : 566745,
+						"needTime" : 14433256,
+						"needYield" : 0,
+						"saveState" : 117247,
+						"restoreState" : 117247,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 15000000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "lineitem",
+				"as" : "o_lineitems",
+				"localField" : "_id",
+				"foreignField" : "_id.l_orderkey"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$o_orderpriority",
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lt" : [
+								"$$l.l_commitdate",
+								"$$l.l_receiptdate"
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"lineitems" : {
+							"$eq" : [ ]
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"o_orderdate" : {
+						"$gte" : ISODate("1992-01-01T00:00:00Z"),
+						"$lt" : ISODate("1992-04-01T00:00:00Z")
+					}
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orders",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 566745,
+					"executionTimeMillis" : 146177,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 15000000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"nReturned" : 566745,
+						"executionTimeMillisEstimate" : 16519,
+						"works" : 15000002,
+						"advanced" : 566745,
+						"needTime" : 14433256,
+						"needYield" : 0,
+						"saveState" : 117244,
+						"restoreState" : 117244,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 15000000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "lineitem",
+				"as" : "o_lineitems",
+				"localField" : "_id",
+				"foreignField" : "_id.l_orderkey"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$o_orderpriority",
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lt" : [
+								"$$l.l_commitdate",
+								"$$l.l_receiptdate"
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"lineitems" : {
+							"$eq" : [ ]
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"o_orderdate" : {
+						"$gte" : ISODate("1992-01-01T00:00:00Z"),
+						"$lt" : ISODate("1992-04-01T00:00:00Z")
+					}
+				},
+				"fields" : {
+					"o_lineitems" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.orders",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 566745,
+					"executionTimeMillis" : 145992,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 15000000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								}
+							]
+						},
+						"nReturned" : 566745,
+						"executionTimeMillisEstimate" : 17010,
+						"works" : 15000002,
+						"advanced" : 566745,
+						"needTime" : 14433256,
+						"needYield" : 0,
+						"saveState" : 117242,
+						"restoreState" : 117242,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 15000000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "lineitem",
+				"as" : "o_lineitems",
+				"localField" : "_id",
+				"foreignField" : "_id.l_orderkey"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"orderpriority" : "$o_orderpriority",
+				"lineitems" : {
+					"$filter" : {
+						"input" : "$o_lineitems",
+						"as" : "l",
+						"cond" : {
+							"$lt" : [
+								"$$l.l_commitdate",
+								"$$l.l_receiptdate"
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$match" : {
+				"$nor" : [
+					{
+						"lineitems" : {
+							"$eq" : [ ]
+						}
+					}
+				]
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

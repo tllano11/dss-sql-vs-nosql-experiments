@@ -1,0 +1,47 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_L'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_L'] }}.aggregate([
+{% endif %}
+    {$match: {l_shipdate: {$gt:ISODate("{{ variables['tpch']['q3']['date'] }}T00:00:00Z")}}},
+    // Because there is a 1-M relationship between orders and lineitem,
+    // only one order will be in the array
+    {$lookup: {
+	from: "orders",
+	localField: "_id.l_orderkey",
+	foreignField: "_id",
+	as: "order",
+    }},
+    {$unwind: "$order"},
+    {$match: {"order.o_orderdate":{ $lt: ISODate("{{ variables['tpch']['q3']['date'] }}T00:00:00Z")}}},
+    {$lookup: {
+	from: "{{ variables['mongo_C'] }}",
+	localField: "order.o_custkey",
+	foreignField: "_id",
+	as: "customer"
+    }},
+    {$unwind: "$customer"},
+    {$match: {"customer.c_mktsegment": "{{ variables['tpch']['q3']['c_mktsegment'] }}"}},
+    { $project: {
+	l_orderkey: "$_id.l_orderkey",
+    	o_orderdate: "$order.o_orderdate",
+    	o_shippriority: "$order.o_shippriority",
+	l_extendedprice: 1,
+	l_discount: 1,
+    }},
+    { $group: { 
+    	_id: {l_orderkey:"$l_orderkey", o_orderdate: "$o_orderdate", o_shippriority: "$o_shippriority"},
+    	revenue: {$sum: {$multiply: ["$l_extendedprice", {$subtract: [1, "$l_discount"]}]}}
+    }},
+    { $sort: { "revenue": -1, "_id.o_orderdate": 1}},
+    { $limit : 10 }
+{% if explain %}
+], {allowDiskUse:true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

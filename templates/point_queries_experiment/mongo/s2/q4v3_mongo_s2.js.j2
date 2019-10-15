@@ -1,0 +1,18 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+db.{{ variables['mongo_C'] }}.createIndex({c_acctbal:-1}, {name: "idx_c_acctbal_mc"});
+{% if explain -%} 
+printjson(db.{{ variables['mongo_C'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_C'] }}.aggregate([
+{% endif %}
+   { $match: { c_acctbal: { $lt: {{ variables['point']['q4']['lt_balance'] }} }}}
+{% if explain %}
+], {allowDiskUse: true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}
+db.{{ variables['mongo_C'] }}.dropIndex("idx_c_acctbal_mc");

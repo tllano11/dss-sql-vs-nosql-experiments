@@ -1,0 +1,24 @@
+\c {{ variables['psql_db_name'] }}
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+       orders.o->>'o_orderpriority' as orderpriority,
+       count(*) as order_count
+from
+	(select jsonb_array_elements(j.customers->'c_orders') o
+	from {{ variables['psql_db_schema'] }}.json_data j) orders
+where
+	cast(orders.o->>'o_orderdate' as date) >= date '{{ variables['tpch']['q4']['date'] }}'
+	and cast(orders.o->>'o_orderdate' as date) < date '{{ variables['tpch']['q4']['date'] }}' + interval '3' month
+	and exists (
+	    select 1
+	    from jsonb_array_elements(orders.o->'o_lineitems') l
+	    where 
+	    	  cast(l->>'l_commitdate' as date) < cast(l->>'l_receiptdate' as date)
+	)
+group by
+      orderpriority
+order by
+      orderpriority;

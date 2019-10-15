@@ -1,0 +1,40 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_CjOjL'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_CjOjL'] }}.aggregate([
+{% endif %}
+    { $project: {
+	_id:0, 
+	orders: {$filter:{
+		 input: "$c_orders",
+		 as: "o",
+		 cond: {$and: [{$gte:["$$o.o_orderdate", ISODate("{{ variables['tpch']['q4']['date'] }}T00:00:00Z")]}, {$lt:["$$o.o_orderdate", ISODate("{{ variables['tpch']['q4']['delta_date'] }}T00:00:00Z")]}]}}
+	}}
+	
+    },
+    { $unwind: "$orders" },
+    { $project: {
+	orderkey: "$orders.o_orderkey",
+	orderpriority: "$orders.o_orderpriority",
+	lineitems: "$orders.o_lineitems" 
+    }},
+    { $unwind: "$lineitems"},
+    { $match: {$expr:{$lt:["$lineitems.l_commitdate","$lineitems.l_receiptdate"]}}},
+    { $group: {
+	_id: {orderkey:"$orderkey", orderprioriry:"$orderpriority"}
+    }},
+    { $group: {
+	_id: "$_id.orderprioriry",
+	order_count: {$sum: 1}
+    }},
+    { $sort: {"_id": 1}}
+{% if explain %}
+], {allowDiskUse:true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

@@ -1,0 +1,125 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                    QUERY PLAN                                                                                    
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=39723898.24..39723898.26 rows=10 width=128) (actual time=186832.490..186832.495 rows=10 loops=1)
+   ->  Sort  (cost=39723898.24..39723898.74 rows=200 width=128) (actual time=186832.486..186832.486 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=39723889.92..39723893.92 rows=200 width=128) (actual time=186831.446..186832.084 rows=1253 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=174.55..39473889.93 rows=8333333 width=128) (actual time=166.359..186814.435 rows=4939 loops=1)
+                     Filter: ((scale1.make_date((ol.o ->> 'o_orderdate'::text)) < '1992-01-02'::date) AND (scale1.make_date((ol.l ->> 'l_shipdate'::text)) > '1992-01-02'::date))
+                     Rows Removed by Filter: 11995552
+                     ->  ProjectSet  (cost=174.55..411389.93 rows=75000000 width=64) (actual time=86.193..130383.309 rows=12000491 loops=1)
+                           ->  ProjectSet  (cost=174.55..21389.93 rows=750000 width=32) (actual time=86.185..120258.252 rows=3000540 loops=1)
+                                 ->  Bitmap Heap Scan on json_data j  (cost=174.55..17564.93 rows=7500 width=128) (actual time=85.833..936.242 rows=300036 loops=1)
+                                       Recheck Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Heap Blocks: exact=30185
+                                       ->  Bitmap Index Scan on c_mktsegment_jbindex  (cost=0.00..172.68 rows=7500 width=0) (actual time=73.422..73.422 rows=300036 loops=1)
+                                             Index Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+ Planning time: 171.813 ms
+ Execution time: 186832.925 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                    QUERY PLAN                                                                                    
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=39723898.24..39723898.26 rows=10 width=128) (actual time=190059.902..190059.907 rows=10 loops=1)
+   ->  Sort  (cost=39723898.24..39723898.74 rows=200 width=128) (actual time=190059.898..190059.898 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=39723889.92..39723893.92 rows=200 width=128) (actual time=190058.816..190059.509 rows=1253 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=174.55..39473889.93 rows=8333333 width=128) (actual time=203.879..190041.109 rows=4939 loops=1)
+                     Filter: ((scale1.make_date((ol.o ->> 'o_orderdate'::text)) < '1992-01-02'::date) AND (scale1.make_date((ol.l ->> 'l_shipdate'::text)) > '1992-01-02'::date))
+                     Rows Removed by Filter: 11995552
+                     ->  ProjectSet  (cost=174.55..411389.93 rows=75000000 width=64) (actual time=106.807..134205.849 rows=12000491 loops=1)
+                           ->  ProjectSet  (cost=174.55..21389.93 rows=750000 width=32) (actual time=106.794..124673.678 rows=3000540 loops=1)
+                                 ->  Bitmap Heap Scan on json_data j  (cost=174.55..17564.93 rows=7500 width=128) (actual time=106.195..983.686 rows=300036 loops=1)
+                                       Recheck Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Heap Blocks: exact=30185
+                                       ->  Bitmap Index Scan on c_mktsegment_jbindex  (cost=0.00..172.68 rows=7500 width=0) (actual time=91.718..91.718 rows=300036 loops=1)
+                                             Index Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+ Planning time: 152.996 ms
+ Execution time: 190060.446 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                    QUERY PLAN                                                                                    
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=39723898.24..39723898.26 rows=10 width=128) (actual time=190107.359..190107.364 rows=10 loops=1)
+   ->  Sort  (cost=39723898.24..39723898.74 rows=200 width=128) (actual time=190107.354..190107.355 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=39723889.92..39723893.92 rows=200 width=128) (actual time=190106.323..190106.970 rows=1253 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=174.55..39473889.93 rows=8333333 width=128) (actual time=214.485..190089.064 rows=4939 loops=1)
+                     Filter: ((scale1.make_date((ol.o ->> 'o_orderdate'::text)) < '1992-01-02'::date) AND (scale1.make_date((ol.l ->> 'l_shipdate'::text)) > '1992-01-02'::date))
+                     Rows Removed by Filter: 11995552
+                     ->  ProjectSet  (cost=174.55..411389.93 rows=75000000 width=64) (actual time=126.629..134428.005 rows=12000491 loops=1)
+                           ->  ProjectSet  (cost=174.55..21389.93 rows=750000 width=32) (actual time=126.616..124985.641 rows=3000540 loops=1)
+                                 ->  Bitmap Heap Scan on json_data j  (cost=174.55..17564.93 rows=7500 width=128) (actual time=126.032..983.096 rows=300036 loops=1)
+                                       Recheck Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Heap Blocks: exact=30185
+                                       ->  Bitmap Index Scan on c_mktsegment_jbindex  (cost=0.00..172.68 rows=7500 width=0) (actual time=109.411..109.411 rows=300036 loops=1)
+                                             Index Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+ Planning time: 144.351 ms
+ Execution time: 190107.827 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                    QUERY PLAN                                                                                    
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=39723898.24..39723898.26 rows=10 width=128) (actual time=185709.259..185709.264 rows=10 loops=1)
+   ->  Sort  (cost=39723898.24..39723898.74 rows=200 width=128) (actual time=185709.255..185709.256 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=39723889.92..39723893.92 rows=200 width=128) (actual time=185708.247..185708.882 rows=1253 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=174.55..39473889.93 rows=8333333 width=128) (actual time=199.577..185690.009 rows=4939 loops=1)
+                     Filter: ((scale1.make_date((ol.o ->> 'o_orderdate'::text)) < '1992-01-02'::date) AND (scale1.make_date((ol.l ->> 'l_shipdate'::text)) > '1992-01-02'::date))
+                     Rows Removed by Filter: 11995552
+                     ->  ProjectSet  (cost=174.55..411389.93 rows=75000000 width=64) (actual time=87.108..128768.613 rows=12000491 loops=1)
+                           ->  ProjectSet  (cost=174.55..21389.93 rows=750000 width=32) (actual time=87.094..118828.803 rows=3000540 loops=1)
+                                 ->  Bitmap Heap Scan on json_data j  (cost=174.55..17564.93 rows=7500 width=128) (actual time=86.514..946.041 rows=300036 loops=1)
+                                       Recheck Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Heap Blocks: exact=30185
+                                       ->  Bitmap Index Scan on c_mktsegment_jbindex  (cost=0.00..172.68 rows=7500 width=0) (actual time=76.237..76.237 rows=300036 loops=1)
+                                             Index Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+ Planning time: 135.976 ms
+ Execution time: 185709.717 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                    QUERY PLAN                                                                                    
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=39723898.24..39723898.26 rows=10 width=128) (actual time=187768.567..187768.572 rows=10 loops=1)
+   ->  Sort  (cost=39723898.24..39723898.74 rows=200 width=128) (actual time=187768.563..187768.563 rows=10 loops=1)
+         Sort Key: (sum((((ol.l ->> 'l_extendedprice'::text))::numeric * ('1'::numeric - ((ol.l ->> 'l_discount'::text))::numeric)))) DESC, ((ol.o ->> 'o_orderdate'::text))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  HashAggregate  (cost=39723889.92..39723893.92 rows=200 width=128) (actual time=187767.548..187768.187 rows=1253 loops=1)
+               Group Key: (ol.o ->> 'o_orderkey'::text), (ol.o ->> 'o_orderdate'::text), (ol.o ->> 'o_shippriority'::text)
+               ->  Subquery Scan on ol  (cost=174.55..39473889.93 rows=8333333 width=128) (actual time=224.075..187750.056 rows=4939 loops=1)
+                     Filter: ((scale1.make_date((ol.o ->> 'o_orderdate'::text)) < '1992-01-02'::date) AND (scale1.make_date((ol.l ->> 'l_shipdate'::text)) > '1992-01-02'::date))
+                     Rows Removed by Filter: 11995552
+                     ->  ProjectSet  (cost=174.55..411389.93 rows=75000000 width=64) (actual time=136.923..133717.039 rows=12000491 loops=1)
+                           ->  ProjectSet  (cost=174.55..21389.93 rows=750000 width=32) (actual time=136.910..123839.884 rows=3000540 loops=1)
+                                 ->  Bitmap Heap Scan on json_data j  (cost=174.55..17564.93 rows=7500 width=128) (actual time=136.280..993.853 rows=300036 loops=1)
+                                       Recheck Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+                                       Heap Blocks: exact=30185
+                                       ->  Bitmap Index Scan on c_mktsegment_jbindex  (cost=0.00..172.68 rows=7500 width=0) (actual time=114.759..114.760 rows=300036 loops=1)
+                                             Index Cond: ((customers ->> 'c_mktsegment'::text) = 'AUTOMOBILE'::text)
+ Planning time: 129.135 ms
+ Execution time: 187769.016 ms
+(18 rows)
+
+
+

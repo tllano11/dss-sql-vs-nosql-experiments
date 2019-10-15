@@ -1,0 +1,525 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 625425,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 193094,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 85982,
+						"restoreState" : 85982,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$eq" : [
+								"$$o.o_orderkey",
+								{
+									"$const" : 7
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 625388,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 191750,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 85974,
+						"restoreState" : 85974,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$eq" : [
+								"$$o.o_orderkey",
+								{
+									"$const" : 7
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 626602,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 194257,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 86037,
+						"restoreState" : 86037,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$eq" : [
+								"$$o.o_orderkey",
+								{
+									"$const" : 7
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 630209,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 195500,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 86130,
+						"restoreState" : 86130,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$eq" : [
+								"$$o.o_orderkey",
+								{
+									"$const" : 7
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					
+				},
+				"fields" : {
+					"c_orders" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 3750000,
+					"executionTimeMillis" : 631174,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 3750000,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"nReturned" : 3750000,
+						"executionTimeMillisEstimate" : 192763,
+						"works" : 3750002,
+						"advanced" : 3750000,
+						"needTime" : 1,
+						"needYield" : 0,
+						"saveState" : 86168,
+						"restoreState" : 86168,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 3750000
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"c_orders" : {
+					"$filter" : {
+						"input" : "$c_orders",
+						"as" : "o",
+						"cond" : {
+							"$eq" : [
+								"$$o.o_orderkey",
+								{
+									"$const" : 7
+								}
+							]
+						}
+					}
+				}
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$c_orders"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : false,
+				"orders" : "$c_orders"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"lineitems" : "$orders.o_lineitems"
+			}
+		},
+		{
+			"$unwind" : {
+				"path" : "$lineitems"
+			}
+		},
+		{
+			"$replaceRoot" : {
+				"newRoot" : "$lineitems"
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

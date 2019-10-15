@@ -1,0 +1,125 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                    QUERY PLAN                                                                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=7288909.46..7291785.57 rows=7 width=27) (actual time=641602.594..641602.598 rows=2 loops=1)
+   Group Key: lineitem.l_shipmode
+   ->  Gather Merge  (cost=7288909.46..7291785.08 rows=56 width=27) (actual time=641560.520..641798.671 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=7287909.32..7290778.03 rows=7 width=27) (actual time=641523.337..641554.849 rows=2 loops=9)
+               Group Key: lineitem.l_shipmode
+               ->  Sort  (cost=7287909.32..7288267.90 rows=143432 width=27) (actual time=641482.941..641492.303 rows=140216 loops=9)
+                     Sort Key: lineitem.l_shipmode
+                     Sort Method: quicksort  Memory: 17113kB
+                     ->  Nested Loop  (cost=0.57..7275624.36 rows=143432 width=27) (actual time=8.265..641228.858 rows=140216 loops=9)
+                           ->  Parallel Seq Scan on lineitem  (cost=0.00..6467890.38 rows=143432 width=15) (actual time=6.124..529149.705 rows=140216 loops=9)
+                                 Filter: ((l_shipmode = ANY ('{RAIL,"REG AIR"}'::bpchar[])) AND (l_commitdate < l_receiptdate) AND (l_shipdate < l_commitdate) AND (l_receiptdate >= '1992-01-01'::date) AND (l_receiptdate < '1993-01-01 00:00:00'::timestamp without time zone))
+                                 Rows Removed by Filter: 33193763
+                           ->  Index Scan using orders_pkey on orders  (cost=0.57..5.63 rows=1 width=20) (actual time=0.796..0.796 rows=1 loops=1261948)
+                                 Index Cond: (o_orderkey = lineitem.l_orderkey)
+ Planning time: 271.911 ms
+ Execution time: 641801.243 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                    QUERY PLAN                                                                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=7288909.46..7291785.57 rows=7 width=27) (actual time=658244.573..658244.578 rows=2 loops=1)
+   Group Key: lineitem.l_shipmode
+   ->  Gather Merge  (cost=7288909.46..7291785.08 rows=56 width=27) (actual time=658210.425..658410.463 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=7287909.32..7290778.03 rows=7 width=27) (actual time=658150.535..658180.837 rows=2 loops=9)
+               Group Key: lineitem.l_shipmode
+               ->  Sort  (cost=7287909.32..7288267.90 rows=143432 width=27) (actual time=658120.276..658128.057 rows=140216 loops=9)
+                     Sort Key: lineitem.l_shipmode
+                     Sort Method: quicksort  Memory: 17119kB
+                     ->  Nested Loop  (cost=0.57..7275624.36 rows=143432 width=27) (actual time=6.583..657880.479 rows=140216 loops=9)
+                           ->  Parallel Seq Scan on lineitem  (cost=0.00..6467890.38 rows=143432 width=15) (actual time=5.890..539769.578 rows=140216 loops=9)
+                                 Filter: ((l_shipmode = ANY ('{RAIL,"REG AIR"}'::bpchar[])) AND (l_commitdate < l_receiptdate) AND (l_shipdate < l_commitdate) AND (l_receiptdate >= '1992-01-01'::date) AND (l_receiptdate < '1993-01-01 00:00:00'::timestamp without time zone))
+                                 Rows Removed by Filter: 33193763
+                           ->  Index Scan using orders_pkey on orders  (cost=0.57..5.63 rows=1 width=20) (actual time=0.839..0.839 rows=1 loops=1261948)
+                                 Index Cond: (o_orderkey = lineitem.l_orderkey)
+ Planning time: 247.020 ms
+ Execution time: 658412.691 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                    QUERY PLAN                                                                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=7288909.46..7291785.57 rows=7 width=27) (actual time=503296.960..503296.965 rows=2 loops=1)
+   Group Key: lineitem.l_shipmode
+   ->  Gather Merge  (cost=7288909.46..7291785.08 rows=56 width=27) (actual time=503266.818..503479.063 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=7287909.32..7290778.03 rows=7 width=27) (actual time=503183.103..503210.065 rows=2 loops=9)
+               Group Key: lineitem.l_shipmode
+               ->  Sort  (cost=7287909.32..7288267.90 rows=143432 width=27) (actual time=503151.636..503158.917 rows=140216 loops=9)
+                     Sort Key: lineitem.l_shipmode
+                     Sort Method: quicksort  Memory: 17199kB
+                     ->  Nested Loop  (cost=0.57..7275624.36 rows=143432 width=27) (actual time=1.198..502920.353 rows=140216 loops=9)
+                           ->  Parallel Seq Scan on lineitem  (cost=0.00..6467890.38 rows=143432 width=15) (actual time=0.703..426367.462 rows=140216 loops=9)
+                                 Filter: ((l_shipmode = ANY ('{RAIL,"REG AIR"}'::bpchar[])) AND (l_commitdate < l_receiptdate) AND (l_shipdate < l_commitdate) AND (l_receiptdate >= '1992-01-01'::date) AND (l_receiptdate < '1993-01-01 00:00:00'::timestamp without time zone))
+                                 Rows Removed by Filter: 33193763
+                           ->  Index Scan using orders_pkey on orders  (cost=0.57..5.63 rows=1 width=20) (actual time=0.543..0.543 rows=1 loops=1261948)
+                                 Index Cond: (o_orderkey = lineitem.l_orderkey)
+ Planning time: 248.626 ms
+ Execution time: 503481.631 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                    QUERY PLAN                                                                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=7288909.46..7291785.57 rows=7 width=27) (actual time=560190.225..560190.229 rows=2 loops=1)
+   Group Key: lineitem.l_shipmode
+   ->  Gather Merge  (cost=7288909.46..7291785.08 rows=56 width=27) (actual time=560149.223..560371.145 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=7287909.32..7290778.03 rows=7 width=27) (actual time=560088.599..560124.480 rows=2 loops=9)
+               Group Key: lineitem.l_shipmode
+               ->  Sort  (cost=7287909.32..7288267.90 rows=143432 width=27) (actual time=560046.121..560056.298 rows=140216 loops=9)
+                     Sort Key: lineitem.l_shipmode
+                     Sort Method: quicksort  Memory: 17140kB
+                     ->  Nested Loop  (cost=0.57..7275624.36 rows=143432 width=27) (actual time=0.737..559797.835 rows=140216 loops=9)
+                           ->  Parallel Seq Scan on lineitem  (cost=0.00..6467890.38 rows=143432 width=15) (actual time=0.351..464743.667 rows=140216 loops=9)
+                                 Filter: ((l_shipmode = ANY ('{RAIL,"REG AIR"}'::bpchar[])) AND (l_commitdate < l_receiptdate) AND (l_shipdate < l_commitdate) AND (l_receiptdate >= '1992-01-01'::date) AND (l_receiptdate < '1993-01-01 00:00:00'::timestamp without time zone))
+                                 Rows Removed by Filter: 33193763
+                           ->  Index Scan using orders_pkey on orders  (cost=0.57..5.63 rows=1 width=20) (actual time=0.675..0.675 rows=1 loops=1261948)
+                                 Index Cond: (o_orderkey = lineitem.l_orderkey)
+ Planning time: 230.495 ms
+ Execution time: 560373.777 ms
+(18 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                                    QUERY PLAN                                                                                                                                     
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Finalize GroupAggregate  (cost=7288909.46..7291785.57 rows=7 width=27) (actual time=663928.113..663928.119 rows=2 loops=1)
+   Group Key: lineitem.l_shipmode
+   ->  Gather Merge  (cost=7288909.46..7291785.08 rows=56 width=27) (actual time=663882.108..664105.424 rows=18 loops=1)
+         Workers Planned: 8
+         Workers Launched: 8
+         ->  Partial GroupAggregate  (cost=7287909.32..7290778.03 rows=7 width=27) (actual time=663843.098..663874.123 rows=2 loops=9)
+               Group Key: lineitem.l_shipmode
+               ->  Sort  (cost=7287909.32..7288267.90 rows=143432 width=27) (actual time=663809.245..663817.642 rows=140216 loops=9)
+                     Sort Key: lineitem.l_shipmode
+                     Sort Method: quicksort  Memory: 17076kB
+                     ->  Nested Loop  (cost=0.57..7275624.36 rows=143432 width=27) (actual time=18.327..663560.039 rows=140216 loops=9)
+                           ->  Parallel Seq Scan on lineitem  (cost=0.00..6467890.38 rows=143432 width=15) (actual time=16.399..546670.713 rows=140216 loops=9)
+                                 Filter: ((l_shipmode = ANY ('{RAIL,"REG AIR"}'::bpchar[])) AND (l_commitdate < l_receiptdate) AND (l_shipdate < l_commitdate) AND (l_receiptdate >= '1992-01-01'::date) AND (l_receiptdate < '1993-01-01 00:00:00'::timestamp without time zone))
+                                 Rows Removed by Filter: 33193763
+                           ->  Index Scan using orders_pkey on orders  (cost=0.57..5.63 rows=1 width=20) (actual time=0.830..0.830 rows=1 loops=1261948)
+                                 Index Cond: (o_orderkey = lineitem.l_orderkey)
+ Planning time: 259.334 ms
+ Execution time: 664107.925 ms
+(18 rows)
+
+
+

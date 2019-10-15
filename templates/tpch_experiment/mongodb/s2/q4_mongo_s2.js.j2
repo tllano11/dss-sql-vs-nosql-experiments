@@ -1,0 +1,40 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_O'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_O'] }}.aggregate([
+{% endif %}
+    { $match: {
+	o_orderdate: {$gte:ISODate("{{ variables['tpch']['q4']['date'] }}T00:00:00Z"), $lt: ISODate("{{ variables['tpch']['q4']['delta_date'] }}T00:00:00Z")}
+    }},
+    { $lookup: {
+	from: "{{ variables['mongo_L'] }}",
+	localField: "_id",
+	foreignField: "_id.l_orderkey",
+	as: "o_lineitems"
+    }},
+    { $project: {
+	orderpriority: "$o_orderpriority",
+	lineitems: {
+	    $filter: {
+		input: "$o_lineitems",
+		as: "l",
+		cond: {$lt:["$$l.l_commitdate","$$l.l_receiptdate"]}
+	    }
+	}
+    }},
+    { $match: {lineitems: { $ne:[] } }},
+    { $group: {
+	_id: "$orderpriority",
+	order_count: {$sum: 1}
+    }},
+    { $sort: {"_id": 1}}
+{% if explain %}
+], {allowDiskUse:true}));
+{% else %}
+], {allowDiskUse:true});
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

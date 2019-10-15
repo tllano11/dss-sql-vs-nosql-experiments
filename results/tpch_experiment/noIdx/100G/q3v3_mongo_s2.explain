@@ -1,0 +1,297 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"l_shipdate" : {
+						"$gt" : ISODate("1992-01-02T00:00:00Z")
+					}
+				},
+				"fields" : {
+					"l_discount" : 1,
+					"l_extendedprice" : 1,
+					"order.o_custkey" : 1,
+					"order.o_orderdate" : 1,
+					"order.o_shippriority" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.lineitem",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"l_shipdate" : {
+							"$gt" : ISODate("1992-01-02T00:00:00Z")
+						}
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"l_shipdate" : {
+								"$gt" : ISODate("1992-01-02T00:00:00Z")
+							}
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 600035870,
+					"executionTimeMillis" : 54646838,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 600037902,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"l_shipdate" : {
+								"$gt" : ISODate("1992-01-02T00:00:00Z")
+							}
+						},
+						"nReturned" : 600035870,
+						"executionTimeMillisEstimate" : 2409429,
+						"works" : 600037904,
+						"advanced" : 600035870,
+						"needTime" : 2033,
+						"needYield" : 0,
+						"saveState" : 4828570,
+						"restoreState" : 4828570,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 600037902
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "order",
+				"localField" : "_id.l_orderkey",
+				"foreignField" : "_id",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"o_orderdate" : {
+						"$lt" : ISODate("1992-01-02T00:00:00Z")
+					}
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "customer",
+				"as" : "customer",
+				"localField" : "order.o_custkey",
+				"foreignField" : "_id",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"c_mktsegment" : {
+						"$eq" : "AUTOMOBILE"
+					}
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"l_discount" : true,
+				"l_extendedprice" : true,
+				"l_orderkey" : "$_id.l_orderkey",
+				"o_orderdate" : "$order.o_orderdate",
+				"o_shippriority" : "$order.o_shippriority"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_orderkey" : "$l_orderkey",
+					"o_orderdate" : "$o_orderdate",
+					"o_shippriority" : "$o_shippriority"
+				},
+				"revenue" : {
+					"$sum" : {
+						"$multiply" : [
+							"$l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$l_discount"
+								]
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"revenue" : -1,
+					"_id.o_orderdate" : 1
+				},
+				"limit" : NumberLong(10)
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"l_shipdate" : {
+						"$gt" : ISODate("1992-01-02T00:00:00Z")
+					}
+				},
+				"fields" : {
+					"l_discount" : 1,
+					"l_extendedprice" : 1,
+					"order.o_custkey" : 1,
+					"order.o_orderdate" : 1,
+					"order.o_shippriority" : 1,
+					"_id" : 1
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.lineitem",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"l_shipdate" : {
+							"$gt" : ISODate("1992-01-02T00:00:00Z")
+						}
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"l_shipdate" : {
+								"$gt" : ISODate("1992-01-02T00:00:00Z")
+							}
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 600035870,
+					"executionTimeMillis" : 54900178,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 600037902,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"l_shipdate" : {
+								"$gt" : ISODate("1992-01-02T00:00:00Z")
+							}
+						},
+						"nReturned" : 600035870,
+						"executionTimeMillisEstimate" : 2121907,
+						"works" : 600037904,
+						"advanced" : 600035870,
+						"needTime" : 2033,
+						"needYield" : 0,
+						"saveState" : 4828338,
+						"restoreState" : 4828338,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 600037902
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "orders",
+				"as" : "order",
+				"localField" : "_id.l_orderkey",
+				"foreignField" : "_id",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"o_orderdate" : {
+						"$lt" : ISODate("1992-01-02T00:00:00Z")
+					}
+				}
+			}
+		},
+		{
+			"$lookup" : {
+				"from" : "customer",
+				"as" : "customer",
+				"localField" : "order.o_custkey",
+				"foreignField" : "_id",
+				"unwinding" : {
+					"preserveNullAndEmptyArrays" : false
+				},
+				"matching" : {
+					"c_mktsegment" : {
+						"$eq" : "AUTOMOBILE"
+					}
+				}
+			}
+		},
+		{
+			"$project" : {
+				"_id" : true,
+				"l_discount" : true,
+				"l_extendedprice" : true,
+				"l_orderkey" : "$_id.l_orderkey",
+				"o_orderdate" : "$order.o_orderdate",
+				"o_shippriority" : "$order.o_shippriority"
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"l_orderkey" : "$l_orderkey",
+					"o_orderdate" : "$o_orderdate",
+					"o_shippriority" : "$o_shippriority"
+				},
+				"revenue" : {
+					"$sum" : {
+						"$multiply" : [
+							"$l_extendedprice",
+							{
+								"$subtract" : [
+									{
+										"$const" : 1
+									},
+									"$l_discount"
+								]
+							}
+						]
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"revenue" : -1,
+					"_id.o_orderdate" : 1
+				},
+				"limit" : NumberLong(10)
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+
+do you want to kill the current op(s) on the server? (y/n): 2019-05-09T12:58:43.084-0400 E -        [main] Error saving history file: FileOpenFailed: Unable to open() file : Unknown error
+2019-05-09T12:58:43.084-0400 I CONTROL  [main] shutting down with code:0

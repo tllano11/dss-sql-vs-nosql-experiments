@@ -1,0 +1,255 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 64,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 63,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 2,
+						"restoreState" : 2,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 22,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 22,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 2,
+						"restoreState" : 2,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 27,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 27,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 2,
+						"restoreState" : 2,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 23,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 23,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 2,
+						"restoreState" : 2,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"_id" : 7
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.scale1",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"_id" : {
+							"$eq" : 7
+						}
+					},
+					"winningPlan" : {
+						"stage" : "IDHACK"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 1,
+					"executionTimeMillis" : 22,
+					"totalKeysExamined" : 1,
+					"totalDocsExamined" : 1,
+					"executionStages" : {
+						"stage" : "IDHACK",
+						"nReturned" : 1,
+						"executionTimeMillisEstimate" : 21,
+						"works" : 2,
+						"advanced" : 1,
+						"needTime" : 0,
+						"needYield" : 0,
+						"saveState" : 2,
+						"restoreState" : 2,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"keysExamined" : 1,
+						"docsExamined" : 1
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+

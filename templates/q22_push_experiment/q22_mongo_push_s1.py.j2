@@ -1,0 +1,47 @@
+#!/bin/python3.6
+from pymongo import MongoClient
+import time
+
+client = MongoClient()
+client = MongoClient('localhost', 27017)
+db = client["{{ variables['mongo_db_name'] }}"]
+
+t0 = time.time()
+pipeline = db.{{ variables['mongo_CjOjL'] }}.aggregate([
+    {"$match": {
+	"c_acctbal": {"$gt": 0.0}
+    }},
+    {"$project": {
+        "_id": 1,
+	"c_acctbal": 1,
+	"cntrycode": {"$substr":["$c_phone", 0, 2]},
+        "c_orders": 1
+    }},
+    {"$match": {
+	"cntrycode": {"$in": ['30', '17', '25', '10', '22', '15', '21'] }
+    }},
+    {"$group": {
+	"_id": None,
+        "c_acctbals": {"$push": {
+            "c_acctbal":"$c_acctbal", 
+            "cntrycode":"$cntrycode", 
+            "num_orders": {"$size":"$c_orders"}
+        }},
+	"c_acctbal_avg": {"$avg": "$c_acctbal"}
+    }},
+    {"$unwind": "$c_acctbals"},
+    {"$match": {
+        "$expr": { "$and":[
+            {"$gt":["$c_acctbals.c_acctbal", "$c_acctbal_avg"]}, 
+            {"$eq":["$c_acctbals.num_orders", 0]}
+        ]}
+    }},
+    {"$group": {
+        "_id": "$c_acctbals.cntrycode",
+        "numcust": {"$sum": 1},
+        "totacctbal": {"$sum": "$c_acctbals.c_acctbal"}
+    }},
+    {"$sort": {"_id": 1}}
+], allowDiskUse=True)
+wall_time = time.time() - t0
+print(wall_time*1000)

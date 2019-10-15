@@ -1,0 +1,35 @@
+\c {{ variables['psql_db_name'] }}
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+	cntrycode,
+	count(*) as numcust,
+	sum(c_acctbal) as totacctbal
+from
+	(
+		select
+			substring(j.customers->>'c_phone' from 1 for 2) as cntrycode,
+			cast(j.customers->>'c_acctbal' as decimal) as c_acctbal
+		from
+			{{ variables['psql_db_schema'] }}.json_data j
+		where
+			substring(j.customers->>'c_phone' from 1 for 2) in
+				('{{ variables['tpch']['q22']['code1'] }}', '{{ variables['tpch']['q22']['code2'] }}', '{{ variables['tpch']['q22']['code3'] }}', '{{ variables['tpch']['q22']['code4'] }}', '{{ variables['tpch']['q22']['code5'] }}', '{{ variables['tpch']['q22']['code6'] }}', '{{ variables['tpch']['q22']['code7'] }}')
+			and cast(j.customers->>'c_acctbal' as decimal) > (
+				select
+					avg(cast(j.customers->>'c_acctbal' as decimal))
+				from
+					{{ variables['psql_db_schema'] }}.json_data j
+				where
+					cast(j.customers->>'c_acctbal' as decimal) > 0.00
+					and substring(j.customers->>'c_phone' from 1 for 2) in
+						('{{ variables['tpch']['q22']['code1'] }}', '{{ variables['tpch']['q22']['code2'] }}', '{{ variables['tpch']['q22']['code3'] }}', '{{ variables['tpch']['q22']['code4'] }}', '{{ variables['tpch']['q22']['code5'] }}', '{{ variables['tpch']['q22']['code6'] }}', '{{ variables['tpch']['q22']['code7'] }}')
+			)
+			and jsonb_array_length(j.customers->'c_orders') < 1
+	) as custsale
+group by
+	cntrycode
+order by
+	cntrycode;

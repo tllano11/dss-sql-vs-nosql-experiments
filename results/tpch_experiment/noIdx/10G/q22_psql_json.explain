@@ -1,0 +1,130 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                 QUERY PLAN                                                                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=136925.46..137129.62 rows=5833 width=72) (actual time=113493.326..113532.581 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=44178.44..44178.45 rows=1 width=32) (actual time=55634.613..55634.613 rows=1 loops=1)
+           ->  Gather  (cost=44178.00..44178.41 rows=4 width=32) (actual time=55634.557..55634.733 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=43178.00..43178.01 rows=1 width=32) (actual time=55625.418..55625.418 rows=1 loops=5)
+                       ->  Parallel Seq Scan on json_data j_1  (cost=0.00..43134.25 rows=4375 width=129) (actual time=9.229..52244.995 rows=76404 loops=5)
+                             Filter: ((((customers ->> 'c_acctbal'::text))::numeric > 0.00) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=92747.02..92761.60 rows=5833 width=161) (actual time=113486.914..113492.919 rows=63677 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 34370kB
+         ->  Seq Scan on json_data j  (cost=0.00..92382.16 rows=5833 width=161) (actual time=55665.849..113395.124 rows=63677 loops=1)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND (((customers ->> 'c_acctbal'::text))::numeric > $1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 1436323
+ Planning time: 63.602 ms
+ Execution time: 113534.735 ms
+(19 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                 QUERY PLAN                                                                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=136925.46..137129.62 rows=5833 width=72) (actual time=113999.440..114034.987 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=44178.44..44178.45 rows=1 width=32) (actual time=56302.469..56302.469 rows=1 loops=1)
+           ->  Gather  (cost=44178.00..44178.41 rows=4 width=32) (actual time=56302.445..56302.597 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=43178.00..43178.01 rows=1 width=32) (actual time=56294.118..56294.118 rows=1 loops=5)
+                       ->  Parallel Seq Scan on json_data j_1  (cost=0.00..43134.25 rows=4375 width=129) (actual time=3.614..52918.689 rows=76404 loops=5)
+                             Filter: ((((customers ->> 'c_acctbal'::text))::numeric > 0.00) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=92747.02..92761.60 rows=5833 width=161) (actual time=113993.712..113999.527 rows=63677 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 34370kB
+         ->  Seq Scan on json_data j  (cost=0.00..92382.16 rows=5833 width=161) (actual time=56334.515..113899.572 rows=63677 loops=1)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND (((customers ->> 'c_acctbal'::text))::numeric > $1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 1436323
+ Planning time: 62.676 ms
+ Execution time: 114037.100 ms
+(19 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                 QUERY PLAN                                                                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=136925.46..137129.62 rows=5833 width=72) (actual time=113224.024..113262.342 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=44178.44..44178.45 rows=1 width=32) (actual time=55346.371..55346.371 rows=1 loops=1)
+           ->  Gather  (cost=44178.00..44178.41 rows=4 width=32) (actual time=55346.298..55346.481 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=43178.00..43178.01 rows=1 width=32) (actual time=55325.925..55325.926 rows=1 loops=5)
+                       ->  Parallel Seq Scan on json_data j_1  (cost=0.00..43134.25 rows=4375 width=129) (actual time=5.364..51987.024 rows=76404 loops=5)
+                             Filter: ((((customers ->> 'c_acctbal'::text))::numeric > 0.00) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=92747.02..92761.60 rows=5833 width=161) (actual time=113217.587..113223.473 rows=63677 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 34370kB
+         ->  Seq Scan on json_data j  (cost=0.00..92382.16 rows=5833 width=161) (actual time=55386.622..113117.607 rows=63677 loops=1)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND (((customers ->> 'c_acctbal'::text))::numeric > $1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 1436323
+ Planning time: 71.402 ms
+ Execution time: 113264.455 ms
+(19 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                 QUERY PLAN                                                                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=136925.46..137129.62 rows=5833 width=72) (actual time=113549.032..113588.407 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=44178.44..44178.45 rows=1 width=32) (actual time=55921.447..55921.447 rows=1 loops=1)
+           ->  Gather  (cost=44178.00..44178.41 rows=4 width=32) (actual time=55918.364..55921.566 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=43178.00..43178.01 rows=1 width=32) (actual time=55909.240..55909.241 rows=1 loops=5)
+                       ->  Parallel Seq Scan on json_data j_1  (cost=0.00..43134.25 rows=4375 width=129) (actual time=6.443..52519.958 rows=76404 loops=5)
+                             Filter: ((((customers ->> 'c_acctbal'::text))::numeric > 0.00) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=92747.02..92761.60 rows=5833 width=161) (actual time=113542.761..113549.291 rows=63677 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 34370kB
+         ->  Seq Scan on json_data j  (cost=0.00..92382.16 rows=5833 width=161) (actual time=55961.674..113446.857 rows=63677 loops=1)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND (((customers ->> 'c_acctbal'::text))::numeric > $1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 1436323
+ Planning time: 54.668 ms
+ Execution time: 113590.488 ms
+(19 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                                                                 QUERY PLAN                                                                                                                  
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=136925.46..137129.62 rows=5833 width=72) (actual time=115749.177..115785.157 rows=7 loops=1)
+   Group Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+   InitPlan 1 (returns $1)
+     ->  Finalize Aggregate  (cost=44178.44..44178.45 rows=1 width=32) (actual time=55959.258..55959.259 rows=1 loops=1)
+           ->  Gather  (cost=44178.00..44178.41 rows=4 width=32) (actual time=55959.230..55959.384 rows=5 loops=1)
+                 Workers Planned: 4
+                 Workers Launched: 4
+                 ->  Partial Aggregate  (cost=43178.00..43178.01 rows=1 width=32) (actual time=55939.914..55939.914 rows=1 loops=5)
+                       ->  Parallel Seq Scan on json_data j_1  (cost=0.00..43134.25 rows=4375 width=129) (actual time=2.544..52535.904 rows=76404 loops=5)
+                             Filter: ((((customers ->> 'c_acctbal'::text))::numeric > 0.00) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+                             Rows Removed by Filter: 223596
+   ->  Sort  (cost=92747.02..92761.60 rows=5833 width=161) (actual time=115743.512..115749.218 rows=63677 loops=1)
+         Sort Key: ("substring"((j.customers ->> 'c_phone'::text), 1, 2))
+         Sort Method: quicksort  Memory: 34370kB
+         ->  Seq Scan on json_data j  (cost=0.00..92382.16 rows=5833 width=161) (actual time=55999.171..115648.559 rows=63677 loops=1)
+               Filter: ((jsonb_array_length((customers -> 'c_orders'::text)) < 1) AND (((customers ->> 'c_acctbal'::text))::numeric > $1) AND ("substring"((customers ->> 'c_phone'::text), 1, 2) = ANY ('{30,17,25,10,22,15,21}'::text[])))
+               Rows Removed by Filter: 1436323
+ Planning time: 46.539 ms
+ Execution time: 115787.298 ms
+(19 rows)
+
+
+

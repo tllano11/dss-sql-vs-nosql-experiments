@@ -1,0 +1,42 @@
+\c {{ variables['psql_db_name'] }}
+{% if explain -%}
+explain analyze select
+{% else %}
+select
+{% endif %}
+	cntrycode,
+	count(*) as numcust,
+	sum(c_acctbal) as totacctbal
+from
+	(
+		select
+			substring(c_phone from 1 for 2) as cntrycode,
+			c_acctbal
+		from
+			{{ variables['psql_db_schema'] }}.customer
+		where
+			substring(c_phone from 1 for 2) in
+				('{{ variables['tpch']['q22']['code1'] }}', '{{ variables['tpch']['q22']['code2'] }}', '{{ variables['tpch']['q22']['code3'] }}', '{{ variables['tpch']['q22']['code4'] }}', '{{ variables['tpch']['q22']['code5'] }}', '{{ variables['tpch']['q22']['code6'] }}', '{{ variables['tpch']['q22']['code7'] }}')
+			and c_acctbal > (
+				select
+					avg(c_acctbal)
+				from
+					{{ variables['psql_db_schema'] }}.customer
+				where
+					c_acctbal > 0.00
+					and substring(c_phone from 1 for 2) in
+						('{{ variables['tpch']['q22']['code1'] }}', '{{ variables['tpch']['q22']['code2'] }}', '{{ variables['tpch']['q22']['code3'] }}', '{{ variables['tpch']['q22']['code4'] }}', '{{ variables['tpch']['q22']['code5'] }}', '{{ variables['tpch']['q22']['code6'] }}', '{{ variables['tpch']['q22']['code7'] }}')
+			)
+			and not exists (
+				select
+					*
+				from
+					{{ variables['psql_db_schema'] }}.orders
+				where
+					o_custkey = c_custkey
+			)
+	) as custsale
+group by
+	cntrycode
+order by
+	cntrycode;

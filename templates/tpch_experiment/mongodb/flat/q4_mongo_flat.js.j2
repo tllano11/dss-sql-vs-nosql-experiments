@@ -1,0 +1,32 @@
+conn = new Mongo();
+db = conn.getDB("{{ variables['mongo_db_name'] }}");
+{% if explain -%} 
+printjson(db.{{ variables['mongo_F'] }}.explain("allPlansExecution").aggregate([
+{% else %}
+cursor = db.{{ variables['mongo_F'] }}.aggregate([
+{% endif %}
+    {$match: 
+     {$and: 
+      [
+	  {o_orderdate: {$gte:ISODate("{{ variables['tpch']['q4']['date'] }}T00:00:00Z")}}, 
+	  {o_orderdate: {$lt:ISODate("{{ variables['tpch']['q4']['delta_date'] }}T00:00:00Z")}},
+	  {$expr:{$lt:["$l_commitdate","$l_receiptdate"]}}
+      ]
+     }
+    },
+    { $group: {
+	_id: {orderkey:"$o_orderkey", orderpriority:"$o_orderpriority"}
+    }},
+    { $group: {
+	_id: "$_id.orderpriority",
+	order_count: {$sum: 1}
+    }},
+    { $sort: {"_id": 1}}
+{% if explain %}
+]));
+{% else %}
+]);
+while ( cursor.hasNext() ) {
+      printjson( cursor.next() );
+}
+{% endif %}

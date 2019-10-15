@@ -1,0 +1,160 @@
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=11719913.49..11719913.99 rows=200 width=16) (actual time=267027.179..267027.181 rows=46 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  HashAggregate  (cost=11719903.84..11719905.84 rows=200 width=16) (actual time=267027.128..267027.136 rows=46 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  Finalize GroupAggregate  (cost=6642635.82..11607403.84 rows=7500000 width=12) (actual time=257688.015..265643.024 rows=7500000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Gather Merge  (cost=6642635.82..11344903.84 rows=37500000 width=12) (actual time=257687.991..263417.350 rows=7500000 loops=1)
+                     Workers Planned: 5
+                     Workers Launched: 5
+                     ->  Partial GroupAggregate  (cost=6641635.74..6827973.30 rows=7500000 width=12) (actual time=257179.286..261037.125 rows=1250000 loops=6)
+                           Group Key: customer.c_custkey
+                           ->  Sort  (cost=6641635.74..6678748.26 rows=14845007 width=8) (actual time=257179.269..259136.362 rows=12782295 loops=6)
+                                 Sort Key: customer.c_custkey
+                                 Sort Method: external merge  Disk: 216648kB
+                                 ->  Hash Left Join  (cost=3459885.95..4670376.02 rows=14845007 width=8) (actual time=235370.859..253808.129 rows=12782295 loops=6)
+                                       Hash Cond: (customer.c_custkey = orders.o_custkey)
+                                       ->  Parallel Seq Scan on customer  (cost=0.00..194128.00 rows=1500000 width=4) (actual time=8.990..6201.492 rows=1250000 loops=6)
+                                       ->  Hash  (cost=2242131.00..2242131.00 rows=74225036 width=8) (actual time=235336.469..235336.469 rows=74193644 loops=6)
+                                             Buckets: 2097152  Batches: 128  Memory Usage: 39090kB
+                                             ->  Seq Scan on orders  (cost=0.00..2242131.00 rows=74225036 width=8) (actual time=1.432..221918.657 rows=74193644 loops=6)
+                                                   Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                                                   Rows Removed by Filter: 806356
+ Planning time: 146.902 ms
+ Execution time: 267166.362 ms
+(25 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=11719913.49..11719913.99 rows=200 width=16) (actual time=253228.039..253228.041 rows=46 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  HashAggregate  (cost=11719903.84..11719905.84 rows=200 width=16) (actual time=253227.973..253227.982 rows=46 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  Finalize GroupAggregate  (cost=6642635.82..11607403.84 rows=7500000 width=12) (actual time=244315.169..251931.855 rows=7500000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Gather Merge  (cost=6642635.82..11344903.84 rows=37500000 width=12) (actual time=244315.154..249849.557 rows=7500000 loops=1)
+                     Workers Planned: 5
+                     Workers Launched: 5
+                     ->  Partial GroupAggregate  (cost=6641635.74..6827973.30 rows=7500000 width=12) (actual time=243971.621..247737.821 rows=1250000 loops=6)
+                           Group Key: customer.c_custkey
+                           ->  Sort  (cost=6641635.74..6678748.26 rows=14845007 width=8) (actual time=243971.601..245863.514 rows=12782295 loops=6)
+                                 Sort Key: customer.c_custkey
+                                 Sort Method: external merge  Disk: 220472kB
+                                 ->  Hash Left Join  (cost=3459885.95..4670376.02 rows=14845007 width=8) (actual time=218914.589..240625.296 rows=12782295 loops=6)
+                                       Hash Cond: (customer.c_custkey = orders.o_custkey)
+                                       ->  Parallel Seq Scan on customer  (cost=0.00..194128.00 rows=1500000 width=4) (actual time=6.030..9529.531 rows=1250000 loops=6)
+                                       ->  Hash  (cost=2242131.00..2242131.00 rows=74225036 width=8) (actual time=218882.492..218882.492 rows=74193644 loops=6)
+                                             Buckets: 2097152  Batches: 128  Memory Usage: 39090kB
+                                             ->  Seq Scan on orders  (cost=0.00..2242131.00 rows=74225036 width=8) (actual time=1.335..205158.675 rows=74193644 loops=6)
+                                                   Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                                                   Rows Removed by Filter: 806356
+ Planning time: 148.754 ms
+ Execution time: 253378.560 ms
+(25 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=11719913.49..11719913.99 rows=200 width=16) (actual time=275449.265..275449.267 rows=46 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  HashAggregate  (cost=11719903.84..11719905.84 rows=200 width=16) (actual time=275449.216..275449.224 rows=46 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  Finalize GroupAggregate  (cost=6642635.82..11607403.84 rows=7500000 width=12) (actual time=266286.743..274089.523 rows=7500000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Gather Merge  (cost=6642635.82..11344903.84 rows=37500000 width=12) (actual time=266286.720..271968.707 rows=7500000 loops=1)
+                     Workers Planned: 5
+                     Workers Launched: 5
+                     ->  Partial GroupAggregate  (cost=6641635.74..6827973.30 rows=7500000 width=12) (actual time=265957.484..269786.748 rows=1250000 loops=6)
+                           Group Key: customer.c_custkey
+                           ->  Sort  (cost=6641635.74..6678748.26 rows=14845007 width=8) (actual time=265957.465..267898.330 rows=12782295 loops=6)
+                                 Sort Key: customer.c_custkey
+                                 Sort Method: external merge  Disk: 212656kB
+                                 ->  Hash Left Join  (cost=3459885.95..4670376.02 rows=14845007 width=8) (actual time=242737.683..262633.098 rows=12782295 loops=6)
+                                       Hash Cond: (customer.c_custkey = orders.o_custkey)
+                                       ->  Parallel Seq Scan on customer  (cost=0.00..194128.00 rows=1500000 width=4) (actual time=0.199..7459.216 rows=1250000 loops=6)
+                                       ->  Hash  (cost=2242131.00..2242131.00 rows=74225036 width=8) (actual time=242718.812..242718.812 rows=74193644 loops=6)
+                                             Buckets: 2097152  Batches: 128  Memory Usage: 39090kB
+                                             ->  Seq Scan on orders  (cost=0.00..2242131.00 rows=74225036 width=8) (actual time=1.484..228901.957 rows=74193644 loops=6)
+                                                   Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                                                   Rows Removed by Filter: 806356
+ Planning time: 143.993 ms
+ Execution time: 275600.761 ms
+(25 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=11719913.49..11719913.99 rows=200 width=16) (actual time=289926.482..289926.484 rows=46 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  HashAggregate  (cost=11719903.84..11719905.84 rows=200 width=16) (actual time=289926.420..289926.428 rows=46 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  Finalize GroupAggregate  (cost=6642635.82..11607403.84 rows=7500000 width=12) (actual time=281205.334..288648.116 rows=7500000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Gather Merge  (cost=6642635.82..11344903.84 rows=37500000 width=12) (actual time=281205.314..286656.354 rows=7500000 loops=1)
+                     Workers Planned: 5
+                     Workers Launched: 5
+                     ->  Partial GroupAggregate  (cost=6641635.74..6827973.30 rows=7500000 width=12) (actual time=280667.154..284290.503 rows=1250000 loops=6)
+                           Group Key: customer.c_custkey
+                           ->  Sort  (cost=6641635.74..6678748.26 rows=14845007 width=8) (actual time=280667.132..282535.214 rows=12782295 loops=6)
+                                 Sort Key: customer.c_custkey
+                                 Sort Method: external merge  Disk: 223400kB
+                                 ->  Hash Left Join  (cost=3459885.95..4670376.02 rows=14845007 width=8) (actual time=256773.861..277309.570 rows=12782295 loops=6)
+                                       Hash Cond: (customer.c_custkey = orders.o_custkey)
+                                       ->  Parallel Seq Scan on customer  (cost=0.00..194128.00 rows=1500000 width=4) (actual time=4.106..8176.273 rows=1250000 loops=6)
+                                       ->  Hash  (cost=2242131.00..2242131.00 rows=74225036 width=8) (actual time=256747.653..256747.653 rows=74193644 loops=6)
+                                             Buckets: 2097152  Batches: 128  Memory Usage: 39090kB
+                                             ->  Seq Scan on orders  (cost=0.00..2242131.00 rows=74225036 width=8) (actual time=1.557..242924.238 rows=74193644 loops=6)
+                                                   Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                                                   Rows Removed by Filter: 806356
+ Planning time: 132.677 ms
+ Execution time: 290071.459 ms
+(25 rows)
+
+
+
+You are now connected to database "tpch" as user "tomas".
+                                                                               QUERY PLAN                                                                                
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Sort  (cost=11719913.49..11719913.99 rows=200 width=16) (actual time=301801.138..301801.140 rows=46 loops=1)
+   Sort Key: (count(*)) DESC, (count(orders.o_orderkey)) DESC
+   Sort Method: quicksort  Memory: 27kB
+   ->  HashAggregate  (cost=11719903.84..11719905.84 rows=200 width=16) (actual time=301801.085..301801.094 rows=46 loops=1)
+         Group Key: count(orders.o_orderkey)
+         ->  Finalize GroupAggregate  (cost=6642635.82..11607403.84 rows=7500000 width=12) (actual time=292605.248..300484.435 rows=7500000 loops=1)
+               Group Key: customer.c_custkey
+               ->  Gather Merge  (cost=6642635.82..11344903.84 rows=37500000 width=12) (actual time=292605.233..298365.271 rows=7500000 loops=1)
+                     Workers Planned: 5
+                     Workers Launched: 5
+                     ->  Partial GroupAggregate  (cost=6641635.74..6827973.30 rows=7500000 width=12) (actual time=292298.765..296025.200 rows=1250000 loops=6)
+                           Group Key: customer.c_custkey
+                           ->  Sort  (cost=6641635.74..6678748.26 rows=14845007 width=8) (actual time=292298.749..294195.596 rows=12782295 loops=6)
+                                 Sort Key: customer.c_custkey
+                                 Sort Method: external merge  Disk: 228224kB
+                                 ->  Hash Left Join  (cost=3459885.95..4670376.02 rows=14845007 width=8) (actual time=268715.712..288947.013 rows=12782295 loops=6)
+                                       Hash Cond: (customer.c_custkey = orders.o_custkey)
+                                       ->  Parallel Seq Scan on customer  (cost=0.00..194128.00 rows=1500000 width=4) (actual time=0.216..7791.842 rows=1250000 loops=6)
+                                       ->  Hash  (cost=2242131.00..2242131.00 rows=74225036 width=8) (actual time=268699.858..268699.858 rows=74193644 loops=6)
+                                             Buckets: 2097152  Batches: 128  Memory Usage: 39090kB
+                                             ->  Seq Scan on orders  (cost=0.00..2242131.00 rows=74225036 width=8) (actual time=2.273..255359.880 rows=74193644 loops=6)
+                                                   Filter: ((o_comment)::text !~~ '%express%packages%'::text)
+                                                   Rows Removed by Filter: 806356
+ Planning time: 131.553 ms
+ Execution time: 301959.043 ms
+(25 rows)
+
+
+

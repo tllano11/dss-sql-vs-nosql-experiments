@@ -1,0 +1,810 @@
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"o_orderdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"o_orderdate" : {
+								"$lt" : ISODate("1992-04-01T00:00:00Z")
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						}
+					]
+				},
+				"fields" : {
+					"o_orderkey" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 143353,
+					"executionTimeMillis" : 28313,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 143353,
+						"executionTimeMillisEstimate" : 27465,
+						"works" : 6051221,
+						"advanced" : 143353,
+						"needTime" : 5907867,
+						"needYield" : 0,
+						"saveState" : 47343,
+						"restoreState" : 47343,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"orderkey" : "$o_orderkey",
+					"orderpriority" : "$o_orderpriority"
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id.orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"o_orderdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"o_orderdate" : {
+								"$lt" : ISODate("1992-04-01T00:00:00Z")
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						}
+					]
+				},
+				"fields" : {
+					"o_orderkey" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 143353,
+					"executionTimeMillis" : 28669,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 143353,
+						"executionTimeMillisEstimate" : 27986,
+						"works" : 6051221,
+						"advanced" : 143353,
+						"needTime" : 5907867,
+						"needYield" : 0,
+						"saveState" : 47337,
+						"restoreState" : 47337,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"orderkey" : "$o_orderkey",
+					"orderpriority" : "$o_orderpriority"
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id.orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"o_orderdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"o_orderdate" : {
+								"$lt" : ISODate("1992-04-01T00:00:00Z")
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						}
+					]
+				},
+				"fields" : {
+					"o_orderkey" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 143353,
+					"executionTimeMillis" : 28674,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 143353,
+						"executionTimeMillisEstimate" : 27856,
+						"works" : 6051221,
+						"advanced" : 143353,
+						"needTime" : 5907867,
+						"needYield" : 0,
+						"saveState" : 47339,
+						"restoreState" : 47339,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"orderkey" : "$o_orderkey",
+					"orderpriority" : "$o_orderpriority"
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id.orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"o_orderdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"o_orderdate" : {
+								"$lt" : ISODate("1992-04-01T00:00:00Z")
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						}
+					]
+				},
+				"fields" : {
+					"o_orderkey" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 143353,
+					"executionTimeMillis" : 28354,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 143353,
+						"executionTimeMillisEstimate" : 27506,
+						"works" : 6051221,
+						"advanced" : 143353,
+						"needTime" : 5907867,
+						"needYield" : 0,
+						"saveState" : 47328,
+						"restoreState" : 47328,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"orderkey" : "$o_orderkey",
+					"orderpriority" : "$o_orderpriority"
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id.orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
+{
+	"stages" : [
+		{
+			"$cursor" : {
+				"query" : {
+					"$and" : [
+						{
+							"o_orderdate" : {
+								"$gte" : ISODate("1992-01-01T00:00:00Z")
+							}
+						},
+						{
+							"o_orderdate" : {
+								"$lt" : ISODate("1992-04-01T00:00:00Z")
+							}
+						},
+						{
+							"$expr" : {
+								"$lt" : [
+									"$l_commitdate",
+									"$l_receiptdate"
+								]
+							}
+						}
+					]
+				},
+				"fields" : {
+					"o_orderkey" : 1,
+					"o_orderpriority" : 1,
+					"_id" : 0
+				},
+				"queryPlanner" : {
+					"plannerVersion" : 1,
+					"namespace" : "tpch_1.flat",
+					"indexFilterSet" : false,
+					"parsedQuery" : {
+						"$and" : [
+							{
+								"o_orderdate" : {
+									"$lt" : ISODate("1992-04-01T00:00:00Z")
+								}
+							},
+							{
+								"o_orderdate" : {
+									"$gte" : ISODate("1992-01-01T00:00:00Z")
+								}
+							},
+							{
+								"$expr" : {
+									"$lt" : [
+										"$l_commitdate",
+										"$l_receiptdate"
+									]
+								}
+							}
+						]
+					},
+					"winningPlan" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"direction" : "forward"
+					},
+					"rejectedPlans" : [ ]
+				},
+				"executionStats" : {
+					"executionSuccess" : true,
+					"nReturned" : 143353,
+					"executionTimeMillis" : 27993,
+					"totalKeysExamined" : 0,
+					"totalDocsExamined" : 6051219,
+					"executionStages" : {
+						"stage" : "COLLSCAN",
+						"filter" : {
+							"$and" : [
+								{
+									"o_orderdate" : {
+										"$lt" : ISODate("1992-04-01T00:00:00Z")
+									}
+								},
+								{
+									"o_orderdate" : {
+										"$gte" : ISODate("1992-01-01T00:00:00Z")
+									}
+								},
+								{
+									"$expr" : {
+										"$lt" : [
+											"$l_commitdate",
+											"$l_receiptdate"
+										]
+									}
+								}
+							]
+						},
+						"nReturned" : 143353,
+						"executionTimeMillisEstimate" : 27300,
+						"works" : 6051221,
+						"advanced" : 143353,
+						"needTime" : 5907867,
+						"needYield" : 0,
+						"saveState" : 47327,
+						"restoreState" : 47327,
+						"isEOF" : 1,
+						"invalidates" : 0,
+						"direction" : "forward",
+						"docsExamined" : 6051219
+					},
+					"allPlansExecution" : [ ]
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : {
+					"orderkey" : "$o_orderkey",
+					"orderpriority" : "$o_orderpriority"
+				}
+			}
+		},
+		{
+			"$group" : {
+				"_id" : "$_id.orderpriority",
+				"order_count" : {
+					"$sum" : {
+						"$const" : 1
+					}
+				}
+			}
+		},
+		{
+			"$sort" : {
+				"sortKey" : {
+					"_id" : 1
+				}
+			}
+		}
+	],
+	"ok" : 1
+}
+
+
