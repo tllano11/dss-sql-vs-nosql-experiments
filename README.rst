@@ -25,14 +25,14 @@ has all variables required to render such templates.
 
 bin
 ---
-
-.. note:: It is assumed MongoDB's access control is disabled
-   The scripts only work (as they are) on a MongoDB deployment that does not enforce
-   authentication.
-
 Contains the scripts used to create and run the experiments. Queries are rendered using
 the ``create_queries.py`` script (use ``-h`` option for help) and then run using the
 ``run_experiment.sh`` script (use ``-h`` option for help). The ``crjoin`` sub-folder contains
 the ``C++`` source code of a program we designed to transform the TPCH tables: customer,
 orders, and lineitem, produced by DBGEN to MongoDB's extended json format. The program
 was originally built using GCCv8.3.0 and can be compiled using ``make``.
+
+**NOTE:** It is assumed MongoDB's access control is disabled.
+The scripts only work (as they are) on a MongoDB deployment that does not enforce
+authentication.
+
