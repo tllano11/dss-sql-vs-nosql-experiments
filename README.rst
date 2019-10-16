@@ -36,6 +36,14 @@ was originally built using GCCv8.3.0 and can be compiled using ``make``.
 The scripts only work (as they are) on a MongoDB deployment that does not enforce
 authentication.
 
+Query Generation
+================
+Queries can be rendered using the ``create_queries.py`` script under ``./bin``. For
+instance, to generate all queries from the ``TPCH`` experiment one could
+execute::
+
+  ./bin/create_queries.py -t ./templates/tpch_experiment -o /path/to/output/dir
+
 TPCH dataset generation
 ==================
 The first step is to render the scripts inside the ``templates/creation`` folder. To do
@@ -73,6 +81,6 @@ MongoDB
      lineitem_sorted.csv
 
 3. Compile the program under ``./bin/crjoin``.
-4. Manually build the desired schemas using the program from the previous step and import
-   it the produced json files to MongoDB. You can use the rendered ``build.sh`` script 
+4. Manually create the desired schemas using the program from the previous step and import
+   the produced json file/s to MongoDB. You can use the rendered ``build.sh`` script 
    (use the ``-h`` option for help) from the ``creation`` templates as a guide.
