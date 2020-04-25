@@ -2,6 +2,43 @@
 
 Operation *Record::context = NULL;
 
+Context::Context() {
+  this->datePrefix = "\"";
+  this->dateSufix = "\",";
+}
+
+void Context::setIdName(string idName) {
+  this->idName = idName;
+}
+
+void Context::setDatePrefix(string datePrefix) {
+  this->datePrefix = datePrefix;
+}
+
+void Context::setDateSufix(string dateSufix) {
+  this->dateSufix = dateSufix;
+}
+
+void Context::setOperation(Operation operation) {
+  this->operation = operation;
+}
+
+string Context::getIdName() {
+  return this->idName;
+}
+
+string Context::getDatePrefix() {
+  return this->datePrefix;
+}
+
+string Context::getDateSufix() {
+  return this->dateSufix;
+}
+
+Operation Context::getOperation() {
+  return this->operation;
+}
+
 BaseCustomer::BaseCustomer(string *line) { 
   char delim = '|';
   stringstream ssin(*line);
@@ -34,7 +71,13 @@ Customer::Customer(string *line) : BaseCustomer(line){}
 
 string Customer::toJson() {
   ostringstream json;
-  json << "{\"_id\":" << this->c_custkey << ","
+  string idName;
+  if (Context::getInstance()->getIdName().empty()) {
+    idName = "c_custkey";
+  } else {
+    idName = Context::getInstance()->getIdName();
+  }
+  json << "{\"" << idName << "\":" << this->c_custkey << ","
        << "\"c_name\":\"" << this->c_name << "\","
        << "\"c_address\":\"" << this->c_address << "\","
        << "\"c_nationkey\":" << this->c_nationkey << ","
@@ -54,11 +97,13 @@ CustomerOrder::~CustomerOrder() {
 
 string CustomerOrder::toJson() {
   ostringstream json;
-  if (*(this->context) == CREATE_PSQL_JSON) {
-    json << "{\"c_custkey\":" << this->c_custkey << ",";
+  string idName;
+  if (Context::getInstance()->getIdName().empty()) {
+    idName = "c_custkey";
   } else {
-    json << "{\"_id\":" << this->c_custkey << ",";
+    idName = Context::getInstance()->getIdName();
   }
+  json << "{\"" << idName << "\":" << this->c_custkey << ",";
   json << "\"c_name\":\"" << this->c_name << "\","
        << "\"c_address\":\"" << this->c_address << "\","
        << "\"c_nationkey\":" << this->c_nationkey << ","
@@ -116,7 +161,13 @@ Order::Order(string *line) : BaseOrder(line) {}
 
 string Order::toJson() {
   ostringstream json;
-  json << "{\"_id\":" << this->o_orderkey << ","
+  string idName;
+  if (Context::getInstance()->getIdName().empty()) {
+    idName = "o_orderkey";
+  } else {
+    idName = Context::getInstance()->getIdName();
+  }
+  json << "{\"" << idName << "\":" << this->o_orderkey << ","
        << "\"o_custkey\":" << this->o_custkey << ","
        << "\"o_orderstatus\":\"" << this->o_orderstatus << "\","
        << "\"o_totalprice\":" << this->o_totalprice << ","
@@ -137,21 +188,24 @@ OrderLitem::~OrderLitem() {
 
 string OrderLitem::toJson() {
   ostringstream json;
-  string date_preffix = "{\"$date\":\"";
-  string date_suffix = "\"},";
-  if (*(this->context) == CREATE_PSQL_JSON) {
-    date_preffix = "\"";
-    date_suffix = "\",";
+  string idName;
+  if (Context::getInstance()->getIdName().empty()) {
+    idName = "o_orderkey";
+  } else {
+    idName = Context::getInstance()->getIdName();
   }
-  if (*(this->context) == CREATE_O_JOIN_L) {
-    json << "{\"_id\":" << this->o_orderkey << ","
+  Operation operation = Context::getInstance()->getOperation();
+  string datePrefix = Context::getInstance()->getDatePrefix();
+  string dateSufix = Context::getInstance()->getDateSufix();
+  if (operation == CREATE_O_JOIN_L) {
+    json << "{\"" << idName << "\":" << this->o_orderkey << ","
 	 << "\"o_custkey\":" << this->o_custkey << ",";
   } else {
     json << "{\"o_orderkey\":" << this->o_orderkey << ",";
   }
   json << "\"o_orderstatus\":\"" << this->o_orderstatus << "\","
        << "\"o_totalprice\":" << this->o_totalprice << ","
-       << "\"o_orderdate\":" << date_preffix << this->o_orderdate << date_suffix
+       << "\"o_orderdate\":" << datePrefix << this->o_orderdate << dateSufix
        << "\"o_orderpriority\":\"" << this->o_orderpriority << "\","
        << "\"o_clerk\":\"" << this->o_clerk << "\","
        << "\"o_shippriority\":" << this->o_shippriority << ","
@@ -217,14 +271,12 @@ Lineitem::Lineitem(string *line) {
 
 string Lineitem::toJson() {
   ostringstream json;
-  string date_preffix = "{\"$date\":\"";
-  string date_suffix = "\"},";
-  if (*(this->context) == CREATE_PSQL_JSON) {
-    date_preffix = "\"";
-    date_suffix = "\",";
-  }
-  if (*(this->context) == CREATE_SINGLE) {
-    json << "{\"_id\":{\"l_orderkey\":" << this->l_orderkey << ","
+  string idName = Context::getInstance()->getIdName();
+  Operation operation = Context::getInstance()->getOperation();
+  string datePrefix = Context::getInstance()->getDatePrefix();
+  string dateSufix = Context::getInstance()->getDateSufix();
+  if (operation == CREATE_SINGLE) {
+    json << "{\"" << idName << "\":{\"l_orderkey\":" << this->l_orderkey << ","
 	 << "\"l_linenumber\":" << this->l_linenumber << "},";
   } else {
     json << "{\"l_linenumber\":" << this->l_linenumber << ",";
@@ -237,9 +289,9 @@ string Lineitem::toJson() {
        << "\"l_tax\":" << this->l_tax << ","
        << "\"l_returnflag\":\"" << this-> l_returnflag << "\","
        << "\"l_linestatus\":\"" << this-> l_linestatus << "\","
-       << "\"l_shipdate\":" << date_preffix << this-> l_shipdate << date_suffix
-       << "\"l_commitdate\":" << date_preffix << this-> l_commitdate << date_suffix
-       << "\"l_receiptdate\":" << date_preffix << this-> l_receiptdate << date_suffix
+       << "\"l_shipdate\":" << datePrefix << this-> l_shipdate << dateSufix
+       << "\"l_commitdate\":" << datePrefix << this-> l_commitdate << dateSufix
+       << "\"l_receiptdate\":" << datePrefix << this-> l_receiptdate << dateSufix
        << "\"l_shipinstruct\":\"" << this-> l_shipinstruct << "\","
        << "\"l_shipmode\":\"" << this-> l_shipmode << "\","
        << "\"l_comment\":\"" << this-> l_comment << "\"}";

@@ -11,10 +11,34 @@
 using namespace std;
 
 enum Operation {
-		 CREATE_C_JOIN_O_JOIN_L,
-		 CREATE_O_JOIN_L,
-		 CREATE_SINGLE,
-		 CREATE_PSQL_JSON
+		CREATE_C_JOIN_O_JOIN_L,
+		CREATE_O_JOIN_L,
+		CREATE_SINGLE,
+		CREATE_PSQL_JSON
+};
+
+class Context {
+private:
+  string idName;
+  string datePrefix;
+  string dateSufix;
+  Operation operation;
+  Context();
+  Context(Context const&);
+  Context& operator=(Context const&);
+public:
+  static Context* getInstance() {
+    static Context* instance = new Context();
+    return instance;
+  };
+  void setIdName(string idName);
+  void setDatePrefix(string datePrefix);
+  void setDateSufix(string dateSufix);
+  void setOperation(Operation operation);
+  string getIdName();
+  string getDatePrefix();
+  string getDateSufix();
+  Operation getOperation();
 };
 
 class Record {

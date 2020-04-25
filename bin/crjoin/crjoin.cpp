@@ -7,6 +7,12 @@
 
 using namespace std;
 
+enum Database {
+  PSQL,
+  MONGODB,
+  COUCHBASE,
+};
+
 struct EOFReached : public exception {
    const char * what () const throw () {
       return "EOF Reached Exception";
@@ -102,6 +108,8 @@ template <class T> void create_json_3collections(ifstream *file, ofstream *outFi
 
 void print_usage() {
   cout << "Arguments:" << endl <<
+    "-d    Produce json for an specific database engine; options are " << PSQL << " (psql), " <<
+    MONGODB << " (mongodb) and " << COUCHBASE << " (couchbase)" << endl <<
     "-m    Operation mode:" << endl <<
     "        " << CREATE_SINGLE << " produces a single json (no joins) based on the table selected" << endl <<
     "        " << CREATE_O_JOIN_L << " produces the json representation of orders join lineitem" << endl <<
@@ -119,10 +127,14 @@ int main(int argc, char *argv[]) {
   const char *ofname = NULL;
   const char *lfname = NULL;
   const char *outfname;
+  int database;
   int operation = -1;
   int c;
-  while ((c = getopt(argc, argv, "m:c:o:l:r:h")) != -1) {
+  while ((c = getopt(argc, argv, "d:m:c:o:l:r:h")) != -1) {
       switch (c) {
+      case 'd':
+	database = atoi(optarg);
+	break;
       case 'm':
 	operation = atoi(optarg);
 	break;
@@ -160,11 +172,30 @@ int main(int argc, char *argv[]) {
   ifstream lfile (lfname, ifstream::in);
   ofstream outFile;
   outFile.open(outfname, ios_base::app);
-  Operation op;
+
+  switch (database) {
+  case PSQL:
+    break;
+  case MONGODB: {
+    string idName = "_id";
+    string datePrefix = "{\"$date\":\"";
+    string dateSufix = "\"},";
+    Context::getInstance()->setIdName(idName);
+    Context::getInstance()->setDatePrefix(datePrefix);
+    Context::getInstance()->setDateSufix(dateSufix);
+  } break;
+  case COUCHBASE: {
+    string idName = "id";
+    Context::getInstance()->setIdName(idName);
+  } break;
+  default:
+    print_usage();
+    exit(1);
+  }
+
   switch (operation) {
-  case CREATE_SINGLE:
-    op = CREATE_SINGLE;
-    Record::context = &op;
+  case CREATE_SINGLE: {
+    Context::getInstance()->setOperation(CREATE_SINGLE);
     if (cfname != NULL) {
       create_json_3collections<Customer>(&cfile, &outFile);
     }
@@ -174,21 +205,17 @@ int main(int argc, char *argv[]) {
     if (lfname != NULL) {
       create_json_3collections<Lineitem>(&lfile, &outFile);
     }
-    break;
-  case CREATE_O_JOIN_L:
-    op = CREATE_O_JOIN_L;
-    Record::context = &op;
+    } break;
+  case CREATE_O_JOIN_L: {
+    Context::getInstance()->setOperation(CREATE_O_JOIN_L);
     create_json_2collections(&ofile, &lfile, &outFile);
-    break;
-  case CREATE_C_JOIN_O_JOIN_L:
-    op = CREATE_C_JOIN_O_JOIN_L;
-    Record::context = &op;
+    } break;
+  case CREATE_C_JOIN_O_JOIN_L: {
+      Context::getInstance()->setOperation(CREATE_C_JOIN_O_JOIN_L);
     create_json_1collection(&cfile, &ofile, &lfile, &outFile);
-    break;
-  case CREATE_PSQL_JSON:
-    op = CREATE_PSQL_JSON;
-    Record::context = &op;
-    create_json_1collection(&cfile, &ofile, &lfile, &outFile);
-    break;
+    } break;
+  default:
+    print_usage();
+    exit(1);
   }
 }
