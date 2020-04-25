@@ -19,9 +19,11 @@ and results in ``noIdx`` did not.
 
 templates
 ---------
-Contains the ``jinja2`` templates of all **queries** and scripts involved in the
+Contains the ``jinja2`` templates of all PSQL and MongoDB **queries** and scripts involved in the
 creation of the schemas used during experimentation. The ``vars.yml`` file
-has all variables required to render such templates.
+has all variables required to render such templates. Couchbase queries are within the same folder,
+but rather than templates, they are written with the default values used for
+experiments.
 
 bin
 ---
