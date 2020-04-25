@@ -1,0 +1,27 @@
+select
+	li.l_orderkey as o_orderkey,
+	sum(li.l_extendedprice * (1 - li.l_discount)) as revenue,
+	os.o_orderdate,
+	os.o_shippriority
+from
+	(select c.id as c_custkey from c where c.c_mktsegment = 'AUTOMOBILE') cu
+join    
+	(select o.id as o_orderkey, o.o_custkey, o.o_orderdate, o.o_shippriority 
+	from orders o 
+	where DATE_FORMAT_STR(o.o_orderdate, '1111-11-11') < '1992-01-02') os 
+on 	
+	cu.c_custkey = os.o_custkey
+join 	
+	(select l.l_orderkey, l.l_extendedprice, l.l_discount
+	from lineitem l 
+	where DATE_FORMAT_STR(l.l_shipdate, '1111-11-11') > '1992-01-02') li
+on 
+	li.l_orderkey = os.o_orderkey
+group by
+      li.l_orderkey,
+      os.o_orderdate,
+      os.o_shippriority
+order by
+      revenue desc,
+      os.o_orderdate
+limit 10;

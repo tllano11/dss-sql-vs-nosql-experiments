@@ -1,0 +1,17 @@
+SELECT cntrycode, COUNT(*) AS numcust, SUM(c_acctbal) AS totacctbal
+FROM ( SELECT MAX(d.c_acctbal) AS c_acctbal, MAX(d.cntrycode) AS cntrycode
+       FROM (SELECT SUBSTR(c1.c_phone, 0, 2) AS cntrycode, c1.c_acctbal, c1.id, META(c1).id AS mid
+             FROM c c1
+             WHERE SUBSTR(c1.c_phone, 0, 2) IN ['30', '17', '25', '10', '22', '15', '21']
+                   AND c1.c_acctbal > ( SELECT RAW AVG(c2.c_acctbal)
+                                         FROM c c2
+                                         WHERE c2.c_acctbal > 0.00
+                                               AND substr(c2.c_phone, 0, 2) IN ['30', '17', '25', '10', '22', '15', '21']
+                                       )[0]
+            ) AS d
+       LEFT JOIN orders o ON d.id = o.o_custkey
+       WHERE o.id IS MISSING
+       GROUP BY d.mid
+       ) AS custsale
+GROUP BY cntrycode
+ORDER BY cntrycode;

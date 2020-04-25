@@ -1,0 +1,28 @@
+select
+	c_count,
+	count(*) as custdist
+from	(
+		select
+			co.c_custkey as c_custkey,
+			sum(case when co.o_comment is missing then 0 else 1 end) as c_count
+		from (
+			select
+			        s1.id as c_custkey,
+				o.o_orderkey as o_orderkey,
+				o.o_comment as o_comment
+			from
+				s1
+			left outer unnest
+				s1.c_orders o ) as co
+		where 
+			co.o_comment is missing
+			or not regex_like(co.o_comment, '.*express.*packages.*')
+		group by
+			co.c_custkey
+			
+	) as c_orders
+group by
+	c_count
+order by
+	custdist desc,
+	c_count desc;

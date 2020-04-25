@@ -1,0 +1,23 @@
+select
+	o.o_orderkey, 
+	sum(l.l_extendedprice * (1 - l.l_discount)) as revenue,
+	o.o_orderdate,
+	o.o_shippriority 
+from 
+	s1 
+unnest 
+	c_orders o
+unnest 
+	o.o_lineitems l 
+where 
+	s1.c_mktsegment = 'AUTOMOBILE'
+	and DATE_FORMAT_STR(o.o_orderdate, '1111-11-11') < '1992-01-02'
+	and l.l_shipdate > '1992-01-02' 
+group by 
+	o.o_orderkey, 
+	o.o_orderdate, 
+	o.o_shippriority 
+order by 
+	revenue desc,
+	o.o_orderdate 
+limit 10

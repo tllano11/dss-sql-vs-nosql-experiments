@@ -1,0 +1,34 @@
+select
+	cntrycode,
+	count(*) as numcust,
+	sum(c_acctbal) as totacctbal
+from
+	(
+		select
+			substr(c1.c_phone, 0, 2) as cntrycode,
+			c1.c_acctbal
+		from
+			c c1
+		where
+			substr(c1.c_phone, 0, 2) in
+				['30', '17', '25', '10', '22', '15', '21']
+			and c1.c_acctbal > (
+				select raw
+					avg(c2.c_acctbal)
+				from
+					c c2
+				where
+					c2.c_acctbal > 0.00
+					and substr(c2.c_phone, 0, 2) in
+						['30', '17', '25', '10', '22', '15', '21']
+			)[0]
+			and c1.id in (
+			      	select raw c.id
+				from c left outer join ol o on c.id = o.o_custkey
+				where o.id is missing
+			)
+	) as custsale
+group by
+	cntrycode
+order by
+	cntrycode;

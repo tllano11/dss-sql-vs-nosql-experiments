@@ -1,0 +1,18 @@
+select
+	o.o_orderpriority, count(*) as order_count
+from
+	s1
+unnest 
+	c_orders o 
+where 
+	DATE_FORMAT_STR(o.o_orderdate, '1111-11-11') >= '1992-01-01'
+	and DATE_FORMAT_STR(o.o_orderdate,'1111-11-11') < DATE_ADD_STR('1992-01-01', 3, 'month')
+	and exists ( 
+		select 
+			array l for l in o.o_lineitems when l.l_commitdate < l.l_receiptdate end 
+		where 
+			any l in o.o_lineitems satisfies l.l_commitdate < l.l_receiptdate end
+	) 
+group by 
+	o.o_orderpriority
+order by o.o_orderpriority

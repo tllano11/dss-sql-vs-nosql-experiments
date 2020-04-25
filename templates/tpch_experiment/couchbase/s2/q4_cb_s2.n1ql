@@ -1,0 +1,26 @@
+select
+        os.o_orderpriority,
+        count(distinct os.o_orderkey) as order_count
+from (
+	select 
+		o.id as o_orderkey, o.o_orderpriority
+        from 
+		orders o
+	where 
+		DATE_FORMAT_STR(o.o_orderdate, '1111-11-11') >= '1992-01-01'
+		and DATE_FORMAT_STR(o.o_orderdate,'1111-11-11') < DATE_ADD_STR('1992-01-01', 3, 'month')
+) as os
+join (
+	select
+		l.l_orderkey
+	from 
+		lineitem l
+	where
+		l.l_commitdate < l.l_receiptdate
+) as li
+on 
+	os.o_orderkey = li.l_orderkey
+group by
+        os.o_orderpriority
+order by
+        os.o_orderpriority;

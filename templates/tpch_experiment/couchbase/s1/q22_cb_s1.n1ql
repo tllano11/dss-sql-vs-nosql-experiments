@@ -1,0 +1,30 @@
+select
+	cntrycode,
+	count(*) as numcust,
+	sum(c_acctbal) as totacctbal
+from
+	(
+		select
+			substr(a.c_phone, 0, 2) as cntrycode,
+			a.c_acctbal
+		from
+			s1 a
+		where
+			array_length(a.c_orders) = 0
+			and substr(a.c_phone, 0, 2) in
+				['30', '17', '25', '10', '22', '15', '21']
+			and a.c_acctbal > (
+				select raw
+					avg(b.c_acctbal)
+				from
+					s1 b
+				where
+					b.c_acctbal > 0.00
+					and substr(b.c_phone, 0, 2) in
+						['30', '17', '25', '10', '22', '15', '21']
+			)[0] 
+	) as custsale
+group by
+	cntrycode
+order by
+	cntrycode;

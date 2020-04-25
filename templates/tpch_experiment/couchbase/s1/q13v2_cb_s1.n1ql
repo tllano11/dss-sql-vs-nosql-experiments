@@ -1,0 +1,18 @@
+select
+	c_count,
+	count(*) as custdist
+from	(
+		select
+			s1.id as c_custkey,
+			sum(array_count(array 1 for o in s1.c_orders when o.o_comment not like '%express%packages%' end)) as c_count
+		from
+			s1
+		group by
+			s1.id
+			
+	) as c_orders
+group by
+	c_count
+order by
+	custdist desc,
+	c_count desc;

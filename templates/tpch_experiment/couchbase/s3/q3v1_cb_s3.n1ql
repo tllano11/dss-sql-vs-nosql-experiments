@@ -1,0 +1,21 @@
+select
+	ol.id as o_orderkey,
+	sum(l.l_extendedprice * (1 - l.l_discount)) as revenue,
+	ol.o_orderdate,
+	ol.o_shippriority
+from
+	ol join c on meta(c).id = ol.o_custkey
+unnest
+	ol.o_lineitems l
+where
+	c.c_mktsegment = 'AUTOMOBILE'
+	and DATE_FORMAT_STR(ol.o_orderdate, '1111-11-11') < '1992-01-02'
+	and l.l_shipdate > '1992-01-02'
+group by
+      ol.id,
+      ol.o_orderdate,
+      ol.o_shippriority
+order by
+      revenue desc,
+      ol.o_orderdate
+LIMIT 10;
